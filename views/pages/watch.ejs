@@ -1,0 +1,24 @@
+<% layout('layout/boilerplate') %>
+
+
+<body>
+    <h1>Video Details</h1>
+    <div>
+        <h2>Title: <%= video.title %></h2>
+        <p>Description: <%= video.description %></p>
+        <p>Views: <%= video.views %></p>
+        <p>Published: <%= video.isPublished ? 'Yes' : 'No' %></p>
+        <p>Owner: <%= video.owner %></p>
+        <p>Uploaded At: <%= video.createdAt %></p>
+        <p>Updated At: <%= video.updatedAt %></p>
+        <div>
+            <video controls>
+                <source src="<%= video.videoFile %>" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div>
+            <img src="<%= video.thumbnail %>" alt="Thumbnail">
+        </div>
+    </div>
+</body>

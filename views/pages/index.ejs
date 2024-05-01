@@ -18,7 +18,7 @@
                             <h5 class="card-title"><%= video.title %></h5>
                             <p class="card-text">Views: <%= video.views %></p>
                             <p class="card-text">Owner: <%= video.owner %></p>
-                            <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                            <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
                         </div>
                     </div>
                 </div>

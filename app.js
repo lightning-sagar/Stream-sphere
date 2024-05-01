@@ -104,11 +104,12 @@ app.use((req, res, next) => {
 
 
 //homepage
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   if(req.isAuthenticated()){
     res.redirect(`/user/${req.user._id}`);
   }
-  res.render('pages/index.ejs');
+  const allVideos = await Video.find({});
+  res.render('pages/index.ejs',{allVideos});
 })
 
 //login and signup
@@ -192,7 +193,9 @@ app.put('/user/:id/:category', ensureAuthenticated, async (req, res) => {
 
 app.get('/user/:id', ensureAuthenticated, async (req, res) => {
   const user = await User.findById(req.params.id);
-  const allVideos = await Video.find({});
+  const usercat = user.category;
+  console.log(usercat);
+  const allVideos = await Video.find({category: usercat});
   res.render('pages/index.ejs', { user,req,currentUser: req.user, allVideos });
 })
 
@@ -200,7 +203,6 @@ app.get('/user/:id', ensureAuthenticated, async (req, res) => {
 app.get("/user/:id/upload", ensureAuthenticated, (req, res) => {
   res.render("pages/upload.ejs", { req, currentUser: req.user });
 })
-
 app.post("/user/:id/upload", upload.fields([
   {
       name: "videoFile",
@@ -212,7 +214,7 @@ app.post("/user/:id/upload", upload.fields([
   }
 ]), ensureAuthenticated, async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description,category } = req.body;
     if (!title || !description) {
       throw new Error("Title and description are required.");
     }
@@ -239,6 +241,7 @@ app.post("/user/:id/upload", upload.fields([
       description,
       isPublished: false,
       owner: req.user._id,
+      category
     });
 
     if (!publishVideo) {
@@ -252,6 +255,17 @@ app.post("/user/:id/upload", upload.fields([
     res.status(500).send("Error uploading video");
   }
 });
+
+//watch video
+app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
+  const video = await Video.findById(req.params.video);
+  console.log(video);
+  res.render("pages/watch.ejs", { req, currentUser: req.user, video });
+})
+
+
+
+
 
   app.get('/auth/google',
   passport.authenticate('google', { scope:

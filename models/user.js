@@ -11,7 +11,7 @@ const userSchema = new Schema({
   //category of video
   category: {
     type: String,
-    default:"10"
+    default:"coding"
   },
   avatar: {
     type: String,  
