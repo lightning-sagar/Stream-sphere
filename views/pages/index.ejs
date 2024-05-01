@@ -1,0 +1,28 @@
+<% layout('/layout/boilerplate.ejs') %>
+<style>
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Featured Videos</h1>
+        <div class="row">
+            <% allVideos.forEach(video => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= video.title %></h5>
+                            <p class="card-text">Views: <%= video.views %></p>
+                            <p class="card-text">Owner: <%= video.owner %></p>
+                            <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
