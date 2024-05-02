@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const videoSchema = new Schema(
     {
         videoFile: {
-            type: String, // Cloudinary URL
+            type: String,
         },
         thumbnail: {
             type: String,

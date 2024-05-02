@@ -1,11 +1,16 @@
 <% layout('layout/boilerplate') %>
+<style>
+  .max-width-600 {
+    max-width: 600px;
+  }
 
-<div class="container">
-  <h3>Upload Video</h3>
-  <form action="/user/<%= req.user._id %>/upload" method="POST" enctype="multipart/form-data">
+</style>
+<div class="container mt-3">
+  <h3 class="mb-4">Upload Video</h3>
+  <form action="/user/<%= req.user._id %>/upload" method="POST" enctype="multipart/form-data" class="max-width-600 mx-auto">
     <div class="mb-3">
       <label for="videoFile" class="form-label">Select Video File</label>
-      <input type="file" class="form-control" id="videoFile" name="videoFile" >
+      <input type="file" class="form-control" id="videoFile" name="videoFile" accept="video/*" required>
     </div>
     <div class="mb-3">
       <label for="title" class="form-label">Title</label>
@@ -17,18 +22,7 @@
     </div>
     <div class="mb-3">
       <label for="thumbnail" class="form-label">Select Thumbnail</label>
-      <input type="file" class="form-control" id="thumbnail" name="thumbnail">
-    </div>
-    <div class="mb-3">
-      <label for="category" class="form-label">Select Category</label>
-      <select class="form-select" id="category" name="category" required>
-        <option value="coding">Coding</option>
-        <option value="engineering">Engineering</option>
-        <option value="adventure">Adventure</option>
-        <option value="movies">Movies</option>
-        <option value="comedy">Comedy</option>
-        <option value="tkoc">TKOC</option>
-      </select>
+      <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
     </div>
     <button type="submit" class="btn btn-primary">Upload</button>
   </form>

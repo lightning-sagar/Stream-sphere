@@ -5,7 +5,8 @@ const multer = require('multer');
 cloudinary.config({ 
   cloud_name: 'dybgs03yy', 
   api_key: '332289123789885', 
-  api_secret: 'PuGPKDLd8lTU37vu7MqS9JRtS-I' 
+  api_secret: 'PuGPKDLd8lTU37vu7MqS9JRtS-I' ,
+  timeout: 600000 // 10 minutes timeout
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
@@ -16,7 +17,7 @@ const uploadOnCloudinary = async (localFilePath) => {
             resource_type: "auto",
         });
         console.log("working");
-        // fs.unlinkSync(localFilePath);  
+        fs.unlinkSync(localFilePath);  
         return response;
     } catch (error) {
         console.error("Error uploading to Cloudinary:", error);

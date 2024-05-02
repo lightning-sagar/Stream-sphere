@@ -5,7 +5,10 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+
 const User = require('./models/user.js');
+const Comment = require('./models/comment.js');
+
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -24,7 +27,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 require('dotenv').config();
 require('./auth.js')
-
 const ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -108,8 +110,9 @@ app.get('/', async (req, res) => {
   if(req.isAuthenticated()){
     res.redirect(`/user/${req.user._id}`);
   }
-  const allVideos = await Video.find({});
-  res.render('pages/index.ejs',{allVideos});
+  const allVideos = await Video.find().populate('owner');
+  console.log(allVideos);
+  res.render('pages/index.ejs',{allVideos,req});
 })
 
 //login and signup
@@ -195,8 +198,9 @@ app.get('/user/:id', ensureAuthenticated, async (req, res) => {
   const user = await User.findById(req.params.id);
   const usercat = user.category;
   console.log(usercat);
-  const allVideos = await Video.find({category: usercat});
-  res.render('pages/index.ejs', { user,req,currentUser: req.user, allVideos });
+  const allVideos = await Video.find({category: usercat}).populate('owner');
+  res.render('pages/index.ejs', { user, currentUser: req.user,req, allVideos });
+
 })
 
 //upload
@@ -214,14 +218,14 @@ app.post("/user/:id/upload", upload.fields([
   }
 ]), ensureAuthenticated, async (req, res) => {
   try {
-    const { title, description,category } = req.body;
+    const { title, description } = req.body;
     if (!title || !description) {
       throw new Error("Title and description are required.");
     }
     console.log(req.files.thumbnail[0].path, req.files.thumbnail);
     const thumbnailLocalPath = req.files['thumbnail'][0].path;
     const vedioLocalPath = req.files['videoFile'][0].path;
-
+    const category = req.user.category;
     console.log(vedioLocalPath, thumbnailLocalPath);
 
     // Upload video file and thumbnail to Cloudinary
@@ -258,9 +262,45 @@ app.post("/user/:id/upload", upload.fields([
 
 //watch video
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
-  const video = await Video.findById(req.params.video);
-  console.log(video);
-  res.render("pages/watch.ejs", { req, currentUser: req.user, video });
+  try {
+    const userCategory = req.user.category;
+    const allVideos = await Video.find({ category: userCategory }).populate('owner');
+    const videos = await Video.find({ _id: req.params.video,category: userCategory }).populate('owner');
+    const comment = await Comment.find({ video: req.params.video }).populate('owner');
+    console.log(comment,"comment");
+    res.render("pages/watch.ejs", { req, currentUser: req.user, videos,allVideos,comment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+app.get("/user/:id/our-video", ensureAuthenticated, async (req, res) => {
+  try {
+    const videos = await Video.find({ owner: req.params.id }).populate('owner');
+    res.render("pages/our-video.ejs", { req, currentUser: req.user, videos });
+  } catch (error) {
+    console.error("Error retrieving videos:", error);
+    res.status(500).send("Error retrieving videos");
+  }
+});
+
+//post comment 
+app.post("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
+  try {
+    const { content } = req.body;
+    console.log(req.body);
+    const { id, video } = req.params;
+    const newComment = await Comment.create({
+      content,
+      video,
+      owner: id
+    })
+    console.log("Comment added:", newComment);
+    res.redirect(`/user/${req.user._id}/videos/${req.params.video}`);
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).send("Error adding comment");
+  }
 })
 
 
