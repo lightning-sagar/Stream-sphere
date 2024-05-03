@@ -115,6 +115,8 @@ app.get('/', async (req, res) => {
   res.render('pages/index.ejs',{allVideos,req});
 })
 
+
+
 //login and signup
 app.get('/login', (req, res) => {
   res.render('users/login.ejs');
@@ -274,18 +276,72 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+
+//dashboard
 app.get("/user/:id/our-video", ensureAuthenticated, async (req, res) => {
   try {
+    const id = req.params.id;
+    const profile = await User.findById(id);
     const videos = await Video.find({ owner: req.params.id }).populate('owner');
-    res.render("pages/our-video.ejs", { req, currentUser: req.user, videos });
+    res.render("pages/dashboard.ejs", { req, user: req.user, videos,profile });
   } catch (error) {
     console.error("Error retrieving videos:", error);
     res.status(500).send("Error retrieving videos");
   }
 });
+app.get("/user/:id/edit", ensureAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    res.render("pages/edit.ejs", { req, currentUser: req.user, id, user });
+  } catch (error) {
+    console.error("Error retrieving video:", error);
+    res.status(500).send("Error retrieving video");
+  }
+})
+app.put("/user/:id/edit/profile", ensureAuthenticated,upload.fields([
+  {
+      name: "avatar",
+      maxCount: 1,
+  }
+]), async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(req.body,"wow");
+    const { username, email, category } = req.body;
+    const avatarlocalPath = req.files['avatar'][0].path;
+    const [avatarResponse] = await Promise.all([
+      uploadOnCloudinary(avatarlocalPath)
+    ]);
+
+    if (!avatarResponse ) {
+      throw new Error("Error uploading files to Cloudinary.");
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        username,
+        email,
+        category,
+        avatar: avatarResponse.secure_url
+      },
+      { new: true }
+    );
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+    console.log("User updated successfully:", updatedUser);
+    res.redirect(`/user/${req.user._id}`);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Error updating user");
+  }
+})
 
 //post comment 
-app.post("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
+app.post("/user/:id/videos/:video/comments", ensureAuthenticated, async (req, res) => {
   try {
     const { content } = req.body;
     console.log(req.body);
@@ -302,6 +358,57 @@ app.post("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Error adding comment");
   }
 })
+
+//likes
+app.post("/user/:id/videos/:video/comments/:commentId/like", ensureAuthenticated, async (req, res) => {
+  try {
+    const { id, video,commentId } = req.params;
+
+    const liked = await Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $addToSet: { likes: id } },  
+      { new: true }
+    ).populate('owner');
+
+    if (!liked) {
+      console.error("Comment not found");
+      return res.status(404).send("Comment not found");
+    }
+
+    console.log("Like added:", liked);
+    res.redirect(`/user/${req.user._id}/videos/${req.params.video}`);
+  } catch (error) {
+    console.error("Error adding like:", error);
+    res.status(500).send("Error adding like");
+  }
+})
+app.post("/user/:id/videos/:video/comments/:commentId/unlike", ensureAuthenticated, async (req, res) => {
+  try {
+    const { id, video,commentId } = req.params;
+
+    const liked = await Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $pull: { likes: id } }, 
+      { new: true }
+    ).populate('owner');
+
+    if (!liked) {
+      console.error("Comment not found");
+      return res.status(404).send("Comment not found");
+    }
+
+    console.log("Like added:", liked);
+    res.redirect(`/user/${req.user._id}/videos/${req.params.video}`);
+  } catch (error) {
+    console.error("Error adding like:", error);
+    res.status(500).send("Error adding like");
+  }
+})
+
+
+
+
+
 
 
 

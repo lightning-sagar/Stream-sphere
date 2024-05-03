@@ -1,0 +1,82 @@
+<% layout('/layout/boilerplate.ejs') %>
+
+<style>
+  body {
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn-primary {
+    background-color: #5680cf;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #4362ab;
+  }
+
+  .loading {
+    display: none;
+    margin-top: 10px;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <h2>Edit Profile</h2>
+    <form id="editForm" action="/user/<%= req.user._id %>/edit/profile?_method=PUTvcx" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="avatar" class="form-label">Profile Picture</label>
+        <input type="file" id="avatar" name="avatar" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" name="username" class="form-control" value="<%= user.username %>" required>
+      </div>
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" required>
+      </div>
+      <div class="form-group">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" id="category" name="category" class="form-control" value="<%= user.category %>" required>
+      </div>
+      <div class="loading" id="loading">Uploading...</div>
+      <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('editForm').addEventListener('submit', function() {
+      document.getElementById('submitButton').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+    });
+  </script>
+</body>

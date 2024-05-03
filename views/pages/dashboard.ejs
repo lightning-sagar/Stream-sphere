@@ -1,0 +1,245 @@
+<% layout('/layout/boilerplate.ejs') %>
+
+<style>
+  body {
+    background-color: #f0f0f0; /* Light background color */
+    color: #333; /* Dark text color */
+    font-family: Arial, sans-serif; /* Fallback font */
+  }
+
+  .container {
+    max-width: 1200px; /* Adjust max-width as needed */
+    margin: 0 auto; /* Center align container */
+    padding-top: 20px; /* Add padding to the top */
+  }
+
+  .profile-section {
+    background-color: #fff; /* Light background color */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Add some space between sections */
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-name {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .profile-email {
+    color: #888; /* Lighter text color */
+    margin-bottom: 10px;
+  }
+
+  .profile-category {
+    font-style: italic;
+    color: #666; /* Darker text color */
+  }
+
+  .video-section {
+    background-color: #fff; /* Light background color */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .video-thumbnail {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .video-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .video-views {
+    color: #888; /* Lighter text color */
+  }
+
+  .video-container {
+    padding: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.video-details {
+    width: calc(100% - 360px); /* Adjust as needed */
+    padding: 20px;
+    background-color: #ffffff; /* White background color */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.video {
+    width: 100%;
+}
+
+video {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.comments {
+    width: 350px;
+    background-color: #ffffff; /* White background color */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333; /* Dark text color */
+    margin-top: 0;
+}
+
+p {
+    color: #666; /* Medium text color */
+    margin: 0;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.comment-input-container {
+    display: flex;
+}
+
+.comment-input {
+    flex: 1; /* Take up remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left side */
+}
+
+.send-button {
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    cursor: pointer;
+}
+
+.card {
+    transition: transform 0.3s;
+    background-color: #ffffff; /* White card background color */
+    color: #333; /* Dark text color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-title {
+    color: #5680cf; /* Blue card title color */
+}
+
+.card-text {
+    color: #666; /* Medium card text color */
+}
+
+.comment-form input[type="text"] {
+    flex: 1; /* Take up remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* Add some spacing between input and button */
+}
+
+.comment-form button[type="submit"] {
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.editbtn{
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 650px;
+
+}
+</style>  
+
+<body>
+  <div class="container">
+    <div class="profile-section">
+      <div class="profile-info">
+        <img src="<%= profile.avatar %>" alt="Avatar" class="profile-avatar">
+        <div>
+          <div class="profile-name"><%= profile.username %></div>
+          <div class="profile-email"><%= profile.emial %></div>
+          <div class="profile-category">Category: <%= profile.username %></div>
+        </div>
+        <form action="/user/<%= profile._id %>/edit" method="GET">
+          <button type="submit" class="btn btn-primary editbtn">Edit Profile</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="other-videos">
+      <div class="container">
+          <h3 class="mb-4">Latest Video</h3>
+          <div class="row">
+              <% videos.forEach(video => { %>
+                  <div class="col-md-4 mb-4">
+                      <div class="card shadow-sm">
+                          <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+                          <div class="card-body">
+                              <h5 class="card-title"><%= video.title %></h5>
+                              <p class="card-text">Views: <%= video.views %></p>
+                              <p class="card-text">Owner:<%= video.owner.username %></p>
+                              <% if(!currentUser){%>
+                                  <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
+                              <%}else{ %>
+                                  <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
+                              <% } %>
+                          </div>
+                          
+                      </div>
+                  </div>
+              <% }); %>
+          </div>
+      </div>
+  </div>
+</body>

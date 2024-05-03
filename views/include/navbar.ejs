@@ -2,55 +2,56 @@
   body {
     font-family: 'Playpen Sans', cursive !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
-    color: #fff;
-    background-color: #121212;
+    color: #333; /* Dark text color */
+    background-color: #ffffff; /* Light background color */
   }
 
   .navbar {
-    background-color: #333;
+    background-color: #ffffff; /* Dark background color */
   }
 
   .navbar-brand {
-    color: #fff;
+    color: #333; /* Dark text color */
     font-size: 1.5rem;
   }
 
   .navbar-toggler {
-    border-color: #fff;
+    border-color: #333; /* Dark border color */
   }
 
   .navbar-nav .nav-link {
-    color: #fff;
+    color: #333; /* Dark text color */
     margin-right: 1rem;
     font-weight: bold;
   }
 
   .navbar-nav .nav-link:hover {
-    color: #5bc0de;
+    color: #5bc0de; /* Lighter hover color */
   }
 
   .navbar-nav .dropdown-menu {
-    background-color: #333;
-    border-color: #5bc0de;
+    background-color: #ffffff; /* Light background color */
+    border-color: #5bc0de; /* Accent color */
   }
 
   .navbar-nav .dropdown-item {
-    color: #fff;
+    color: #333; /* Dark text color */
   }
 
   .navbar-nav .dropdown-item:hover {
-    background-color: #5bc0de;
+    background-color: #5bc0de; /* Accent color on hover */
+    color: #ffffff; /* Light text color */
   }
 
   .navbar-nav .search-btn {
-    background-color: #fe424d;
-    color: #fff;
+    background-color: #fe424d; /* Dark button color */
+    color: #fff; /* Light text color */
     border-radius: 25px;
     padding: 0.5rem 1rem;
   }
 
   .navbar-nav .search-btn:hover {
-    background-color: #ff2e33;
+    background-color: #ff2e33; /* Darker hover color */
   }
 
   .navbar-nav .search-inp {
@@ -60,48 +61,50 @@
   }
 
   .navbar-collapse {
-    background-color: #333;
+    background-color: #ffffff; /* Light background color */
   }
-
- 
 
   .navbar-nav.login-btns .nav-link {
     margin-right: 0;
   }
+
   .navbar-brand.logged-in {
-    color: #5bc0de; /* Change brand color */
-    font-size: 1.8rem; /* Increase font size */
-}
+    color: #5bc0de; /* Accent color */
+    font-size: 1.8rem;
+  }
 
-.navbar-nav.logged-in .nav-link {
-    color: #5bc0de; /* Change link color */
-}
+  .navbar-nav.logged-in .nav-link {
+    color: #5bc0de; /* Accent color */
+  }
 
-.navbar-nav.logged-in .nav-link:hover {
-    color: #ffffff; /* Change hover color */
-}
+  .navbar-nav.logged-in .nav-link:hover {
+    color: #ffffff; /* Light text color on hover */
+  }
 
-.navbar-nav.logged-in .search-btn {
-    background-color: #5bc0de; /* Change search button background color */
-    border-color: #5bc0de; /* Change search button border color */
-}
+  .navbar-nav.logged-in .search-btn {
+    background-color: #5bc0de; /* Accent color */
+    border-color: #5bc0de; /* Accent color */
+  }
 
-.navbar-nav.logged-in .search-btn:hover {
+  .navbar-nav.logged-in .search-btn:hover {
     background-color: #48a1c9; /* Darker hover color */
     border-color: #48a1c9; /* Darker hover border color */
-}
+  }
 
-.navbar-nav.logged-in .search-inp {
-    border-color: #5bc0de; /* Change search input border color */
-}
+  .navbar-nav.logged-in .search-inp {
+    border-color: #5bc0de; /* Accent color */
+  }
 
-.navbar-nav.logged-in .logout-link {
-    color: #d9534f; /* Change logout link color */
-}
-  </style>
+  .navbar-nav.logged-in .logout-link {
+    color: #d9534f; /* Danger color */
+  }
+</style>
+
+
   <nav class="navbar navbar-expand-md navbar-light bg-body-light sticky-top border-bottom">
     <% if (!currentUser ) { %>
         <div class="container-fluid">
+          
             <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -133,10 +136,10 @@
                     </li>
                 </ul>
                 <div class="navbar-nav login-btns">
-                    <a class="nav-link add-notes-link" href="/user/<%= req.user._id %>/upload">Upload Video</a>
+                    <a class="nav-link add-notes-link upload" href="/user/<%= req.user._id %>/upload">Upload Video</a>
                 </div>
                 <div class="navbar-nav login-btns">
-                  <a class="nav-link add-notes-link" href="/user/<%= req.user._id %>/our-video">Our Video</a>
+                  <a class="nav-link add-notes-link" href="/user/<%= req.user._id %>/our-video">Channel</a>
               </div>
                 <!-- <form id="searchForm" class="d-flex ms-auto" role="search" action="/user/<%= req.user._id %>/search" method="GET">
                     <input class="form-control search-inp" type="search" id="searchInput" name="title" placeholder="Date(MM-DD) or title" aria-label="Search">
@@ -150,9 +153,11 @@
                     <% if(currentUser){ %>
                         <a class="nav-link logout-link" href="/logout">Logout</a>
                     <% } %>
+                    
                 </div>
             </div>
         </div>
+ 
         <script>
             if(currentUser){
                 let searchForm = document.getElementById('searchForm');
@@ -165,4 +170,4 @@
         </script>
     <% } %>
 </nav>
-  
+

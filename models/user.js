@@ -8,6 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  //category of video
   category: {
     type: String,
     default:"coding"

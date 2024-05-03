@@ -1,36 +1,59 @@
-<% layout('/layout/boilerplate.ejs') %>
-<style>
-    body {
-        background-color: #121212; /* Dark background color */
-        color: #fff; /* Light text color */
-    }
+    <% layout('/layout/boilerplate.ejs') %>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Light background color */
+            color: #333; /* Dark text color */
+        }
 
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .col-md-4{
+            width: 30.33333333%!important;
+            margin-bottom: 50px!important;
+        }
+        .card {
+            transition: transform 0.3s;
+            background-color: #ffffff;  
+            color: #333; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .card {
-        transition: transform 0.3s;
-        background-color: #333; /* Dark card background color */
-        color: #fff; /* Light text color */
-    }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    .card:hover {
-        transform: translateY(-5px);
-    }
+        .card-title {
+            color: #5680cf; /* Blue text color */
+        }
 
-    .card-title {
-        color: #5680cf; /* Light text color */
-    }
+        .card-text {
+            color: #555; /* Darker text color */
+        }
 
-    .card-text {
-        color: #ffffff; /* Lighter text color */
-    }
-</style>
+        .btn {
+            background-color: #5680cf; /* Blue button color */
+            color: #fff; /* Light text color */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #4362ab; /* Darker blue on hover */
+        }
+
+        .rounded-circle {
+            border-radius: 50%;
+        }
+    </style>
 
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <h3 class="mb-4">Latest Video</h3>
         <div class="row">
             <% allVideos.forEach(video => { %>
@@ -40,14 +63,14 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= video.title %></h5>
                             <p class="card-text">Views: <%= video.views %></p>
-                            <p class="card-text">Owner:<%= video.owner.username %></p>
-                            <% console.log(video.owner.gmail) %>
-                            <% if(!currentUser){%>
+                            <p class="card-text">
+                                <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
+                                <%= video.owner.username %>
+                            </p>
+                            <% if (!currentUser) { %>
                                 <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                                <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                            <%}else{ %>
+                            <% } else { %>
                                 <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                                <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
                             <% } %>
                         </div>
                     </div>

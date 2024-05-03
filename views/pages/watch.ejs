@@ -3,108 +3,121 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        color: #eee;
-        background-color: #121212;
+        color: #333;  
+        background-color: #f5f5f5;  
         margin: 0;
         padding: 0;
     }
-
+    
     .video-container {
         padding: 50px;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
     }
-
+    
     .video-details {
-        width: calc(100% - 360px); /* Adjust as needed */
+        width: calc(100% - 360px);  
         padding: 20px;
-        background-color: #333;
+        background-color: #ffffff;  
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
     }
-
+    
     .video {
         width: 100%;
     }
-
+    
     video {
         width: 100%;
         border-radius: 5px;
     }
-
+    
     .comments {
-        width: 300px;
-        background-color: #333;
+        width: 350px;
+        background-color: #ffffff; 
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
     }
-
+    
     h2 {
-        color: #fff;
-        margin-top: 0;
+        text-align: center;
+        color: #333;  
+        margin-top: 0; 
     }
-
+    
     p {
-        color: #ccc;
+        color: #666;  
         margin: 0;
     }
-
+    
     .avatar {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         margin-right: 10px;
     }
-
-    .comment {
-        margin-bottom: 20px;
-    }
-
-    body {
-        background-color: #121212; /* Dark background color */
-        color: #fff; /* Light text color */
-    }
-
+    
     .card-img-top {
         height: 200px;
         object-fit: cover;
     }
 
-    .card {
-        transition: transform 0.3s;
-        background-color: #333; /* Dark card background color */
-        color: #fff; /* Light text color */
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .card-title {
-        color: #5680cf; /* Light text color */
-    }
-
-    .card-text {
-        color: #ffffff; /* Lighter text color */
-    }
-
     .comment-form {
         margin-top: 20px;
     }
-
+    
+    .comment-input-container {
+        display: flex;
+    }
+    
+    .comment-input {
+        flex: 1; 
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;  
+    }
+    
+    .send-button {
+        background-color: #5680cf;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 0 5px 5px 0;  
+        cursor: pointer;
+    }
+    
+    .card {
+        transition: transform 0.3s;
+        background-color: #ffffff;  
+        color: #333; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card-title {
+        color: #ffffff;  
+    }
+    
+    .card-text {
+        color: #666;  
+    }
+    
     .comment-form input[type="text"] {
-        width: 100%;
+        flex: 1; 
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        margin-bottom: 10px;
+        margin-right: 10px;  
     }
-
-    .comment-form input[type="submit"] {
+    
+    .comment-form button[type="submit"] {
         background-color: #5680cf;
         color: #fff;
         padding: 10px 20px;
@@ -112,10 +125,16 @@
         border-radius: 5px;
         cursor: pointer;
     }
-
-    .comment-form input[type="submit"]:hover {
-        background-color: #4362ab;
+    
+    .like{
+        cursor: pointer;
+        color: #ccc;
     }
+    .unlike{
+        cursor: pointer;
+        color: #5680cf;
+    }
+    
 </style>
 
 <body>
@@ -134,27 +153,46 @@
         <div class="comments">
             <h2>Comments</h2>
             <div class="comment-form">
-                <form action="/user/<%= req.user._id %>/videos/<%= videos[0]._id %>" method="POST">
-                    <input type="text" name="content" placeholder="Enter your content...">
-                    <input type="hidden" name="video_id" value="<%= videos[0]._id %>">
-                    <input type="submit" value="Post Comment">
+                <form action="/user/<%= req.user._id %>/videos/<%= videos[0]._id %>/comments" method="POST">
+                    <div class="comment-input-container">
+                        <input type="text" name="content" placeholder="Comment" class="comment-input">
+                        <button type="submit" class="send-button">Send</button>
+                    </div>
                 </form>
             </div>
-            <% if(comment){ %>
+            <% if (comment && comment.length > 0) { %>
                 <% comment.forEach(comment => { %>
                     <div class="comment">
-                        <% console.log(comment.user) %>
-                        <p><strong><%= comment.user %>:</strong> <%= comment.content %></p>
+                        <p><strong><%= comment.owner.username %>:</strong> <%= comment.content %></p>
+                        <% if (currentUser && comment.likes.includes(currentUser._id)) { %>
+                            <form action="/user/<%= req.user._id %>/videos/<%= videos[0]._id %>/comments/<%= comment._id %>/unlike" method="POST">
+                                <button>
+                                    <span class="material-symbols-outlined unlike">
+                                        thumb_up
+                                    </span>
+                                </button> 
+                            </form>
+                        <% } else { %>
+                            <form action="/user/<%= req.user._id %>/videos/<%= videos[0]._id %>/comments/<%= comment._id %>/like" method="POST">
+                               <button>
+                                <span class="material-symbols-outlined like">
+                                    thumb_up
+                                    </span>
+                               </button> 
+                            </form>
+                        <% } %>
+                        <p><%= comment.likes.length %> likes</p>
                     </div>
                 <% }); %>
             <% } else { %>
                 <p>No comments yet.</p>
             <% } %>
         </div>
+        
     </div>
 
     <div class="other-videos">
-        <div class="container mt-5">
+        <div class="container">
             <h3 class="mb-4">Latest Video</h3>
             <div class="row">
                 <% allVideos.forEach(video => { %>
@@ -165,7 +203,6 @@
                                 <h5 class="card-title"><%= video.title %></h5>
                                 <p class="card-text">Views: <%= video.views %></p>
                                 <p class="card-text">Owner:<%= video.owner.username %></p>
-                                <% console.log(video.owner.gmail) %>
                                 <% if(!currentUser){%>
                                     <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
                                     <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
@@ -174,15 +211,7 @@
                                     <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
                                 <% } %>
                             </div>
-                            <div class="card-body">
-                                <div class="comment-form">
-                                    <form action="/post_comment" method="POST">
-                                        <input type="text" name="comment" placeholder="Enter your comment...">
-                                        <input type="hidden" name="video_id" value="<%= video._id %>">
-                                        <input type="submit" value="Post Comment">
-                                    </form>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 <% }); %>
