@@ -2,23 +2,33 @@
 
 <style>
   body {
-    background-color: #f0f0f0; /* Light background color */
-    color: #333; /* Dark text color */
-    font-family: Arial, sans-serif; /* Fallback font */
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: relative; /* Ensure positioning context for overlay */
   }
 
-  .container {
-    max-width: 1200px; /* Adjust max-width as needed */
-    margin: 0 auto; /* Center align container */
-    padding-top: 20px; /* Add padding to the top */
+  /* Background overlay */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    backdrop-filter: blur(5px); /* Apply blur effect */
+    z-index: 9998; /* Ensure the overlay is behind the popup */
+    display: none; /* Initially hidden */
   }
 
   .profile-section {
-    background-color: #fff; /* Light background color */
+    background-color: #fff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px; /* Add some space between sections */
+    margin-bottom: 30px;
   }
 
   .profile-avatar {
@@ -26,6 +36,14 @@
     height: 80px;
     border-radius: 50%;
     margin-right: 20px;
+  }
+
+  .cbox {
+    background: #fff;
+    padding-right: 5%;
+    margin-left: 110px;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
   .profile-info {
@@ -39,18 +57,28 @@
     font-size: 20px;
   }
 
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #333;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 9999; /* Ensure the close button is above the overlay */
+  }
+
   .profile-email {
-    color: #888; /* Lighter text color */
+    color: #888;
     margin-bottom: 10px;
   }
 
   .profile-category {
     font-style: italic;
-    color: #666; /* Darker text color */
+    color: #666;
   }
 
   .video-section {
-    background-color: #fff; /* Light background color */
+    background-color: #fff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -68,7 +96,7 @@
   }
 
   .video-views {
-    color: #888; /* Lighter text color */
+    color: #888;
   }
 
   .video-container {
@@ -76,118 +104,121 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
+  }
 
-.video-details {
-    width: calc(100% - 360px); /* Adjust as needed */
+  .video-details {
+    width: calc(100% - 360px);
     padding: 20px;
-    background-color: #ffffff; /* White background color */
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-}
+  }
 
-.video {
+  .video {
     width: 100%;
-}
+  }
 
-video {
+  video {
     width: 100%;
     border-radius: 5px;
-}
+  }
 
-.comments {
+  .comments {
     width: 350px;
-    background-color: #ffffff; /* White background color */
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-}
+  }
 
-h2 {
+  h2 {
     text-align: center;
-    color: #333; /* Dark text color */
+    color: #333;
     margin-top: 0;
-}
+  }
 
-p {
-    color: #666; /* Medium text color */
+  p {
+    color: #666;
     margin: 0;
-}
+  }
 
-.avatar {
+  .avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
-}
+  }
 
-.card-img-top {
+  .card-img-top {
     height: 200px;
     object-fit: cover;
-}
+  }
 
-.comment-form {
+  .comment-form {
     margin-top: 20px;
-}
+  }
 
-.comment-input-container {
+  .comment-input-container {
     display: flex;
-}
+  }
 
-.comment-input {
-    flex: 1; /* Take up remaining space */
+  .comment-input {
+    flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px; /* Rounded corners on the left side */
-}
+    border-radius: 5px 0 0 5px;
+  }
 
-.send-button {
+  .send-button {
     background-color: #5680cf;
     color: #fff;
     padding: 10px 20px;
     border: none;
-    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
-}
+  }
 
-.card {
+  .card {
     transition: transform 0.3s;
-    background-color: #ffffff; /* White card background color */
-    color: #333; /* Dark text color */
+    background-color: #ffffff;
+    color: #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.card:hover {
+  .card:hover {
     transform: translateY(-5px);
-}
+  }
 
-.card-title {
-    color: #5680cf; /* Blue card title color */
-}
+  .card-title {
+    color: #5680cf; 
+    margin-left: 15px;
+  }
 
-.card-text {
-    color: #666; /* Medium card text color */
-}
+  .card-text {
+    color: #666;
+    margin-top: 10px;
+  }
 
-.comment-form input[type="text"] {
-    flex: 1; /* Take up remaining space */
+  .comment-form input[type="text"] {
+    flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px; /* Add some spacing between input and button */
-}
+    margin-right: 10px;
+  }
 
-.comment-form button[type="submit"] {
+  .comment-form button[type="submit"] {
     background-color: #5680cf;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-.editbtn{
+  }
+
+  .editbtn {
     background-color: #5680cf;
     color: #fff;
     padding: 10px 20px;
@@ -195,51 +226,106 @@ p {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 650px;
-
-}
-</style>  
+  }
+</style>
 
 <body>
-  <div class="container">
+  <!-- Background overlay -->
+  <div class="overlay"></div>
+  
+  <div class="cbox">
     <div class="profile-section">
       <div class="profile-info">
+        <% if(profile.avatar){ %>
         <img src="<%= profile.avatar %>" alt="Avatar" class="profile-avatar">
+        <% } else { %>
+          <span class="material-symbols-outlined profile-avatar">
+            account_circle
+            </span>
+        <% } %>
         <div>
           <div class="profile-name"><%= profile.username %></div>
           <div class="profile-email"><%= profile.emial %></div>
           <div class="profile-category">Category: <%= profile.username %></div>
         </div>
-        <form action="/user/<%= profile._id %>/edit" method="GET">
           <button type="submit" class="btn btn-primary editbtn">Edit Profile</button>
-        </form>
       </div>
     </div>
-
-    <div class="other-videos">
-      <div class="container">
-          <h3 class="mb-4">Latest Video</h3>
-          <div class="row">
-              <% videos.forEach(video => { %>
-                  <div class="col-md-4 mb-4">
-                      <div class="card shadow-sm">
-                          <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
-                          <div class="card-body">
-                              <h5 class="card-title"><%= video.title %></h5>
-                              <p class="card-text">Views: <%= video.views %></p>
-                              <p class="card-text">Owner:<%= video.owner.username %></p>
-                              <% if(!currentUser){%>
-                                  <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                              <%}else{ %>
-                                  <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                              <% } %>
-                          </div>
-                          
-                      </div>
-                  </div>
-              <% }); %>
+    <!-- add btn here -->
+    <div class="video-section">
+        <div class="btn-group mb-3" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-light">Playlist</button>
+          <button type="button" class="btn btn-light" style="background-color: #5680cf">Latest</button>
+          <button type="button" class="btn btn-light">Like</button>
+          <!-- Add more buttons as needed -->
+        </div>
+      <h3 class="mb-4">Latest Video</h3>
+      <div class="row">
+        <% videos.forEach(video => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+              <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <h5 class="card-title center"><%= video.title %></h5>
+                <p class="card-text"><% video.owner.categories %></p>
+                <% if(!currentUser){%>
+                  <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
+                <%}else{ %>
+                  <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
+                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
+                <% } %>
+              </div>
+            </div>
           </div>
+        <% }); %>
       </div>
+    </div>
   </div>
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const editButtons = document.querySelectorAll('.editbtn');
+    const overlay = document.querySelector('.overlay');
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const userId = button.dataset.userId; // Assuming you have a data attribute for user ID
+        try {
+          const response = await fetch(`/user/<%= profile._id %>/edit`); // Fetch the edit form content
+          const editFormContent = await response.text();
+
+          const popupContainer = document.createElement('div');
+          popupContainer.innerHTML = editFormContent;
+          popupContainer.classList.add('popup-container');
+          document.body.appendChild(popupContainer);
+
+          // Apply styles to the popup container
+          popupContainer.style.position = 'fixed';
+          popupContainer.style.top = '50%';
+          popupContainer.style.left = '50%';
+          popupContainer.style.transform = 'translate(-50%, -50%)';
+          popupContainer.style.backgroundColor = '#fff';
+          popupContainer.style.padding = '20px';
+          popupContainer.style.borderRadius = '10px';
+          popupContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+          popupContainer.style.zIndex = '9999';
+          // Add close button
+          const closeButton = document.createElement('button');
+          closeButton.innerHTML = '✖️';  
+          closeButton.classList.add('close-btn');
+          closeButton.addEventListener('click', () => {
+            document.body.removeChild(popupContainer);
+            overlay.style.display = 'none'; // Hide the overlay
+            document.body.style.overflow = ''; // Restore scrollability
+          });
+          popupContainer.appendChild(closeButton);
+          overlay.style.display = 'block'; // Show the overlay
+          document.body.style.overflow = 'hidden'; // Hide vertical scrollbar
+        } catch (error) {
+          console.error('Error fetching edit form content:', error);
+        }
+      });
+    });
+  });
+</script>

@@ -3,35 +3,38 @@
 <body>
     <div class="container">
         <h3>Categories</h3>
-        <div class="row mt-3">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/user/<%= req.user._id %>/coding?_method=PUT" method="POST">
-                            <button type="submit" class="btn btn-primary">Coding <i class="fas fa-plus"></i></button>
-                        </form>                   
+        <form action="/user/<%= req.user._id %>/submit?_method=PUT" method="POST">
+            <div class="row mt-3">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <label for="coding">
+                                <input type="checkbox" id="coding" name="categories" value="Coding"> Coding
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <label for="engineering">
+                                <input type="checkbox" id="engineering" name="categories" value="Engineering"> Engineering
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <label for="adventure">
+                                <input type="checkbox" id="adventure" name="categories" value="Adventure"> Adventure
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/user/<%= req.user._id %>/Engineering?_method=PUT" method="POST">
-                            <button type="submit" class="btn btn-primary">Engineering <i class="fas fa-plus"></i></button>
-                        </form>    
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/user/<%= req.user._id %>/Adventure?_method=PUT" method="POST">
-                            <button type="submit" class="btn btn-primary">Adventure <i class="fas fa-plus"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 
     <!-- Font Awesome -->

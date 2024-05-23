@@ -8,11 +8,10 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  //category of video
-  category: {
+  categories: [{
     type: String,
-    default:"coding"
-  },
+    default: "coding" 
+  }],
   avatar: {
     type: String,  
   },

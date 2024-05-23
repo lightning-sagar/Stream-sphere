@@ -27,8 +27,18 @@ const videoSchema = new Schema(
             type: Boolean,
             default: true
         },
-        category: {
-            type: String
+        categories: {
+            type: [{
+                type: String,
+                required: true,
+                lowercase: true  
+            }],
+            validate: {
+                validator: function (value) {
+                    return value.every(category => typeof category === 'string' && category === category.toLowerCase());
+                },
+                message: props => `${props.value} must be lowercase strings`
+            }
         },
         owner: {
             type: Schema.Types.ObjectId,

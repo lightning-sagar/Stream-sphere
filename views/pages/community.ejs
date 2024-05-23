@@ -1,0 +1,40 @@
+<% layout('/layout/boilerplate.ejs') %>
+
+<div class="container">
+    <h2>Welcome to <%= communities.name %> Community!</h2>
+    <p><%= communities.description %></p>
+    <% if (currentUser) { %>
+      <h3>Switch Community:</h3>
+      <div class="community-switch">
+          <% userCategories.forEach(comm => { %>
+              <% console.log(comm) %>
+                  <form action="/community/switch" method="POST">
+                      <button type="submit" class="btn btn-secondary"><%= comm %></button>
+                  </form>
+          <% }); %>
+      </div>
+    <% } %>
+    <% if (currentUser) { %>
+        <form action="/community/<%= communities._id %>/tweet/Coding" method="POST">
+            <div class="form-group">
+                <label for="tweetContent">Write your tweet:</label>
+                <textarea class="form-control" id="tweetContent" name="content" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Tweet</button>
+        </form>
+    <% } else { %>
+        <p>Login to tweet!</p>
+    <% } %>
+
+    <div class="tweets">
+        <% allTweets.forEach(tweet => { %>
+            <div class="tweet">
+                <p><%= tweet.content %></p>
+                <p><strong>Posted by:</strong> <%= tweet.owner.username %></p>
+                <p><strong>Category:</strong> <%= tweet.owner.category %></p>
+            </div>
+        <% }); %>
+    </div>
+
+    
+</div>

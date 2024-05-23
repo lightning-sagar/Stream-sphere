@@ -8,6 +8,8 @@ const LocalStrategy = require('passport-local');
 
 const User = require('./models/user.js');
 const Comment = require('./models/comment.js');
+const {Tweet,Community,Membership} = require('./models/community.js');
+
 
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
@@ -174,20 +176,17 @@ app.get('/category',ensureAuthenticated,async (req, res) => {
   const user = await User.findById(req.params.id);
   res.render('pages/category.ejs',{req,currentUser: req.user});
 })
-app.put('/user/:id/:category', ensureAuthenticated, async (req, res) => {
+app.put('/user/:id/submit', ensureAuthenticated, async (req, res) => {
   try {
     const userId = req.params.id;
-    const category = req.params.category;
-    const userData = req.body.user;
-    console.log(category);
-    const user = await User.findById(userId);
+    const categories = Array.isArray(req.body.categories) ? req.body.categories : [req.body.categories]; // Ensure categories is an array
+    console.log(categories);  
 
-    const newuser = await User.findByIdAndUpdate(userId, {
-      category,
-    })
-    await newuser.save();
+    const newUser = await User.findByIdAndUpdate(userId, {
+      categories: categories,  
+    });
 
-    console.log("User updated:", newuser);
+    console.log("User updated:", newUser);
     res.redirect(`/user/${userId}`);
   } catch (error) {
     console.error("Error updating user:", error);
@@ -197,13 +196,19 @@ app.put('/user/:id/:category', ensureAuthenticated, async (req, res) => {
 
 
 app.get('/user/:id', ensureAuthenticated, async (req, res) => {
-  const user = await User.findById(req.params.id);
-  const usercat = user.category;
-  console.log(usercat);
-  const allVideos = await Video.find({category: usercat}).populate('owner');
-  res.render('pages/index.ejs', { user, currentUser: req.user,req, allVideos });
+  try {
+    const user = await User.findById(req.params.id);
+    const userCategories = user.categories;
+    console.log(userCategories, "categories");
+    const allVideos = await Video.find({ categories: { $in: userCategories } }).populate('owner');
+    console.log(allVideos);
+    res.render('pages/index.ejs', { user, currentUser: req.user, req, allVideos });
+  } catch (error) {
+    console.error("Error fetching user's videos:", error);
+    res.status(500).send("Error fetching user's videos");
+  }
+});
 
-})
 
 //upload
 app.get("/user/:id/upload", ensureAuthenticated, (req, res) => {
@@ -220,47 +225,55 @@ app.post("/user/:id/upload", upload.fields([
   }
 ]), ensureAuthenticated, async (req, res) => {
   try {
-    const { title, description } = req.body;
-    if (!title || !description) {
-      throw new Error("Title and description are required.");
-    }
-    console.log(req.files.thumbnail[0].path, req.files.thumbnail);
-    const thumbnailLocalPath = req.files['thumbnail'][0].path;
-    const vedioLocalPath = req.files['videoFile'][0].path;
-    const category = req.user.category;
-    console.log(vedioLocalPath, thumbnailLocalPath);
+      const { title, description, categories } = req.body; 
+      console.log(req.body);
+      if (!title || !description) {
+          req.flash('error_msg', 'Title and description are required.');
+          return res.redirect(`/user/${req.user._id}/upload`);
+      }
+      console.log(req.files);
+      const thumbnailLocalPath = req.files['thumbnail'][0].path;
+      const videoLocalPath = req.files['videoFile'][0].path;
 
-    // Upload video file and thumbnail to Cloudinary
-    const [thumbnailResponse, videoResponse] = await Promise.all([
-      uploadOnCloudinary(thumbnailLocalPath),
-      uploadOnCloudinary(vedioLocalPath)
-    ]);
+      console.log(videoLocalPath, thumbnailLocalPath);
 
-    if (!thumbnailResponse || !videoResponse) {
-      throw new Error("Error uploading files to Cloudinary.");
-    }
+      const [thumbnailResponse, videoResponse] = await Promise.all([
+          uploadOnCloudinary(thumbnailLocalPath),
+          uploadOnCloudinary(videoLocalPath),
+      ]);
 
-    const publishVideo = await Video.create({
-      videoFile: videoResponse.secure_url,
-      thumbnail: thumbnailResponse.secure_url,
-      title,
-      description,
-      isPublished: false,
-      owner: req.user._id,
-      category
-    });
+      if (!thumbnailResponse || !videoResponse) {
+          req.flash('error_msg', 'Error uploading files to Cloudinary.');
+          return res.redirect(`/user/${req.user._id}/upload`);
+      }
 
-    if (!publishVideo) {
-      throw new Error("Error creating video entry in the database.");
-    }
+      const publishVideo = await Video.create({
+          videoFile: videoResponse.secure_url,
+          thumbnail: thumbnailResponse.secure_url,
+          title,
+          description,
+          isPublished: false,
+          categories: categories.split(",").map(category => category.trim()),  
+          owner: req.user._id,
+      });
 
-    console.log("Video uploaded successfully:", publishVideo);
-    res.redirect(`/user/${req.user._id}`);
+      if (!publishVideo) {
+          req.flash('error_msg', 'Error creating video entry in the database.');
+          return res.redirect(`/user/${req.user._id}/upload`);
+      }
+
+      console.log("Video uploaded successfully:", publishVideo);
+      req.flash('success_msg', 'Video uploaded successfully.');
+      res.redirect(`/user/${req.user._id}`);
   } catch (error) {
-    console.error("Error uploading video:", error);
-    res.status(500).send("Error uploading video");
+      console.error("Error uploading video:", error);
+      req.flash('error_msg', 'Error uploading video.');
+      res.redirect(`/user/${req.user._id}/upload`);
   }
 });
+
+
+
 
 //watch video
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
@@ -301,44 +314,53 @@ app.get("/user/:id/edit", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Error retrieving video");
   }
 })
-app.put("/user/:id/edit/profile", ensureAuthenticated,upload.fields([
+app.put("/user/:id/edit/profile", ensureAuthenticated, upload.fields([
   {
-      name: "avatar",
-      maxCount: 1,
+    name: "avatar",
+    maxCount: 1,
   }
 ]), async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.body,"wow");
     const { username, email, category } = req.body;
-    const avatarlocalPath = req.files['avatar'][0].path;
-    const [avatarResponse] = await Promise.all([
-      uploadOnCloudinary(avatarlocalPath)
-    ]);
+    
+    // Check if avatar field is present in the request body
+    let avatarUrl;
+    if (req.files['avatar'] && req.files['avatar'].length > 0) {
+      const avatarLocalPath = req.files['avatar'][0].path;
+      const [avatarResponse] = await Promise.all([
+        uploadOnCloudinary(avatarLocalPath)
+      ]);
 
-    if (!avatarResponse ) {
-      throw new Error("Error uploading files to Cloudinary.");
+      if (!avatarResponse) {
+        throw new Error("Error uploading avatar to Cloudinary.");
+      }
+      avatarUrl = avatarResponse.secure_url;
     }
+    
+    // Find the user by ID and update the fields
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        username,
-        email,
-        category,
-        avatar: avatarResponse.secure_url
+        ...(username && { username }), // If username exists, update it
+        ...(email && { email }), // If email exists, update it
+        ...(category && { category }), // If category exists, update it
+        ...(avatarUrl && { avatar: avatarUrl }) // If avatarUrl exists, update it
       },
       { new: true }
     );
+
     if (!updatedUser) {
       throw new Error("User not found");
     }
+
     console.log("User updated successfully:", updatedUser);
     res.redirect(`/user/${req.user._id}`);
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).send("Error updating user");
   }
-})
+});
 
 //post comment 
 app.post("/user/:id/videos/:video/comments", ensureAuthenticated, async (req, res) => {
@@ -406,8 +428,40 @@ app.post("/user/:id/videos/:video/comments/:commentId/unlike", ensureAuthenticat
 })
 
 
-
-
+//community
+app.get('/user/:id/community', ensureAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const userCategories = user.categories;
+    const communities = await Community.find({ categories: { $in: userCategories } });
+    const allTweets = await Tweet.find({ community: { $in: communities.map(community => community._id) } }).populate('owner');
+    console.log(allTweets,communities);
+    res.render('pages/community.ejs', { user, req,currentUser: req.user,userCategories, communities, allTweets });
+  } catch (error) {
+    console.error('Error fetching community data:', error);
+    res.status(500).send('Error fetching community data');
+  }
+});
+app.post('/user/:id/tweet', ensureAuthenticated, async (req, res) => {
+  try{
+    const user = await User.findById(req.params.id);
+    if(!user){
+      throw new Error('User not found');
+    }
+    const tweet = await Tweet.create({
+      content: req.body.content,
+      owner: req.user._id
+    })
+    user.tweets.push(tweet._id);
+    await user.save();
+    res.redirect(`/user/${req.user._id}/community`);
+  }catch(e){
+    console.log(e);
+  }
+})
 
 
 

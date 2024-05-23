@@ -56,7 +56,7 @@
     
     .avatar {
         width: 50px;
-        height: 50px;
+        height:30px;
         border-radius: 50%;
         margin-right: 10px;
     }
@@ -103,10 +103,12 @@
     
     .card-title {
         color: #ffffff;  
+        margin-left: 15px;
     }
     
     .card-text {
         color: #666;  
+        margin-top: 10px;
     }
     
     .comment-form input[type="text"] {
@@ -146,8 +148,9 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <h2>Title: <%= videos[0].title %></h2>
-            <p>Owner: <%= videos[0].owner.username %></p>
+            <h2> <%= videos[0].title %></h2>
+            <% console.log(videos[0].owner) %>
+            <p><img src="<%= videos[0].owner.avatar %>" class="avatar" alt=""><%= videos[0].owner.username %></p>
             <p>Description: <%= videos[0].description %></p>
         </div>
         <div class="comments">
@@ -188,7 +191,6 @@
                 <p>No comments yet.</p>
             <% } %>
         </div>
-        
     </div>
 
     <div class="other-videos">
@@ -202,7 +204,6 @@
                             <div class="card-body">
                                 <h5 class="card-title"><%= video.title %></h5>
                                 <p class="card-text">Views: <%= video.views %></p>
-                                <p class="card-text">Owner:<%= video.owner.username %></p>
                                 <% if(!currentUser){%>
                                     <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
                                     <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
@@ -211,7 +212,6 @@
                                     <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
                                 <% } %>
                             </div>
-                            
                         </div>
                     </div>
                 <% }); %>
