@@ -68,10 +68,10 @@
         width: 15px;
     }
     
-    /* Sidebar */
+    /* Sidebar*/
     .sidebar{
         background: #f6f6f6; /* Light gray background */
-        width: 17%;
+        width: 15%;
         height: 100vh;
         position: fixed;
         top: 0;
@@ -142,8 +142,7 @@
         background: #fff; /* White background */
         padding-left: 3%;
         margin-right: 0;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-bottom: 68px;
     }
     .large-container{
         padding-left: 7%; 
@@ -232,28 +231,32 @@
     .logo{
         justify-self: center;
     }
+    .margin{
+        margin-top: 25%!important;
+    }
 </style>
 <div class="sidebar">
     <div class="shortcut-links">
         <% if(currentUser){ %>
-            <div class="text-center pt-3 pb-3">
-                <a href="/">
-                    <span class="logo material-symbols-outlined">
-                        home
-                    </span>
-                    <p class="text-center">&nbsp;Home</p>
-                </a>
-            </div>
-            <div class="text-center pt-3 pb-3">
+            
+            <div class="text-center pt-4 margin pb-3">
                 <a href="/user/<%= req.user._id %>/upload">
                     <span class="material-symbols-outlined">
                         upload_file
                     </span>
-                    <p class="text-center">&nbsp;Upload Video</p>
+                    <p class="text-center ">&nbsp;Upload Video</p>
                 </a>
             </div>
             <div class="text-center pt-3 pb-3">
-                <a href="/user/<%= req.user._id %>/our-video">
+                <a href="/user/<%= req.user._id %>/community">
+                    <span class="material-symbols-outlined">
+                        forum
+                    </span>
+                    <p class="text-center">&nbsp;Community</p>
+                </a>
+            </div>
+            <div class="text-center pt-3 pb-3">
+                <a href="/user/<%= req.user._id %>/dashboard/<%= req.user.username %>">
                     <span class="material-symbols-outlined">
                         dashboard
                     </span>
@@ -262,14 +265,9 @@
             </div>
         <% }else{ %>
             <div class="text-center pt-3 pb-3">
-                <a href="/">
-                    <span class="logo material-symbols-outlined">
-                        home
-                    </span>
-                    <p class="text-center">&nbsp;Home</p>
-                </a>
+                
             </div>
-            <div class="text-center pt-3 pb-3">
+            <div class="text-center pt-4 pb-3">
                 <a href="/login">
                     <span class="material-symbols-outlined">
                         upload_file

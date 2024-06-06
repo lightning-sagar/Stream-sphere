@@ -6,7 +6,7 @@ cloudinary.config({
   cloud_name: 'dybgs03yy', 
   api_key: '332289123789885', 
   api_secret: 'PuGPKDLd8lTU37vu7MqS9JRtS-I' ,
-  timeout: 600000 // 10 minutes timeout
+  timeout: 6000000 // 10 minutes timeout
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
@@ -16,10 +16,10 @@ const uploadOnCloudinary = async (localFilePath) => {
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto",
         });
-        console.log("working");
         fs.unlinkSync(localFilePath);  
         return response;
     } catch (error) {
+        fs.unlinkSync(localFilePath);  
         console.error("Error uploading to Cloudinary:", error);
         return null;
     }

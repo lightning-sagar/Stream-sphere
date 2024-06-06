@@ -18,7 +18,7 @@
 
   .form-control,
   .form-control-file {
-    width: 100%; /* Take up full width of container */
+    width: 50%; /* Take up full width of container */
     margin-bottom: 10px; /* Add space between inputs */
     padding: 8px; /* Add padding to inputs */
     border: 1px solid #ccc; /* Add border to inputs */
@@ -43,27 +43,134 @@
   .btn-primary:hover {
     background-color: #4362ab; /* Darker blue on hover */
   }
-</style>
+  .container{
+    padding-bottom: 150px;
+  }
+  /* Custom styles for two-step upload process */
+  .step-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
 
-<div class="container mt-3">
-  <h3 class="mb-4">Upload Video</h3>
-  <form action="/user/<%= req.user._id %>/upload" method="POST" enctype="multipart/form-data" class="max-width-800 mx-auto">
-    <div class="form-group">
-      <label for="videoFile" class="form-label">Select Video File</label>
-      <input type="file" class="form-control-file" id="videoFile" name="videoFile" accept="video/*" required>
+  .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer; /* Add cursor pointer for clickable behavior */
+  }
+
+  .step-circle.active {
+    background-color: #5680cf; /* Blue color for active step */
+  }
+
+  .step-two {
+    display: none; /* Initially hide the second step */
+  }
+</style>
+<div class="container pt-5">
+  <form action="/user/<%= req.user._id %>/upload" id="uploadForm" class="max-width-800 mx-auto" enctype="multipart/form-data" method="post">
+    <!-- Step indicators -->
+    <div class="step-container">
+      <div class="step-circle active" data-step="1">1</div>
+      <div class="step-circle" data-step="2">2</div>
     </div>
-    <div class="form-group">
-      <label for="thumbnail" class="form-label">Select Thumbnail</label>
-      <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">
+
+    <!-- Step 1: Upload Video File -->
+    <div class="step-one">
+      <h3 class="mb-4">Step 1: Upload Video File</h3>
+      <div class="form-group">
+        <label for="videoFile" class="form-label">Select Video File</label>
+        <input type="file" class="form-control-file" id="videoFile" name="videoFile" accept="video/*" required>
+      </div>
+      <button type="button" class="btn btn-primary next-step">Next</button>
     </div>
-    <div class="form-group">
-      <label for="title" class="form-label">Title</label>
-      <input type="text" class="form-control" id="title" name="title" required>
+
+    <!-- Step 2: Upload thumbnail, title, description, category -->
+    <div class="step-two" style="display: none;">
+      <h3 class="mb-4">Step 2: Add Thumbnail, Title, Description, Category</h3>
+      <div class="form-group">
+        <label for="thumbnail" class="form-label">Select Thumbnail</label>
+        <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">
+      </div>
+      <div class="form-group">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="categories" class="form-label">Categories (comma-separated)</label>
+        <input type="text" class="form-control" id="categories" name="categories">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Upload</button>
     </div>
-    <div class="form-group">
-      <label for="description" class="form-label">Description</label>
-      <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
   </form>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const stepOne = document.querySelector('.step-one');
+    const stepTwo = document.querySelector('.step-two');
+    const nextBtn = document.querySelector('.next-step');
+    const stepCircles = document.querySelectorAll('.step-circle');
+    const form = document.querySelector('form');
+
+    
+    nextBtn.addEventListener('click', function() {
+      // Validation logic for step 1 fields
+      const videoFile = document.getElementById('videoFile');
+      if (videoFile.value === '') {
+        alert('Please select a video file.');
+        return;
+      }
+
+      // Proceed to step 2
+      stepOne.style.display = 'none';
+      stepTwo.style.display = 'block';
+      stepCircles[1].classList.add('active');
+    });
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Validation logic for step 2 fields
+      const thumbnail = document.getElementById('thumbnail');
+      const title = document.getElementById('title');
+      if (thumbnail.value === '' || title.value === '') {
+        alert('Please select a thumbnail and enter a title.');
+        return;
+      }
+
+      // If everything is valid, submit the form
+      this.submit(); // Submit the form
+    });
+
+    stepCircles.forEach(function(circle) {
+      circle.addEventListener('click', function() {
+        const stepNumber = parseInt(circle.getAttribute('data-step'));
+        if (stepNumber === 1) {
+          stepOne.style.display = 'block';
+          stepTwo.style.display = 'none';
+          stepCircles[0].classList.add('active');
+          stepCircles[1].classList.remove('active');
+        } else if (stepNumber === 2) {
+          stepOne.style.display = 'none';
+          stepTwo.style.display = 'block';
+          stepCircles[0].classList.remove('active');
+          stepCircles[1].classList.add('active');
+        }
+      });
+    });
+  });
+</script>

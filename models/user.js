@@ -8,32 +8,62 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  //category of video
-  category: {
+  openedChats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+  categories: [{
     type: String,
-    default:"coding"
-  },
+    default: "coding" 
+  }],
   avatar: {
-    type: String,  
+    type: String, 
+    default: "https://cdn-icons-png.flaticon.com/512/149/149071.png" 
   },
   coverImage: {
-      type: String,  
+    type: String,
+  },
+  is_online: {
+    type: Boolean,
+    default: false
   },
   watchHistory: [
-      {
-          type: Schema.Types.ObjectId,
-          ref: "Video"
-      }
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Video"
+    }
   ],
   googleId: String,
   username: String,
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  waiting: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  sendreq: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  blocked: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }]
 });
 
 userSchema.plugin(passportLocalMongoose);
 
 userSchema.statics.findByGoogleId = function (googleId) {
   return this.findOne({ googleId }).exec();
-};
+}; 
 
 const User = mongoose.model('User', userSchema);
 

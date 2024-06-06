@@ -1,0 +1,374 @@
+<% layout('/layout/boilerplate.ejs') %>
+<script>
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.remove();
+</script>
+
+<style>
+  :root {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  .cont {
+    box-sizing: border-box;
+    margin-bottom: -1000px;
+    width: 100%;
+    display: flex;
+    height: 90.7vh;
+    color: #333;
+  }
+
+  .chat-sidebar {
+    width: 5%;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat-sidebar a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    margin: 15px 0;
+  }
+
+  .chat-sidebar i {
+    font-size: 24px;
+  }
+
+  .chat-sidebar p {
+    margin: 5px 0 0;
+  }
+
+  .logos {
+    width: 20%;
+    background-color: #e1e1e1;
+    color: #333;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  .logos .person {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .logos .person:hover {
+    background-color: #ddd;
+  }
+
+  .logos .person img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .chat-container {
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    border-left: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .chat-container h2 {
+    margin: 0 0 20px;
+  }
+
+  .send {
+    background-color: #f4f4f4;
+    padding: 10px;
+    display: flex;
+  }
+
+  .send input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .send button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+
+  .send button:hover {
+    background-color: #0056b3;
+  }
+
+  .messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+
+  .message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 60%;
+}
+.cont{
+  position: fixed;
+  left: 0;
+}
+.sender-user {
+  background-color: #d1e7dd;
+  margin-left: auto;
+  text-align: left;
+}
+
+.receiver-user {
+  background-color: #f8d7da;
+  margin-right: auto;
+  text-align: left;
+}
+#notification {
+      display: none;
+      padding: 10px;
+      background-color: yellow;
+      border: 1px solid black;
+      margin: 10px 0;
+}
+.blue{
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dot{
+  margin-left: 55px;
+  height: 10px;
+  width: 10px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
+
+<body>
+  <div class="cont">
+    <div class="chat-sidebar">
+      <div class="text-center pt-4 margin pb-3">
+        <a href="/<%= req.user._id %>/chat">
+          <div class="blue">
+            <i class="fa-solid fa-message"></i>
+          </div>
+        </a>
+      </div>
+      <div class="text-center pt-3 pb-3">
+        <a href="/<%= req.user._id %>/chat/all">
+          <i class="fa-solid fa-plus"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="logos">
+      <form id="searchForm" class="d-flex ms-auto" role="search" action="/user/<%= req.user._id %>/search/chat" method="GET">
+          <input class="form-control search-inp" type="search" id="searchInput" name="title" placeholder="Sagar" aria-label="Search">
+          <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+      <% if (userchat.length > 0) {  %>
+        <% userchat.forEach(chat => { %>
+          <div class="person" data-userid="<%= chat._id %>" data-username="<%= chat.username %>">
+            <img src="<%= chat.avatar %>" alt="" width="40" height="40">
+            <span><%= chat.username %></span>
+            <sub class="<%= chat.is_online ? 'text-success' : 'text-danger' %>"><%= chat.is_online ? 'Online' : 'Offline' %></sub>
+            <span class="notification-badge" style="<%= chat.hasUnseenMessages ? 'display: inline;' : 'display: none;' %>">
+              <div class="dot"></div>
+            </span>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <div class="chat-container">
+      <h2>Select a user to start chatting</h2>
+      <div id="messages" class="messages"></div>
+      <div id="notification" class="notification"></div>
+    </div>
+  </div>
+</body>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sender_id = '<%= req.user._id %>';
+  let receiver_id = '';
+  let currentChatUser = '';
+
+  const socket = io('/users-namespace', {
+    auth: {
+      userId: sender_id
+    }
+  });
+
+  socket.on('user status', function(data) {
+    const { userId, is_online } = data;
+    const personElement = document.querySelector(`.logos .person[data-userid="${userId}"]`);
+    if (personElement) {
+      const statusElement = personElement.querySelector('sub');
+      if (statusElement) {
+        statusElement.textContent = is_online ? 'Online' : 'Offline';
+        statusElement.className = is_online ? 'text-success' : 'text-danger';
+      }
+    }
+  });
+
+  socket.on('chat message', function(data) {
+    if (data.sender_id === receiver_id || data.to === receiver_id) {
+      const messages = document.getElementById('messages');
+      const messageElement = document.createElement('div');
+      messageElement.className = data.sender_id === sender_id ? 'message sender-user' : 'message receiver-user';
+      messageElement.textContent = `${data.sender_id === sender_id ? 'You' : data.from_username}: ${data.message}`;
+      messages.appendChild(messageElement);
+      messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+    }
+  });
+
+  socket.on('loadChats', function(messages) {
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.innerHTML = '';
+    messages.forEach(msg => {
+      if (msg.sender_id === receiver_id || msg.receiver_id === receiver_id) {
+        const messageElement = document.createElement('div');
+        messageElement.className = msg.sender_id === sender_id ? 'message sender-user' : 'message receiver-user';
+        messageElement.textContent = `${msg.sender_id === sender_id ? 'You' : msg.sender_username}: ${msg.message}`;
+        messagesContainer.appendChild(messageElement);
+      }
+    });
+    messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to the bottom
+  });
+
+  socket.on('new message notification', function(data) {
+    const personElement = document.querySelector(`.logos .person[data-username="${data.from_username}"]`);
+    if (personElement) {
+      const notificationBadge = personElement.querySelector('.notification-badge');
+      if (notificationBadge) {
+        notificationBadge.style.display = 'inline';
+      }
+    }
+  });
+
+  const people = document.querySelectorAll('.person');
+  const chatContainer = document.querySelector('.chat-container');
+
+  people.forEach(person => {
+    person.addEventListener('click', function() {
+      const username = this.getAttribute('data-username');
+      const newReceiverId = this.getAttribute('data-userid');
+      if (receiver_id !== newReceiverId) {
+        receiver_id = newReceiverId;
+        currentChatUser = newReceiverId;
+        chatContainer.innerHTML = `
+          <h2>Chat with ${username}</h2>
+          <div id="messages" class="messages"></div>
+          <div class="send">
+            <input type="text" id="messageInput" placeholder="Type your message here...">
+            <button type="submit" id="sendButton">Send</button>
+          </div>
+        `;
+
+        const sendButton = document.getElementById('sendButton');
+        const messageInput = document.getElementById('messageInput');
+
+        function sendMessage(event) {
+          event.preventDefault();
+          const message = messageInput.value.trim(); 
+          if (message) {
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+
+            $.ajax({
+              type: 'POST',
+              url: `/user/${receiver_id}/chat/save-message`,
+              data: { message: message },
+              success: function(response) {
+                messageInput.value = '';  
+
+                const newMessage = { to: receiver_id, from: sender_id, message: message };
+                socket.emit('new chat message', newMessage);
+
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+              },
+              error: function(error) {
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+              }
+            });
+          }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(event) {
+          if (event.key === 'Enter' && !sendButton.disabled) {
+            sendMessage(event);
+          }
+        });
+
+        const notificationBadge = this.querySelector('.notification-badge');
+        if (notificationBadge) {
+          notificationBadge.style.display = 'none';  
+        }
+
+        socket.emit('mark as seen', { sender_id: sender_id, receiver_id: receiver_id });
+
+        // Update the database to mark messages as seen and mark the chat as opened
+        $.ajax({
+          type: 'POST',
+          url: `/user/${receiver_id}/chat/mark-seen`,
+          success: function(response) {
+            // Messages marked as seen
+          },
+          error: function(error) {
+            console.error('Error marking messages as seen:', error);
+          }
+        });
+
+        // Mark the chat as opened
+        $.ajax({
+          type: 'POST',
+          url: `/user/${receiver_id}/chat/mark-opened`,
+          success: function(response) {
+            // Chat marked as opened
+          },
+          error: function(error) {
+            console.error('Error marking chat as opened:', error);
+          }
+        });
+      }
+      socket.emit('existchat', { sender_id: sender_id, receiver_id: receiver_id });
+    });
+  });
+});
+</script>

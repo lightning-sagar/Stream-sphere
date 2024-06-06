@@ -1,4 +1,3 @@
-<% layout('/layout/boilerplate.ejs') %>
 
 <style>
   body {
@@ -23,19 +22,37 @@
 
   .form-control {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 25px;
+    transition: border-color 0.3s;
+    background-color: #f8f9fa;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #333;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 10000;
+  }
+
+  .form-control:focus {
+    border-color: #5680cf;
+    outline: none;
   }
 
   .btn-primary {
     background-color: #5680cf;
     color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
+    border-radius: 25px;
+    padding: 12px 30px;
     cursor: pointer;
     transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .btn-primary:hover {
@@ -50,8 +67,8 @@
 
 <body>
   <div class="container">
-    <h2>Edit Profile</h2>
-    <form id="editForm" action="/user/<%= req.user._id %>/edit/profile?_method=PUTvcx" method="POST" enctype="multipart/form-data">
+    <h2 style="text-align: center; margin-bottom: 30px;">Edit Profile</h2>
+    <form id="editForm" action="/user/<%= req.user._id %>/edit/profile?_method=PUT" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <label for="avatar" class="form-label">Profile Picture</label>
         <input type="file" id="avatar" name="avatar" class="form-control">
@@ -66,10 +83,12 @@
       </div>
       <div class="form-group">
         <label for="category" class="form-label">Category</label>
-        <input type="text" id="category" name="category" class="form-control" value="<%= user.category %>" required>
+        <input type="text" id="category" name="category" class="form-control" value="<%= user.categories %>" required>
       </div>
       <div class="loading" id="loading">Uploading...</div>
-      <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
+      <div style="text-align: center;">
+        <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
+      </div>
     </form>
   </div>
 

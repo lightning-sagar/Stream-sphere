@@ -36,6 +36,12 @@
             background-color: #121212; /* Dark background color */
             color: #fff; /* Light text color */
         }
+        .container{
+            background: #fff; /* White background */
+            padding-left: 3%;
+            margin-right: 0;
+            padding-bottom: 68px;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +49,7 @@
     <%- include('../include/navbar.ejs')%>
     <%- include('../include/sidebar.ejs') %>
     <div class="container">
+        <%- include('../include/flash.ejs')%>
         <%- body%>
     </div>
 
