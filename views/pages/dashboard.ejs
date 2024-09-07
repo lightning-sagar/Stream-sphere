@@ -2,11 +2,9 @@
 
 <style>
   body {
-    background-color: #f0f0f0;
     color: #333;
     font-family: Arial, sans-serif;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: auto;
     position: relative; /* Ensure positioning context for overlay */
   }
 
@@ -39,11 +37,10 @@
   }
 
   .cbox {
-    height: 79vh;
     overflow: hidden;
-    background: #fff;
+    background: #9ea6c3;
     padding-right: 5%;
-    margin-left: 110px;
+    margin-left: -240px;
     padding-top: 20px;
     padding-bottom: 20px;
   }
@@ -106,6 +103,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    overflow-y:auto;
+    position: fixed;
+    left: 84px;
   }
 
   .video-details {
@@ -237,6 +237,13 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  .profile-right{
+    width: 100%;
+  }
+  .profile-right button{
+    float: right;
+    margin-right: 30px;
+  }
 </style>
 
 <body>
@@ -257,21 +264,37 @@
           <div class="profile-email"><%= profile.email %></div>
           <div class="profile-category">Category: <%= profile.categories %></div>
         </div>
-        <% console.log(currentuser.waiting,"curr") %>
-        
-        <% if (profile._id.equals(currentuser._id)) { %>
-          <button type="submit" class="btn btn-primary editbtn">Edit Profile</button>
-        <% } else { %>
-          <% if (currentuser.sendreq.some(waitingUser => waitingUser._id.equals(profile._id))) { %>
-            <button type="button" class="btn btn-primary addfriend" disabled><i class="fa-solid fa-check"></i>&nbsp;Sent</button>
-          <% } else if (currentuser.friends.some(friend => friend._id.equals(profile._id))) { %>
-            <button type="button" class="btn btn-primary" onclick="window.location.href='/<%= req.user._id %>/chat/<%= profile._id %>'">Chat</button>
+          <div class="profile-right">
+          <% if (profile._id.equals(currentuser._id)) { %>
+            <button type="submit" class="btn btn-primary editbtn">Edit Profile</button>
           <% } else { %>
-            <form action="/user/<%= req.user._id %>/<%= profile.username %>?_method=PUT" method="POST">
-              <button type="submit" class="btn btn-primary addfriend">Add friend</button>
-            </form>
+            <% if (currentuser.sendreq.some(waitingUser => waitingUser._id.equals(profile._id))) { %>
+              <button type="button" class="btn btn-primary addfriend" disabled><i class="fa-solid fa-check"></i>&nbsp;Sent</button>
+            <% } else if (currentuser.friends.some(friend => friend._id.equals(profile._id))) { %>
+              <button type="button" class="btn btn-primary" onclick="window.location.href='/<%= req.user._id %>/chat/<%= profile._id %>'">Chat</button>
+            <% } else { %>
+              <form action="/user/<%= req.user._id %>/<%= profile.username %>?_method=PUT" method="POST">
+                <button type="submit" class="btn btn-primary addfriend">Add friend</button>
+              </form>
+            <% } %>
           <% } %>
-        <% } %>
+            <% if (currentUser && subscribed) { %>
+              <form action="/s/<%= profile._id %>" method="POST">
+                  <button class=" btn btn-primary addfriend">
+                      unsubscribe
+                  </button>
+              </form>
+          <% } else { %>
+              <% if(currentuser._id.toString() !== profile._id.toString()){ %>
+                  <form action="/s/<%= profile._id %>" method="POST">
+                      <button>
+                          <span class="  btn btn-primary addfriend">subscribe</span>
+                      </button>
+                  </form>
+            <% } %>
+  
+          <% } %>
+        </div>
       </div>
     </div>
     <!-- add btn here -->

@@ -1,0 +1,125 @@
+<% layout('/layout/boilerplate.ejs') %>
+ 
+<style>
+      :root {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    } 
+  .con-sub {
+    box-sizing: border-box;
+    margin-bottom: -1000px;
+    width: 100%;
+    display: flex;
+    height: 90.7vh;
+    color: #333;
+  }
+
+  .chat-sidebar {
+    background-color: #ffffffc7;
+    position: fixed;
+    width: 95px;
+    right: 0;
+    height: 657px;
+    top: 64px;
+    gap: 0px;
+    opacity: 0px;
+    color: #333;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .channel-info{
+    margin-top: 20px;
+  }
+  .container{
+    background-color: #9ea6c3;
+    margin-left: 84px;
+  }
+  .video-cont{
+    margin-top: 50px;
+    margin-left: 25px;
+      }
+  .mright{
+    margin-right: 10px;
+  }
+  .active-channel {
+    background-color: #ddd !important;
+  }
+  .bg-sub{
+    background-color: #9ea6c3;
+  }
+</style>
+<body>
+<div class="con-sub">
+    <div class="chat-sidebar">
+        <% if (subscribedChannels.length > 0) { %>
+            <% subscribedChannels.forEach(channel => { %>
+                <% if (typeof channelId !== 'undefined' && channel._id.toString() === channelId) { %>
+                <div class="channel">
+                    <div class="channel-info bg-sub">
+                        <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="channel">
+                    <div class="channel-info">
+                        <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
+                    </div>
+                </div>
+                <% } %>
+            <% }) %>
+        <% } else { %>
+            <p>You have not subscribed to any channels yet.</p>
+        <% } %>
+    </div>
+    <div class="video-cont">
+        <div class="row">
+            <% if (allVideos.length == 0) { %>
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="text-center">No videos found.</p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <% allVideos.forEach(video => { %>
+                <div class="col-md-3 mb-4">
+                    <a href="<%= currentUser ? `/user/${req.user._id}1/videos/${video._id}` : `/videos/${video._id}` %>" class="card shadow-sm">
+                        <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <p class="card-text">
+                                    <% if (video.owner.avatar) { %>
+                                        <img src="<%= video.owner.avatar %>" class="rounded-circle mright" width="30" height="30" alt="Avatar">
+                                    <% } else { %>
+                                        <span class="material-symbols-outlined profile-avatar center rounded-circle">
+                                            account_circle
+                                        </span>
+                                    <% } %>
+                                </p>
+                                <h5 class="card-title"><%= video.title %></h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    const channel = document.querySelectorAll('.channel-avatar');
+        for (let i = 0; i < channel.length; i++) {
+            channel[i].addEventListener('click', (e) => {
+                const userId = e.currentTarget.dataset.userid
+                double = false
+
+                window.location.href = `/user/<%= req.user._id %>/${userId}/videos`
+            })
+        }
+</script>

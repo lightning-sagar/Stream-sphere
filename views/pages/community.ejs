@@ -1,40 +1,434 @@
 <% layout('/layout/boilerplate.ejs') %>
+ <style>
 
-<div class="container">
-    <h2>Welcome to <%= communities.name %> Community!</h2>
-    <p><%= communities.description %></p>
-    <% if (currentUser) { %>
-      <h3>Switch Community:</h3>
-      <div class="community-switch">
-          <% userCategories.forEach(comm => { %>
-              <% console.log(comm) %>
-                  <form action="/community/switch" method="POST">
-                      <button type="submit" class="btn btn-secondary"><%= comm %></button>
-                  </form>
-          <% }); %>
-      </div>
-    <% } %>
-    <% if (currentUser) { %>
-        <form action="/community/<%= communities._id %>/tweet/Coding" method="POST">
-            <div class="form-group">
-                <label for="tweetContent">Write your tweet:</label>
-                <textarea class="form-control" id="tweetContent" name="content" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Tweet</button>
-        </form>
-    <% } else { %>
-        <p>Login to tweet!</p>
-    <% } %>
+  /* .card-text {
+    color: #0042f8!important;
+  } */
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
 
-    <div class="tweets">
-        <% allTweets.forEach(tweet => { %>
-            <div class="tweet">
-                <p><%= tweet.content %></p>
-                <p><strong>Posted by:</strong> <%= tweet.owner.username %></p>
-                <p><strong>Category:</strong> <%= tweet.owner.category %></p>
-            </div>
-        <% }); %>
+.all-comments {
+  max-height: 400px;
+  overflow-y: scroll;
+  padding-right: 15px; /* To avoid scrollbar overlap */
+}
+
+.card {
+  margin-left: 0;
+}
+
+.card .card {
+  margin-left: 40px; /* Indent nested comments */
+}
+
+.container {
+  margin-left: 84px;
+}
+
+.video-container {
+  width: 115%;
+  margin-left: 68px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.video-details {
+  flex: 3; /* Increase flex to make this section larger */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+video {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.comments {
+  width: 120%;
+  margin-left: 20px;
+  flex: 1;  
+  padding: 20px;
+  border-radius: 10px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-top: 0;
+}
+
+p {
+  color: #666;
+  margin: 0;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+.comment-form {
+  margin-top: 20px;
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.nested-comments {
+  margin-left: 40px; /* Indent nested comments */
+}
+
+.comment-input-container {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+.send-button {
+  background-color: #5680cf;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.card {
+  padding: 5px;
+  transition: transform 0.3s;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body {
+  width: fit-content;
+  padding: 15px;
+}
+
+.card-title {
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.card-text {
+  color: #666;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.profile-avatar {
+  margin-right: 10px;
+}
+
+.comment-form input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.comment-form button[type="submit"] {
+  background-color: #5680cf;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.like, .subscribe {
+  cursor: pointer;
+  color: #ff0000;
+  transition: color 0.3s;
+}
+
+.like:hover, .subscribe:hover {
+  color: #5680cf;
+}
+
+.unlike, .unsubscribe {
+  cursor: pointer;
+  color: #000000;
+  transition: color 0.3s;
+}
+
+.unlike:hover, .unsubscribe:hover {
+  color: #333;
+}
+
+.right-side {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto; /* Pushes the container to the right */
+}
+
+.channel-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.channel-info p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.channel-info .right-side form {
+  margin-left: 20px;
+}
+
+.channel-info .right-side button {
+  background-color: #5680cf;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.channel-info .right-side button:hover {
+  background-color: #466fb1;
+}
+
+.other-videos {
+  padding: 20px 0;
+  width: 100%;
+}
+
+.other-videos .other-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.other-videos .card-wrapper {
+  flex: 1 1 calc(33.333% - 20px);
+  box-sizing: border-box;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body .card-title {
+  flex: 1;
+  margin: 0;
+}
+
+.card-body .card-text {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.card-body .views {
+  color: #666;
+  margin: 0;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .video-container {
+    flex-direction: column;
+  }
+
+  .video-details, .comments {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .other-videos .card-wrapper {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .other-videos .card-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .channel-info {
+    flex-direction: column;
+  }
+
+  .channel-info p, .channel-info .right-side {
+    margin-top: 10px;
+  }
+}
+.load-more {
+  color: #5680cf;
+  cursor: pointer;
+  margin-left: 40px; 
+}
+
+.load-more:hover {
+  text-decoration: underline;
+}
+
+.reply-form {
+  margin-top: 10px;
+}
+</style>
+<div class="comments">
+  <form class="comment-form" action="/c/<%= req.user._id %>" method="POST">
+    <div class="comment-input-container">
+      <input class="comment-input" type="text" name="content" placeholder="Write a comment..." required>
+      <button class="send-button" type="submit">Send</button>
     </div>
-
-    
+  </form>
+  <div class="all-comments mt-2">
+    <%- include('../include/tweet.ejs', { comments: allTweets }) %>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    function toggleLikeComment(commentId) {
+      const likeBtn = document.getElementById(`like-btn-${commentId}`);
+      const unlikeBtn = document.getElementById(`unlike-btn-${commentId}`);
+      const likeCount = document.getElementById(`like-count-${commentId}`);
+
+      if (likeBtn) {
+        likeBtn.style.display = 'none';
+        unlikeBtn.style.display = 'inline-block';
+        likeCount.style.display = 'inline-block';
+      }
+
+      if (unlikeBtn) {
+        unlikeBtn.style.display = 'none';
+        likeBtn.style.display = 'inline-block';
+        likeCount.style.display = 'none';
+      }
+
+      // Send a fetch request to the server to update the comment like count
+      fetch(`/c/${commentId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.likeCount) {
+            likeCount.textContent = data.likeCount;
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+      // Send a fetch request to the server to update the comment like count
+    }
+
+    const deleteBtns = document.querySelectorAll('.delete-btn-comment');
+
+    deleteBtns.forEach(btn => {
+      btn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const tweetId = btn.getAttribute('data-comment-id');
+        if (tweetId) {
+          try {
+            const response = await fetch(`/c/${tweetId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (response.ok) {
+              const commentElement = btn.closest('.card-body');
+              commentElement.remove();
+            } else {
+              console.error('Failed to delete comment');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.reply-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        const nestedComments = document.getElementById(`nested-comments-${commentId}`);
+        const icon = this.querySelector('i');
+
+        replyForm.classList.toggle('show');
+        nestedComments.classList.toggle('show');
+
+        if (replyForm.classList.contains('show') || nestedComments.classList.contains('show')) {
+          icon.classList.remove('fa-angle-down');
+          icon.classList.add('fa-angle-up');
+        } else {
+          icon.classList.remove('fa-angle-up');
+          icon.classList.add('fa-angle-down');
+        }
+      });
+    });
+
+    document.querySelectorAll('.load-more-replies').forEach(button => {
+      button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        const hiddenReplies = document.getElementById(`hidden-replies-${commentId}`);
+        hiddenReplies.classList.toggle('show');
+        button.style.display = 'none';
+      });
+    });
+  });
+</script>

@@ -1,5 +1,10 @@
 <% layout('layout/boilerplate') %>
-
+<style>
+  .container {
+    position: fixed;
+    left: 84px;
+  } 
+</style>
 <div class="row mt-5">
   <div class="col-md-6 offset-md-3">
     <h3 class="mb-4">Sign Up</h3>
@@ -30,10 +35,5 @@
         <%= error %>
       </div>
     <% } %>
-
-    <p class="text-center">
-        <a href="/auth/google" class="btn btn-primary btn-block"><i class="fa-brands fa-google"></i>&nbsp;&nbsp;Sign Up with Google</a>
-    </p>
-
   </div>
 </div>

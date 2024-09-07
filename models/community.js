@@ -14,23 +14,6 @@ const membershipSchema = new Schema({
 
 const Membership = mongoose.model('Membership', membershipSchema);
 
-const communitySchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true  
-    },
-    category: {
-        type: String,
-        required: true
-    }
-});
-
-const Community = mongoose.model("Community", communitySchema);
-
 const tweetSchema = new Schema({
     content: {
         type: String,
@@ -38,15 +21,16 @@ const tweetSchema = new Schema({
     },
     owner: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
-    community: {
+    parent: {
         type: Schema.Types.ObjectId,
-        ref: "Community"
-    }
+        ref: 'Tweet',
+        default: null 
+    },
 }, { timestamps: true });
 
 const Tweet = mongoose.model("Tweet", tweetSchema);
 
-
-module.exports = { Community, Membership,Tweet };
+module.exports = { Membership,Tweet };

@@ -1,9 +1,14 @@
 <% layout('layout/boilerplate') %>
 <style>
   body {
-    background-color: #f0f0f0; /* Light background color */
-    color: #333; /* Dark text color */
-    font-family: Arial, sans-serif; /* Fallback font */
+    background-color: #9ea6c3!important; 
+    color: #333;  
+    font-family: Arial, sans-serif;  
+  }
+
+  .container{
+    position: fixed;
+    left: 88px;
   }
 
   .max-width-800 {
@@ -44,6 +49,7 @@
     background-color: #4362ab; /* Darker blue on hover */
   }
   .container{
+    background-color: #9ea6c3;
     padding-bottom: 150px;
   }
   /* Custom styles for two-step upload process */
@@ -57,22 +63,23 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: #fff;
+    color: #5680cf;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 18px;
-    color: #fff;
-    cursor: pointer; /* Add cursor pointer for clickable behavior */
+    cursor: pointer;  
   }
 
   .step-circle.active {
-    background-color: #5680cf; /* Blue color for active step */
+    background-color: #5680cf;
+    color: #fff;  
   }
 
   .step-two {
-    display: none; /* Initially hide the second step */
+    display: none; 
   }
 </style>
 <div class="container pt-5">
@@ -95,7 +102,7 @@
 
     <!-- Step 2: Upload thumbnail, title, description, category -->
     <div class="step-two" style="display: none;">
-      <h3 class="mb-4">Step 2: Add Thumbnail, Title, Description, Category</h3>
+      <h3 class="mb-4">Step 2: Fill In Details</h3>
       <div class="form-group">
         <label for="thumbnail" class="form-label">Select Thumbnail</label>
         <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">

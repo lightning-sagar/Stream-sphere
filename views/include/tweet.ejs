@@ -1,0 +1,47 @@
+<% comments.forEach(comment => { %>
+  <div class="card">
+    <div class="card-body ">
+      <div class="card-text" <% if(comment.owner._id.toString() === req.user._id.toString()) { %> style="color: #0042f8;" <% } %>) %>>
+        <img src="<%= comment.owner.avatar %>" width="30" height="30" class="rounded-circle" alt="">
+        <span class="mr-3 ml-2"><%= comment.owner.username %></span>
+        <p class="mr-3" style="flex-grow: 1;"  <% if(comment.owner._id.toString() === req.user._id.toString()) { %> style="color: #0042f8;" <% } %>) %>><%= comment.content %></p>
+        <div class="right-side">
+          <span class="reply-btn  mr-3 " data-comment-id="<%= comment._id %>">
+            <i class="fa-solid fa-angle-down"></i>
+          </span>
+          <% if (comment.owner._id.toString() === req.user._id.toString()) { %>
+            <span class="delete-btn-comment mr-3" style="color: red;" data-comment-id="<%= comment._id %>">
+              <i class="fa-regular fa-trash-can"></i>
+            </span>
+          <% } %>
+          <div class="heart"  >
+            <i class="fa-regular fa-heart" onclick="toggleLikeComment(this, <%= comment._id %>)"></i>
+          </div>
+        </div>
+        <div class="collapse reply-form" id="reply-form-<%= comment._id %>">
+          <form class="comment-form" action="/c/<%= req.user._id %>" method="POST">
+            <input type="hidden" name="parent" value="<%= comment._id %>">
+            <div class="comment-input-container">
+              <input class="comment-input" type="text" name="content" placeholder="Write a reply..." required>
+              <button class="send-button" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="nested-comments collapse" id="nested-comments-<%= comment._id %>">
+      <% if (comment.children && comment.children.length > 0) { %>
+        <div class="initial-replies">
+          <%- include('../include/tweet.ejs', { comments: comment.children.slice(0, 3) }) %>
+        </div>
+        <% if (comment.children.length > 3) { %>
+          <p class="load-more-replies" data-comment-id="<%= comment._id %>">Load more replies</p>
+          <div class="hidden-replies collapse" id="hidden-replies-<%= comment._id %>">
+            <%- include('../include/tweet.ejs', { comments: comment.children.slice(3) }) %>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+<% }) %>
+<% layout('/layout/boilerplate.ejs') %>

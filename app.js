@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const {isValidObjectId} = require('mongoose');
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
@@ -11,8 +12,8 @@ const socketIO = require('socket.io');
 
 const User = require('./models/user.js');
 const Comment = require('./models/comment.js');
-const {Tweet,Community,Membership} = require('./models/community.js');
-
+const {Tweet,Membership} = require('./models/community.js');
+const Subscription =require('./models/subscription.js')
 
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
@@ -21,7 +22,7 @@ const session = require('express-session');
 const { storage, uploadOnCloudinary, cloudinary,upload } = require('./cloudConfig.js');
 const Video = require('./models/vedio.js');
 const MongoStore = require('connect-mongo');
-const { log, Console } = require('console');
+const { log, Console, error } = require('console');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Chat = require('./models/chat.js');
 
@@ -137,17 +138,27 @@ app.get('/', async (req, res) => {
 
 //login and signup
 app.get('/login', (req, res) => {
-  res.render('users/login.ejs');
+  if (!req.isAuthenticated()) {
+    res.render('users/login.ejs');
+  } else {
+    res.redirect(`/user/${req.user._id}`);
+  }
 });
+
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }), (req, res) => {
   req.flash('success', 'Welcome back!');
   res.redirect(`/user/${req.user._id}`);
 });
 app.get('/signup', (req, res) => {
-  res.render('users/signup.ejs', {
-    error: req.flash('error'),
-    success: req.flash('success'),
-  });
+  if(!req.isAuthenticated()){
+    res.render('users/signup.ejs', {
+      error: req.flash('error'),req,
+      success: req.flash('success'),
+    });
+  }
+  else{
+    res.redirect(`/user/${req.user._id}`);    
+  }
 });
 app.post('/signup', async (req, res) => {
   try {
@@ -200,6 +211,9 @@ app.put('/user/:id/submit', ensureAuthenticated, async (req, res) => {
     const newUser = await User.findByIdAndUpdate(userId, {
       categories: categories,  
     });
+
+    
+
 
     console.log("User updated:", newUser);
     res.redirect(`/user/${userId}`);
@@ -292,22 +306,246 @@ app.post("/user/:id/upload", upload.fields([
   }
 });
 
-
 //watch video
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
   try {
     const userCategory = req.user.category;
     const allVideos = await Video.find({ category: userCategory }).populate('owner');
-    const videos = await Video.find({ _id: req.params.video,category: userCategory }).populate('owner');
-    const comment = await Comment.find({ video: req.params.video }).populate('owner');
-    console.log(comment,"comment");
-    res.render("pages/watch.ejs", { req, currentUser: req.user, videos,allVideos,comment });
+    const video = await Video.findOne({ _id: req.params.video, category: userCategory }).populate('owner');
+    
+    if (!video) {
+      return res.status(404).send("Video not found");
+    }
+
+    const videoOwnerId = video.owner._id.toString();
+    const subscription = await Subscription.findOne({ subscriber: req.user._id, channel: videoOwnerId });
+    const subscribed = !!subscription;
+    const likesCount = await Like.countDocuments({ video: req.params.video });
+    
+    // Get all comments and populate their owners
+    const comments = await Comment.find({ video: req.params.video }).populate('owner').lean();
+    
+    // Organize comments into threads
+    const threadedComments = organizeComments(comments);
+
+    res.render("pages/watch.ejs", {
+      req,
+      currentUser: req.user,
+      video,
+      otherVideos: allVideos,
+      comments: threadedComments,
+      subscribed,
+      likesCount
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
 
+function organizeComments(comments) {
+  const commentMap = {};
+  comments.forEach(comment => {
+    commentMap[comment._id] = comment;
+    comment.children = [];
+  });
+
+  const threadedComments = [];
+  comments.forEach(comment => {
+    if (comment.parent) {
+      if (commentMap[comment.parent]) {
+        commentMap[comment.parent].children.push(comment);
+      }
+    } else {
+      threadedComments.push(comment);
+    }
+  });
+  return threadedComments;
+}
+
+app.get('/c/:Id', ensureAuthenticated, async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id);
+      if (!user) {
+          throw new Error('User not found');
+      }
+      const allTweets = await Tweet.find().populate('owner').lean();
+      const threadedComments = organizeComments(allTweets);
+      res.render('pages/community.ejs', { user, req, currentUser: req.user, allTweets: threadedComments });
+  } catch (error) {
+      console.error('Error fetching community data:', error);
+      res.status(500).send('Error fetching community data');
+  }
+});
+
+app.post('/c/:TweetId', ensureAuthenticated, async (req, res) => {
+  try {
+    const { content, parent } = req.body;
+    const newTweet = new Tweet({
+      content,
+      owner: req.user._id,
+      parent: parent || null
+    });
+    await newTweet.save();
+    res.redirect(req.headers.referer || '/');
+  } catch (error) {
+    console.error('Error creating tweet:', error);
+    res.status(500).send(error.message);
+  }
+});
+
+app.delete('/c/:tweetId', async (req, res) => {
+  try {
+    const tweetId = req.params.tweetId;
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+      return res.status(404).json({ message: 'Tweet not found' });
+    }
+
+    await Tweet.updateMany(
+      { parent: new mongoose.Types.ObjectId(tweetId) },
+      { $set: { parent: null } }
+    );
+    await Tweet.deleteOne({ _id: tweetId });
+    res.send('Tweet deleted successfully');
+  } catch (error) {
+    console.error('Error deleting tweet:', error);
+    res.status(500).send(error.message);
+  }
+});
+ 
+//comment
+app.post('/v/:videoId', async (req, res) => {
+  try {
+    const { content, parent } = req.body;
+    const videoId = req.params.videoId;
+    const newComment = new Comment({
+      content,
+      owner: req.user._id,
+      video: videoId,
+      parent: parent || null
+    });
+    await newComment.save();
+    res.redirect(`back`);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+app.delete('/comments/:id', async (req, res) => {
+  try {
+    const commentId = req.params.id;
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    // Update child comments to set their parent to null
+    await Comment.updateMany(
+      { parent: new mongoose.Types.ObjectId(commentId) }, // Use mongoose.Types.ObjectId to convert commentId correctly
+      { $set: { parent: null } }
+    );
+
+    // Delete the comment itself
+    await Comment.deleteOne({ _id: commentId });
+
+    res.status(200).json({ message: 'Comment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+//subcribe
+app.get("/s/:channelId", ensureAuthenticated, async (req, res) => {
+    const { channelId } = req.params
+    console.log(channelId,"channelId")
+    const subscriberId = channelId;
+    const user = await User.findById(subscriberId);
+    const aggregate = [
+        {
+            $match: {
+                subscriber: subscriberId
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalCount: { $sum: 1 }
+            }
+        }
+    ]
+
+    const subscribedList = await Subscription.aggregate(aggregate);
+
+   console.log(subscribedList, "subscribedList");
+})
+app.post("/s/:channelId", ensureAuthenticated, async (req, res) => {
+  try {
+    const { channelId } = req.params;
+    const userId = req.user._id;
+
+    const channel = await User.findById(channelId);
+    if (!channel) {
+      return res.status(404).send("Channel not found");
+    }
+
+    const existingSubscription = await Subscription.findOne({
+      subscriber: userId,
+      channel: channelId
+    });
+
+    if (existingSubscription) {
+      await Subscription.findByIdAndDelete(existingSubscription._id);
+      console.log("Unsubscribed successfully");
+    } else {
+      await Subscription.create({
+        subscriber: userId,
+        channel: channelId
+      });
+      console.log("Subscribed successfully");
+    }
+
+    res.redirect('back')
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get('/user/:id/subscribed', ensureAuthenticated, async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      const subscriptions = await Subscription.find({ subscriber: id }).populate('channel');
+
+      const subscribedChannels = subscriptions.map(subscription => subscription.channel);
+
+      const subscribedChannelIds = subscribedChannels.map(channel => channel._id);
+      const allVideos = await Video.find({ owner: { $in: subscribedChannelIds } }).populate('owner');
+
+      res.render('pages/subscribed.ejs', { req, currentUser: req.user, subscribedChannels, allVideos });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  }
+});
+app.get('/user/:id/:channelId/videos', ensureAuthenticated, async (req, res) => {
+  try{
+    const { id, channelId } = req.params;
+    const subscriptions = await Subscription.find({ subscriber: id }).populate('channel');
+
+    const subscribedChannels = subscriptions.map(subscription => subscription.channel);
+    const allVideos = await Video.find({ owner: channelId}).populate('owner');
+    const subscribedChannelIds = subscribedChannels.map(channel => channel._id);
+
+    res.render('pages/subscribed.ejs', { req, currentUser: req.user, subscribedChannels, allVideos,channelId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+})
 
 //accept request
 app.put("/user/:id/requests/:friend/accept", ensureAuthenticated, async (req, res) => {
@@ -396,6 +634,19 @@ app.put("/user/:id/:friend", ensureAuthenticated, async (req, res) => {
 });
 
 
+//search
+app.get('/search/:title', ensureAuthenticated, async (req, res) => {
+  try{
+    const {title} = req.query;
+    const videos = await Video.find({title: {$regex: title, $options: 'i'}}).populate('owner');
+    const user = await User.find({username: {$regex: title, $options: 'i'}});
+    const Tweets = await Tweet.find({content: {$regex: title, $options: 'i'}});
+    res.render('pages/search.ejs', {req, videos, user, Tweets});
+  }catch(err){
+    console.log(err);
+  }
+})
+
 
 //dashboard
 app.get("/user/:id/dashboard/:username", ensureAuthenticated, async (req, res) => {
@@ -408,22 +659,21 @@ app.get("/user/:id/dashboard/:username", ensureAuthenticated, async (req, res) =
 
     const currentuser = await User.findById(req.params.id).populate('waiting');
     const videos = await Video.find({ owner: profile._id }).populate('owner');
-    console.log(videos, "videos");
 
     // Check if only user data is requested
     if (req.query.userDataOnly) {
       return res.json({ profile, currentuser });
     }
+    const subscription = await Subscription.findOne({ subscriber: req.user._id, channel: profile._id });
+    const subscribed = subscription ? true : false;
 
     // Render the dashboard page with the full layout
-    res.render("pages/dashboard.ejs", { req, user: req.user, username, videos, profile, currentuser });
+    res.render("pages/dashboard.ejs", { req, user: req.user, username, videos, profile, currentuser, subscribed });
   } catch (error) {
     console.error("Error retrieving videos:", error);
     res.status(500).send("Error retrieving videos");
   }
 });
-
-
 app.get("/user/:id/edit", ensureAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
@@ -493,7 +743,7 @@ usp.on('connection', async (socket) => {
     await User.findByIdAndUpdate(userId, { $set: { is_online: true } }, { new: true });
     usp.emit('user status', { userId, is_online: true });
 
-    socket.join(userId); // Join a room named by user ID
+    socket.join(userId);
 
     socket.on('disconnect', async () => {
       try {
@@ -512,6 +762,7 @@ usp.on('connection', async (socket) => {
         }).populate('sender receiver');
 
         const messagesWithUsernames = oldMessages.map(msg => ({
+          _id: msg._id,
           sender_id: msg.sender._id,
           sender_username: msg.sender.username,
           receiver_id: msg.receiver._id,
@@ -529,7 +780,7 @@ usp.on('connection', async (socket) => {
 
     socket.on('new chat message', async (data) => {
       try {
-        const { from, to, message } = data;
+        const { from, to, message, message_id } = data;
         const sender = await User.findById(from);
         const receiver = await User.findById(to);
 
@@ -540,66 +791,43 @@ usp.on('connection', async (socket) => {
           seen: false
         });
 
+        const savedMessage = await newChatMessage.save();
 
         const messageWithUsernames = {
           from_username: sender.username,
           to_username: receiver.username,
           message: message,
-          timestamp: new Date(),
+          timestamp: savedMessage.timestamp,
+          message_id: savedMessage._id,
           sender_id: sender._id,
-          to: to,
-          seen: false
+          receiver_id: receiver._id
         };
 
-        // Emit message to sender and receiver only
-        usp.to(sender._id.toString()).emit('chat message', messageWithUsernames);
-        usp.to(receiver._id.toString()).emit('chat message', messageWithUsernames);
+        socket.to(to).emit('chat message', messageWithUsernames);
+        socket.emit('chat message', messageWithUsernames);
 
-        // Emit notification to receiver
-        usp.to(receiver._id.toString()).emit('new message notification', {
-          from_username: sender.username,
-          message: message
+        usp.to(to).emit('new message notification', {
+          from_username: sender.username
         });
       } catch (error) {
-        console.error('Error handling new chat message:', error);
+        console.error('Error saving or emitting new chat message:', error);
       }
     });
-
-    socket.on('mark as seen', async (data) => {
-      try {
-        await Chat.updateMany(
-          {
-            sender: data.receiver_id,
-            receiver: data.sender_id,
-            seen: false
-          },
-          {
-            $set: { seen: true }
-          }
-        );
-      } catch (error) {
-        console.error('Error marking messages as seen:', error);
-      }
-    });
-  } catch (error) {
-    console.error('Error during user connection:', error);
-  }
+  } catch (err) {}
 });
+
 //search chat
 app.get("/user/:userId/search/chat", ensureAuthenticated, async (req, res) => {
   try {
     const searchTerm = req.query.title;
     const userId = req.user._id;
 
-    // Find users whose usernames match the search term
     const matchedUsers = await User.find({
       username: { $regex: new RegExp(searchTerm, "i") }
     });
 
-    // Find the current user
     const currentUser = await User.findById(userId).populate('friends');
 
-    // Separate matched users into friends and non-friends
     const friends = matchedUsers.filter(user =>
       currentUser.friends.some(friend => friend._id.equals(user._id))
     );
@@ -607,13 +835,20 @@ app.get("/user/:userId/search/chat", ensureAuthenticated, async (req, res) => {
       !currentUser.friends.some(friend => friend._id.equals(user._id))
     );
     const alluser = await User.find({ _id: { $ne: userId } });
-
-    // Render the chat page with the matched users
+    const user = await User.findById(userId);
+    const waitingUsers = [];
+    for (const requestID of user.waiting) {
+      const requestUser = await User.findById(requestID);
+      if (requestUser) {
+        waitingUsers.push(requestUser);
+      }
+    }
     res.render("pages/allchat.ejs", {
       alluser,
       req,
       friends,
       nonFriends,
+      waitingUsers,
       currentUser: req.user,
       chatUser: null,
       chatHistory: [],
@@ -628,8 +863,8 @@ app.get("/user/:userId/search/chat", ensureAuthenticated, async (req, res) => {
 app.get('/:id/chat/all', ensureAuthenticated,async (req, res) => {
   try {
     const userId = req.user._id;
-    const userchat = await User.find({ _id : { $ne: userId } });
-    res.render('pages/allchat.ejs', { req, currentUser: req.user });
+    const alluser = await User.find({ _id : { $ne: userId } });
+    res.render('pages/allchat.ejs', { req, currentUser: req.user,alluser });
   } catch (error) {
     console.error('Error fetching chat messages:', error);
   }
@@ -698,7 +933,15 @@ app.get("/:id/chat", ensureAuthenticated, async (req, res) => {
       return { ...friend.toObject(), hasUnseenMessages };
     });
 
-    res.render("pages/chat.ejs", { req, currentUser: req.user, userchat: friendsWithChat });
+    const user = await User.findById(userId);
+    const waitingUsers = [];
+    for (const requestID of user.waiting) {
+      const requestUser = await User.findById(requestID);
+      if (requestUser) {
+        waitingUsers.push(requestUser);
+      }
+    }
+    res.render("pages/chat.ejs", { req, currentUser: req.user, userchat: friendsWithChat, waitingUsers });
   } catch (error) {
     console.error('Error fetching chat users:', error);
     res.status(500).send('Internal Server Error');
@@ -719,9 +962,24 @@ app.post("/user/:receiverId/chat/mark-opened", ensureAuthenticated, async (req, 
   }
 });
 
-
-
-
+app.post('/user/:receiver_id/chat/delete-message', async (req, res) => {
+  const { messageId } = req.body;
+  console.log(messageId, 'messageId');
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+      return res.status(400).json({ success: false, message: 'Invalid message ID' });
+  }
+  try {
+      const result = await Chat.findByIdAndDelete(messageId);
+      if (result) {
+          res.json({ success: true });
+      } else {
+          res.status(404).json({ success: false, message: 'Message not found' });
+      }
+  } catch (error) {
+      console.error('Error deleting message:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
 
 app.post("/user/:id/chat/save-message", ensureAuthenticated, async (req, res) => {
   try {
@@ -732,25 +990,26 @@ app.post("/user/:id/chat/save-message", ensureAuthenticated, async (req, res) =>
       seen: false
     });
 
-    await chat.save();
     res.status(200).json({ success: true, message: 'Message saved successfully', chat });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to save message' });
   }
 });
 
-app.post("/mark-as-seen", ensureAuthenticated, async (req, res) => {
+app.post("/user/:receiver_id/:sender_id/chat/mark-seen", ensureAuthenticated, async (req, res) => {
   try {
+    const { receiver_id, sender_id } = req.params;
     await Chat.updateMany(
       {
-        sender: req.body.receiver_id,
-        receiver: req.body.sender_id,
+        sender: receiver_id,
+        receiver: sender_id,
         seen: false
       },
       {
         $set: { seen: true }
       }
     );
+    
     res.status(200).json({ success: true, message: 'Messages marked as seen' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to mark messages as seen' });
@@ -762,39 +1021,7 @@ app.post("/mark-as-seen", ensureAuthenticated, async (req, res) => {
 
 
 
-// app.get("/:id/chat/history", ensureAuthenticated, async (req, res) => {
-//   try {
-//     const selectedUserId = req.params.id;
-//     const chatHistory = await Chat.find({
-//       $or: [
-//         { sender: req.user._id, receiver: selectedUserId },
-//         { sender: selectedUserId, receiver: req.user._id }
-//       ]
-//     }).sort('createdAt');
-
-//     res.json(chatHistory);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Server error' });
-//   }
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//post comment 
-app.post("/user/:id/videos/:video/comments", ensureAuthenticated, async (req, res) => {
+ app.post("/user/:id/videos/:video/comments", ensureAuthenticated, async (req, res) => {
   try {
     const { content } = req.body;
     console.log(req.body);
@@ -812,7 +1039,7 @@ app.post("/user/:id/videos/:video/comments", ensureAuthenticated, async (req, re
   }
 })
 
-//likes
+//likes comment
 app.post("/user/:id/videos/:video/comments/:commentId/like", ensureAuthenticated, async (req, res) => {
   try {
     const { id, video,commentId } = req.params;
@@ -859,40 +1086,99 @@ app.post("/user/:id/videos/:video/comments/:commentId/unlike", ensureAuthenticat
 })
 
 
-//community
-app.get('/user/:id/community', ensureAuthenticated, async (req, res) => {
+
+
+
+const Like = require('./models/Like');
+const comment = require('./models/comment.js');
+//like video
+app.post("/toggle/v/:videoId", ensureAuthenticated, async (req, res) => {
+  const { videoId } = req.params;
+
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    const userCategories = user.categories;
-    const communities = await Community.find({ categories: { $in: userCategories } });
-    const allTweets = await Tweet.find({ community: { $in: communities.map(community => community._id) } }).populate('owner');
-    console.log(allTweets,communities);
-    res.render('pages/community.ejs', { user, req,currentUser: req.user,userCategories, communities, allTweets });
+      const video = await Video.findById(videoId);
+
+      if (!video) {
+          return res.status(404).json({ success: false, message: "Video not found or not published" });
+      }
+
+      const userAlreadyLiked = await Like.findOne({
+          video: videoId,
+          likedBy: req.user._id,
+      });
+
+      if (userAlreadyLiked) {
+          await Like.deleteOne({ _id: userAlreadyLiked._id });
+      } else {
+          const likeVideo = await Like.create({
+              video: videoId,
+              likedBy: req.user._id,
+          });
+
+          if (!likeVideo) {
+              return res.status(400).json({ success: false, message: "Unable to like the video" });
+          }
+      }
+
+      const likesCount = await Like.countDocuments({ video: videoId });
+      return res.json({ success: true, likesCount });
   } catch (error) {
-    console.error('Error fetching community data:', error);
-    res.status(500).send('Error fetching community data');
+      console.error(error);
+      return res.status(500).json({ success: false, message: "An error occurred" });
   }
 });
-app.post('/user/:id/tweet', ensureAuthenticated, async (req, res) => {
-  try{
-    const user = await User.findById(req.params.id);
-    if(!user){
-      throw new Error('User not found');
-    }
-    const tweet = await Tweet.create({
-      content: req.body.content,
-      owner: req.user._id
-    })
-    user.tweets.push(tweet._id);
-    await user.save();
-    res.redirect(`/user/${req.user._id}/community`);
-  }catch(e){
-    console.log(e);
-  }
-})
+
+// app.get('/user/:id/liked', ensureAuthenticated, async (req, res) => {
+//   try {
+//     const aggregate = [
+//       {
+//         $match: {
+//           likedBy: new mongoose.Types.ObjectId(req.user?._id)
+//         }
+//       }, {
+//         $lookup: {
+//           from: "Video",
+//           localField: "video",
+//           foreignField: "_id",
+//           as: "likedVideos"
+//         }
+//       }, {
+//         $unwind: {
+//           path: "$likedVideos",
+//         }
+//       }, {
+//         $project: {
+//           likedVideo: 1
+//         }
+//       }
+//     ]
+  
+//     const likedVideo = await Like.aggregate(aggregate)
+  
+//     if (!likedVideo) {
+//       throw new error(400, "Liked Video not founded")
+//     }
+//     console.log(likedVideo);
+//     res.render('pages/watch.ejs', { req, user: req.user, allVideos:likedVideo })
+//   } catch (error) {
+//     console.error(error)
+//   }
+// })
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -913,7 +1199,7 @@ app.get( '/auth/google/callback',
 
 app.get('/auth/google/success', (req, res) => {
   console.log(req.user);
-  req.flash('success', 'Authenticated with Google successfully!');
+  req.flash('success', 'Authenticated with Google succes sfully!');
   res.redirect(`/user/${req.user._id}`);
 });
 

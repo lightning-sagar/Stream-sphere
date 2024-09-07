@@ -68,12 +68,13 @@
         width: 15px;
     }
     
-    /* Sidebar*/
-    .sidebar{
-        background: #ffffffc7; /* Light gray background */
-        width: 84px;
+    /* Sidebar */
+    .chatsidebar{
+        background: #f6f6f6; /* Light gray background */
+        width: 17%;
         height: 100vh;
         position: fixed;
+        top: 0;
         padding-left: 2%;
         padding-top: 10px;
     }
@@ -96,7 +97,7 @@
         color: #000000; /* Red color */
     }
     
-    .sidebar hr{
+    .chatsidebar hr{
         border: 0;
         height: 1px;
         background: #ccc;
@@ -123,14 +124,14 @@
         margin-right: 28px;
     }
     
-    .small-sidebar{
+    .small-chatsidebar{
         width: 5%;
     }
-    .small-sidebar .shortcut-links a p  , .small-sidebar .subscribed-list a , .small-sidebar h3{
+    .small-chatsidebar .shortcut-links a p  , .small-chatsidebar .subscribed-list a , .small-chatsidebar h3{
         display: none;
     }
     
-    .small-sidebar hr{
+    .small-chatsidebar hr{
         width: 50%;
         margin-bottom: 25px;
         display: none;
@@ -138,7 +139,7 @@
     
     /* Main Body */
     .container{
-        background: #9ea6c3; /* White background */
+        background: #fff; /* White background */
         padding-left: 3%;
         margin-right: 0;
         padding-bottom: 68px;
@@ -196,7 +197,7 @@
             display: none;
         }
     
-        .sidebar{
+        .chatsidebar{
             display: none;
         } 
     
@@ -234,41 +235,8 @@
         margin-top: 25%!important;
     }
 </style>
-<div class="sidebar">
+<div class="chatsidebar">
     <div class="shortcut-links">
-        <% if(currentUser){ %>
-            
-            <div class="text-center pt-4 margin pb-3">
-                <a href="/user/<%= req.user._id %>/upload">
-                    <i class="fa-solid fa-upload"></i>
-                </a>
-            </div>
-            <div class="text-center pt-3 pb-3">
-                <a href="/c/<%= req.user._id %>">
-                    <i class="fa-solid fa-comments"></i>
-                </a>
-            </div>
-            
-            <div class="text-center pt-3 pb-3">
-                <a href="/user/<%= req.user._id %>/subscribed">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-            </div>
-        <% }else{ %>
-            <div class="text-center pt-3 pb-3">
-                
-            </div>
-            <div class="text-center pt-4 pb-3">
-                <a href="/login">
-                    <i class="fa-solid fa-upload"></i>
-
-                </a>
-            </div>
-            <div class="text-center pt-3 pb-3">
-                <a href="/login">
-                </a>
-            </div>
-        <% } %>
-    </div>  
-    <hr>
-   </div>
+        <a href="#">hi</a>
+    </div>
+</div>

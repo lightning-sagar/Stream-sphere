@@ -1,0 +1,190 @@
+<% layout('layout/boilerplate') %>
+
+<style>
+  .search-results {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .card img {
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .card .details {
+    flex-grow: 1;
+  }
+
+  .card .details h5 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .card .details p {
+    margin: 5px 0 0;
+    color: #666;
+  }
+
+  .video-card img {
+    width: 120px;
+    height: 90px;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+
+  .video-card .video-details {
+    margin-top: 0;
+  }
+
+  .video-card .video-details h5 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .video-card .video-details p {
+    margin: 5px 0 0;
+    color: #666;
+  }
+
+  .tweet-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tweet-card p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .filter-buttons {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .filter-buttons button {
+    background-color: #5680cf;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .filter-buttons button:hover {
+    background-color: #4362ab;
+  }
+
+  .filter-buttons button.active {
+    background-color: #4362ab;
+  }
+
+  .scrollable-content {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+</style>
+
+<body>
+  <div class="search-results">
+    <h1>Search Results</h1>
+
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="videos">Videos</button>
+      <button class="filter-btn" data-filter="users">Users</button>
+      <button class="filter-btn" data-filter="tweets">Tweets</button>
+    </div>
+    
+    <div id="videos" class="filter-section scrollable-content">
+      <h2 class="section-title">Videos</h2>
+      <% if (videos.length > 0) { %>
+        <% videos.forEach(video => { %>
+          <div class="card video-card">
+            <img src="<%= video.thumbnail %>" alt="Thumbnail">
+            <div class="details video-details">
+              <h5><%= video.title %></h5>
+              <p>by <%= video.owner.username %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No videos found.</p>
+      <% } %>
+    </div>
+    
+    <div id="users" class="filter-section scrollable-content" style="display: none;">
+      <h2 class="section-title">Users</h2>
+      <% if (user.length > 0) { %>
+        <% user.forEach(u => { %>
+          <div class="card">
+            <img src="<%= u.avatar %>" width="50" height="50" alt="Avatar">
+            <div class="details">
+              <h5><%= u.username %></h5>
+              <p><%= u.email %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No users found.</p>
+      <% } %>
+    </div>
+    
+    <div id="tweets" class="filter-section scrollable-content" style="display: none;">
+      <h2 class="section-title">Tweets</h2>
+      <% if (Tweets.length > 0) { %>
+        <% Tweets.forEach(tweet => { %>
+          <div class="card tweet-card">
+            <p><%= tweet.content %></p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No tweets found.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const filterSections = document.querySelectorAll('.filter-section');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-filter');
+
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+
+          filterSections.forEach(section => {
+            if (filter === 'all' || section.id === filter) {
+              section.style.display = '';
+            } else {
+              section.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>

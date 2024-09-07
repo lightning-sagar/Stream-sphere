@@ -1,111 +1,351 @@
 <% layout('/layout/boilerplate.ejs') %>
+
 <style>
-
-        body {
-            height: 100vh;
-            background-color: #f0f0f0; /* Light background color */
-            color: #333; /* Dark text color */
-        }
-
-        .card-img-top { 
-            height: 200px;
-            object-fit: cover;
-        }
-        .col-md-4{
-            width: 30.33333333%!important;
-            margin-bottom: 50px!important;
-        }
-        .card {
-            transition: transform 0.3s;
-            background-color: #ffffff;  
-            color: #333; 
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-title {
-            color: #5680cf; 
-            margin-left: 15px;
-        }
-
-        .card-text {
-            color: #555;
-            margin-top: 10px;
-        }
-
-        .btn {
-            background-color: #5680cf; /* Blue button color */
-            color: #fff; /* Light text color */
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #4362ab; /* Darker blue on hover */
-        }
-
-        .rounded-circle {
-            border-radius: 50%;
-            height: 28px;
-        }
-        .center{
-            display: flex;
-            margin-top: 10px;
-        }
-        .container {
-            height: 90.7%;
-        }
-</style>
-
+    .bg-red{
+      background-color: red!important;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+  
+    }
+  
+    .all-comments {
+      max-height: 400px;
+      overflow-y: scroll;
+      padding-right: 15px; /* To avoid scrollbar overlap */
+    }
+  
+    .card {
+      margin-left: 0;
+    }
+  
+    .card .card {
+      margin-left: 40px; /* Indent nested comments */
+    }
+  
+    .container {
+      margin-left: 84px;
+    }
+  
+    .video-container {
+      width: 115%;
+      margin-left: 6px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .video-details {
+      flex: 3; /* Increase flex to make this section larger */
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+  
+    video {
+      width: 100%;
+      border-radius: 5px;
+    }
+  
+    .comments {
+      margin-left: 20px;
+      flex: 1;  
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+  
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 0;
+    }
+  
+    p {
+      color: #666;
+      margin: 0;
+    }
+  
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  
+    .card-img-top {
+      object-fit: cover;
+      height: 200px;
+      width: 100%;
+    }
+  
+    .comment-form {
+      margin-top: 20px;
+    }
+  
+    .collapse {
+      display: none;
+    }
+  
+    .collapse.show {
+      display: block;
+    }
+  
+    .nested-comments {
+      margin-left: 40px; /* Indent nested comments */
+    }
+  
+    .comment-input-container {
+      display: flex;
+      align-items: center;
+    }
+  
+    .comment-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+    }
+  
+    .send-button {
+      background-color: #5680cf;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+  
+    .card {
+      padding: 5px;
+      transition: transform 0.3s;
+      background-color: #ffffff;
+      color: #333;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    .card:hover {
+      transform: translateY(-5px);
+    }
+  
+    .card-body {
+      width: fit-content;
+      padding: 15px;
+    }
+  
+    .card-title {
+      color: #333;
+      margin: 0;
+      flex: 1;
+    }
+  
+    .card-text {
+      color: #666;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+  
+    .profile-avatar {
+      margin-right: 10px;
+    }
+  
+    .comment-form input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+  
+    .comment-form button[type="submit"] {
+      background-color: #5680cf;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    .like, .subscribe {
+      cursor: pointer;
+      color: #ff0000;
+      transition: color 0.3s;
+    }
+  
+    .like:hover, .subscribe:hover {
+      color: #5680cf;
+    }
+  
+    .unlike, .unsubscribe {
+      cursor: pointer;
+      color: #000000;
+      transition: color 0.3s;
+    }
+  
+    .unlike:hover, .unsubscribe:hover {
+      color: #333;
+    }
+  
+    .right-side {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  
+    .channel-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+  
+    .channel-info p {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  
+    .channel-info .right-side form {
+      margin-left: 20px;
+    }
+  
+    .channel-info .right-side button {
+      background-color: #5680cf;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  
+    .channel-info .right-side button:hover {
+      background-color: #466fb1;
+    }
+  
+    .other-videos {
+      padding: 20px 0;
+      width: 100%;
+    }
+  
+    .other-videos .other-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  
+    .other-videos .card-wrapper {
+      flex: 1 1 calc(33.333% - 20px);
+      box-sizing: border-box;
+    }
+  
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .card-body .card-title {
+      flex: 1;
+      margin: 0;
+    }
+  
+    .card-body .card-text {
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+    }
+  
+    .card-body .views {
+      color: #666;
+      margin: 0;
+    }
+  
+    .rounded-circle {
+      border-radius: 50%;
+    }
+  
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .video-container {
+        flex-direction: column;
+      }
+  
+      .video-details, .comments {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .other-videos .card-wrapper {
+        flex: 1 1 calc(50% - 20px);
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .other-videos .card-wrapper {
+        flex: 1 1 100%;
+      }
+  
+      .channel-info {
+        flex-direction: column;
+      }
+  
+      .channel-info p, .channel-info .right-side {
+        margin-top: 10px;
+      }
+    }
+  
+    .reply-form {
+      margin-top: 10px;
+    }
+  </style>
 <body>
-    <div class="container pt-5">
-        <h3 class="tp mb-4">Latest Video</h3>
-        <div class="row">
-            <% if(allVideos.length == 0){ %>
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="text-center">No videos found.</p>
-                        </div>
-                    </div>
-                </div>
-            <% }%>
-            <% allVideos.forEach(video => { %>
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <p class="card-text ">
-                                    <% if(video.owner.avatar){ %>
-                                    <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                                    <% } else { %>
-                                        
-                                        <span class="material-symbols-outlined profile-avatar center rounded-circle">
-                                            account_circle 
-                                            </span>
-                                    <% } %>
-                                </p>
-                                <h5 class="card-title"><%= video.title %></h5>
-
-                            </div>
-                            
-                            <% if (!currentUser) { %>
-                                <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                            <% } else { %>
-                                <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                            <% } %>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
+  <div class="video-container">
+    <div class="row card-container">
+      <% if (allVideos.length === 0) { %>
+        <div class="col-md-12 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <p class="text-center">No videos found.</p>
+            </div>
+          </div>
         </div>
+      <% } else { %>
+        <div class="other-videos">
+            <div class="other-container">
+              <% allVideos.forEach(otherVideo => { %>
+                <div class="card-wrapper">
+                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
+                    <div class="card" style="height: 300px;">
+                      <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
+                      <div class="card-body">
+                        <p class="card-text">
+                          <img src="<%= otherVideo.owner.avatar %>" width="30" height="30" class="rounded-circle" alt="">
+                        </p>
+                        <h5 class="card-title"><%= otherVideo.title %></h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+      <% } %>
     </div>
+  </div>
 </body>
