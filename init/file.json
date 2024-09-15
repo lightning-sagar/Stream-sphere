@@ -1,0 +1,902 @@
+[
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831236'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Journey Through the Amazon Rainforest',
+    description: 'Explore the diverse ecosystems of the Amazon, from its lu
+sh forests to the wildlife that calls it home.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'nature', 'adventure' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.102Z,
+    updatedAt: 2024-09-15T08:18:55.102Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831237'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Future of Renewable Energy',
+    description: 'An in-depth look into the innovations in renewable energy
+ and their potential to shape the future.',
+    duration: 240,
+    views: 0,
+    isPublished: true,
+    categories: [ 'science', 'environment' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831238'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Mastering Digital Art',
+    description: 'A comprehensive guide to digital painting techniques for 
+beginners and professionals.',
+    duration: 180,
+    views: 0,
+    isPublished: true,
+    categories: [ 'art', 'education' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831239'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Secrets of Ancient Egypt',
+    description: 'Discover the mysteries of ancient Egypt, from the pyramid
+s to the pharaohs who ruled the land.',
+    duration: 250,
+    views: 0,
+    isPublished: true,
+    categories: [ 'history', 'archaeology' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123a'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'A Culinary Journey Through Italy',
+    description: 'Experience the rich culinary traditions of Italy, from pa
+sta making to wine tasting.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'food', 'travel' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123b'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Evolution of Video Games',
+    description: 'Explore the history of video games, from arcade classics 
+to modern day eSports.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'gaming', 'history' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123c'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Mindfulness Meditation for Beginners',
+    description: 'A guided introduction to mindfulness meditation technique
+s for mental clarity and stress reduction.',
+    duration: 150,
+    views: 0,
+    isPublished: true,
+    categories: [ 'wellness', 'fitness' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123d'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Mastering Data Science with Python',
+    description: 'Learn the fundamentals of data science, from data cleanin
+g to machine learning using Python.',
+    duration: 260,
+    views: 0,
+    isPublished: true,
+    categories: [ 'education', 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123e'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Exploring Ancient Roman Architecture',
+    description: 'Discover the architectural marvels of ancient Rome, from 
+the Colosseum to the Pantheon.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'history', 'architecture' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.103Z,
+    updatedAt: 2024-09-15T08:18:55.103Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283123f'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Physics of Roller Coasters',
+    description: 'An educational video explaining the physics behind roller
+ coasters and their thrilling experiences.',
+    duration: 190,
+    views: 0,
+    isPublished: true,
+    categories: [ 'science', 'education' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831240'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Introduction to JavaScript',
+    description: "A beginner's guide to JavaScript, covering basic concepts
+ and syntax.",
+    duration: 200,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831241'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Advanced Python Techniques',
+    description: 'Explore advanced Python techniques and libraries to enhan
+ce your programming skills.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831242'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Building Web Apps with React',
+    description: 'Learn how to build interactive web applications using Rea
+ct.js.',
+    duration: 240,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831243'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Understanding APIs',
+    description: 'A comprehensive guide to understanding and working with A
+PIs in modern applications.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831244'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Mastering SQL Queries',
+    description: 'Dive into SQL and learn how to write complex queries to m
+anage and analyze data.',
+    duration: 190,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831245'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Introduction to Node.js',
+    description: 'Learn the basics of Node.js and how to use it for server-
+side development.',
+    duration: 200,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831246'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Git and Version Control',
+    description: 'A guide to using Git for version control and managing cod
+e changes efficiently.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831247'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'JavaScript Frameworks Overview',
+    description: 'An overview of popular JavaScript frameworks and their us
+e cases.',
+    duration: 250,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831248'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Building RESTful Services',
+    description: 'Learn how to build and consume RESTful services using mod
+ern tools and techniques.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec2831249'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Exploring Asynchronous JavaScript',
+    description: 'Understand asynchronous programming in JavaScript, includ
+ing callbacks, promises, and async/await.',
+    duration: 240,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283124a'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Creating Dynamic Websites',
+    description: 'Learn how to create dynamic and interactive websites usin
+g modern web technologies.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6986f0c8eb3eec283124b'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Debugging Techniques',
+    description: 'Explore various techniques and tools for debugging code e
+ffectively.',
+    duration: 200,
+    views: 0,
+    isPublished: true,
+    categories: [ 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:18:55.104Z,
+    updatedAt: 2024-09-15T08:18:55.104Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8592'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Exploring the Deep Sea',
+    description: 'Dive deep into the unexplored regions of the ocean, revea
+ling mysterious creatures and dark waters.',
+    duration: 180,
+    views: 0,
+    isPublished: true,
+    categories: [ 'documentary', 'ocean' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.648Z,
+    updatedAt: 2024-09-15T08:19:40.648Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8593'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Space Exploration: Mars',
+    description: "A look at NASA's mission to Mars and the search for signs
+ of life on the Red Planet.",
+    duration: 240,
+    views: 0,
+    isPublished: true,
+    categories: [ 'space', 'science' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.649Z,
+    updatedAt: 2024-09-15T08:19:40.649Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8594'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Wildlife of the Savannah',
+    description: 'Explore the stunning wildlife of the African savannah, fr
+om lions to elephants.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'wildlife', 'nature' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.649Z,
+    updatedAt: 2024-09-15T08:19:40.649Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8595'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Art of Coding',
+    description: 'An insightful documentary on the evolution of programming
+ and its impact on the modern world.',
+    duration: 190,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.649Z,
+    updatedAt: 2024-09-15T08:19:40.649Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8596'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Innovations in AI',
+    description: 'A deep dive into the world of artificial intelligence and
+ its transformative potential.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'ai' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8597'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Adventures in the Arctic',
+    description: 'Join a team of explorers as they venture into the icy rea
+lms of the Arctic.',
+    duration: 260,
+    views: 0,
+    isPublished: true,
+    categories: [ 'adventure', 'nature' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8598'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Rise of eSports',
+    description: 'An in-depth look into the growing phenomenon of competiti
+ve gaming and its global impact.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'gaming', 'sports' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea8599'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Mastering Python Programming',
+    description: 'Learn advanced Python programming concepts with real-worl
+d applications.',
+    duration: 180,
+    views: 0,
+    isPublished: true,
+    categories: [ 'education', 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea859a'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'History of the Internet',
+    description: "Trace the evolution of the internet from its inception to
+ its dominance in today's world.",
+    duration: 250,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'history' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea859b'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Yoga for Beginners',
+    description: 'An introductory guide to yoga, focusing on basic poses an
+d breathing techniques.',
+    duration: 120,
+    views: 0,
+    isPublished: true,
+    categories: [ 'fitness', 'wellness' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.650Z,
+    updatedAt: 2024-09-15T08:19:40.650Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea859c'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Introduction to Machine Learning',
+    description: 'A comprehensive overview of machine learning algorithms a
+nd their real-world applications.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'education', 'machine learning' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.651Z,
+    updatedAt: 2024-09-15T08:19:40.651Z
+  },
+  {
+    _id: new ObjectId('66e6989ca4873093caea859d'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Cycling Through the Alps',
+    description: 'Follow cyclists as they navigate through challenging Alpi
+ne terrain.',
+    duration: 180,
+    views: 0,
+    isPublished: true,
+    categories: [ 'adventure', 'cycling' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:19:40.651Z,
+    updatedAt: 2024-09-15T08:19:40.651Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e61f'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Exploring Volcanoes Around the World',
+    description: 'Discover the most active and dangerous volcanoes across t
+he globe.',
+    duration: 240,
+    views: 0,
+    isPublished: true,
+    categories: [ 'geology', 'nature' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.679Z,
+    updatedAt: 2024-09-15T08:36:51.679Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e620'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Great Wall of China',
+    description: 'A historical journey through the construction and signifi
+cance of the Great Wall of China.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'history', 'architecture' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.681Z,
+    updatedAt: 2024-09-15T08:36:51.681Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e621'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The World of Quantum Computing',
+    description: 'An overview of quantum computers and their potential to r
+evolutionize technology.',
+    duration: 250,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'science' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.681Z,
+    updatedAt: 2024-09-15T08:36:51.681Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e622'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Introduction to Blockchain',
+    description: 'Learn how blockchain technology is shaping the future of 
+decentralized systems.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'finance' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.681Z,
+    updatedAt: 2024-09-15T08:36:51.681Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e623'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Mysteries of the Bermuda Triangle',
+    description: 'Investigating the strange occurrences within the Bermuda 
+Triangle.',
+    duration: 180,
+    views: 0,
+    isPublished: true,
+    categories: [ 'mystery', 'ocean' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.682Z,
+    updatedAt: 2024-09-15T08:36:51.682Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e624'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Advanced JavaScript Techniques',
+    description: 'Learn advanced JavaScript concepts to enhance your coding
+ skills.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'education', 'coding' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.682Z,
+    updatedAt: 2024-09-15T08:36:51.682Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e625'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Science of Happiness',
+    description: 'Explore the science behind happiness and mental well-bein
+g.',
+    duration: 200,
+    views: 0,
+    isPublished: true,
+    categories: [ 'science', 'wellness' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.683Z,
+    updatedAt: 2024-09-15T08:36:51.683Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e626'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Life of Leonardo da Vinci',
+    description: 'A detailed exploration of the life and inventions of Leon
+ardo da Vinci.',
+    duration: 250,
+    views: 0,
+    isPublished: true,
+    categories: [ 'history', 'art' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.683Z,
+    updatedAt: 2024-09-15T08:36:51.683Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e627'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'How to Build a PC',
+    description: 'Step-by-step guide to building your own personal computer
+.',
+    duration: 270,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'education' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.683Z,
+    updatedAt: 2024-09-15T08:36:51.683Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e628'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Climate Change: The Global Challenge',
+    description: 'Understanding the impacts of climate change and the effor
+ts to combat it.',
+    duration: 260,
+    views: 0,
+    isPublished: true,
+    categories: [ 'environment', 'science' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.683Z,
+    updatedAt: 2024-09-15T08:36:51.683Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e629'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Exploring the Galapagos Islands',
+    description: 'Dive into the unique wildlife and landscapes of the Galap
+agos Islands.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'nature', 'adventure' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.683Z,
+    updatedAt: 2024-09-15T08:36:51.683Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e62a'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Rise of Cryptocurrency',
+    description: 'A comprehensive guide to the world of cryptocurrencies an
+d blockchain technology.',
+    duration: 220,
+    views: 0,
+    isPublished: true,
+    categories: [ 'technology', 'finance' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.684Z,
+    updatedAt: 2024-09-15T08:36:51.684Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e62b'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Virtual Reality: The Future of Gaming',
+    description: 'An in-depth look into the future of virtual reality in ga
+ming.',
+    duration: 210,
+    views: 0,
+    isPublished: true,
+    categories: [ 'gaming', 'technology' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.684Z,
+    updatedAt: 2024-09-15T08:36:51.684Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e62c'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'Solar Power Explained',
+    description: 'Learn about solar energy, its applications, and its impor
+tance for a sustainable future.',
+    duration: 200,
+    views: 0,
+    isPublished: true,
+    categories: [ 'science', 'environment' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.684Z,
+    updatedAt: 2024-09-15T08:36:51.684Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e62d'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'The Art of Pottery Making',
+    description: 'Discover the traditional techniques of pottery making in 
+different cultures.',
+    duration: 230,
+    views: 0,
+    isPublished: true,
+    categories: [ 'art', 'education' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.684Z,
+    updatedAt: 2024-09-15T08:36:51.684Z
+  },
+  {
+    _id: new ObjectId('66e69ca32b1eb70a6795e62e'),
+    videoFile: 'https://res.cloudinary.com/dybgs03yy/video/upload/v17263852
+55/wsdzuuyrka8rj3ypqmg7.mp4',
+    thumbnail: 'https://res.cloudinary.com/dybgs03yy/image/upload/v17263852
+54/tr9uwx7ricw4vxnrhzww.png',
+    title: 'How to Improve Your Photography',
+    description: 'Tips and tricks for capturing stunning photos using a DSL
+R or smartphone.',
+    duration: 190,
+    views: 0,
+    isPublished: true,
+    categories: [ 'art', 'technology' ],
+    owner: new ObjectId('6661c0330f0b5138c9819cf9'),
+    __v: 0,
+    createdAt: 2024-09-15T08:36:51.684Z,
+    updatedAt: 2024-09-15T08:36:51.684Z
+  }
+]

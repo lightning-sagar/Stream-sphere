@@ -1,30 +1,75 @@
-const mongoose = require('mongoose');
-const User = require('../models/user'); // Adjust the path as necessary
+const mongoose = require("mongoose");
+const initData = require("./data.js");
+const Video = require("../models/vedio.js");
+ 
+// const getallvideos = async () => {
+//   await mongoose.connect("mongodb+srv://lightningsagar0:s3GYdyVYq1Jx7ZF5@cluster0.otqpl50.mongodb.net/");
+//   const data = await Video.find();
+ 
+//   function convertToJSON(data) {
+//     return data.map(item => {
+//       return {
+//         ...item,
+//         _id: item._id.toString(),
+//         owner: item.owner.toString(),
+//         createdAt: item.createdAt.toISOString(),
+//         updatedAt: item.updatedAt.toISOString(),
+//       };
+//     });
+//   }
+  
+ 
+//   const jsonData = convertToJSON(data);
+  
+ 
+//   console.log(JSON.stringify(jsonData, null, 2));
+//   mongoose.connection.close();
+// }
+// getallvideos()
 
-async function initializeUserData() {
-  try {
-    await mongoose.connect(process.env.ATLAS_DB, { // Change to your database URL
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
 
-    const result = await User.updateMany(
-      {}, 
-      {
-        $set: {
-          friends: [],
-          waiting: [],
-          blocked: []
-        }
-      }
-    );
 
-    console.log(`${result.nModified} user documents updated.`);
-    mongoose.connection.close();
-  } catch (error) {
-    console.error('Error initializing user data:', error);
-    mongoose.connection.close();
-  }
-}
 
-initializeUserData();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// main().then(()=>{
+//   console.log("connectrd to DB");
+// })
+// .catch(err => console.log(err))
+
+// async function main() {
+//   await mongoose.connect("mongodb+srv://lightningsagar0:s3GYdyVYq1Jx7ZF5@cluster0.otqpl50.mongodb.net/");
+// }
+
+// const initDB = async () => {
+// //   await Video.deleteMany();
+//   initData.data = initData.data.map((obj)=>({
+//     ...obj,owner:"6661c0330f0b5138c9819cf9"
+//   }))
+//   await Video.insertMany(initData.data)
+//   console.log("data is inserted");
+// }
+
+// initDB()

@@ -313,7 +313,18 @@
     .reply-form {
       margin-top: 10px;
     }
-  </style>
+</style>
+<script>
+  const getsugguestion = async () => {
+    const res = await fetch('http://localhost:8000/');
+    const data = await res.json();
+    console.log(data);
+    document.getElementById('sugguestion').innerHTML = data.message;
+  }
+
+  window.onload = getsugguestion;  
+</script>
+
 <body>
   <div class="video-container">
     <div class="row card-container">

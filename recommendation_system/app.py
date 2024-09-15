@@ -8,3 +8,5 @@ print(movies[title])
 
 print("\nSimilarity Matrix:")
 print(similarity)
+pandas numpy scikit-learn pickle jupiter
+ipynb -> python -m notebook

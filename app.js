@@ -321,13 +321,11 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     const subscription = await Subscription.findOne({ subscriber: req.user._id, channel: videoOwnerId });
     const subscribed = !!subscription;
     const likesCount = await Like.countDocuments({ video: req.params.video });
-    
-    // Get all comments and populate their owners
     const comments = await Comment.find({ video: req.params.video }).populate('owner').lean();
     
-    // Organize comments into threads
     const threadedComments = organizeComments(comments);
 
+    // Render the watch page
     res.render("pages/watch.ejs", {
       req,
       currentUser: req.user,
@@ -337,6 +335,23 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
       subscribed,
       likesCount
     });
+
+    // Now send an API request to http://localhost:8000/ with video details
+    const videoData = {
+      channelName: video.owner.username, // Assuming `username` is a property of the owner
+      title: video.title,
+      description: video.description
+    };
+
+    // Send the API request using fetch
+    await fetch("http://localhost:8000/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(videoData)
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
