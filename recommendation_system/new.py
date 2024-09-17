@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request  
 from fastapi.middleware.cors import CORSMiddleware
-
+# import recommend from app.py
+from app import recommend
 app = FastAPI()
 
 app.add_middleware(
@@ -11,14 +12,19 @@ app.add_middleware(
     allow_headers=["*"],   
 )
 
-def print_hello():
-    print("Hello")   
 
 @app.post("/")
 async def read_root(request: Request):
-    print_hello()  
-
     body = await request.json()
-    print("Request body:", body)
+    print(body)
+    title = body.get('title')   
+    print(title)
+    if not title:
+        return {"error": "Title is required in the request body"}
+
+    # Call the recommend function
+    recommended_ids = recommend(title)
+    print(recommended_ids)
     
-    return {"message": "Hello World", "request_body": body}
+    # # Return the recommendations
+    return {"message": "Recommendations fetched successfully", "recommended_ids": recommended_ids}

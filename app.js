@@ -310,7 +310,6 @@ app.post("/user/:id/upload", upload.fields([
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
   try {
     const userCategory = req.user.category;
-    const allVideos = await Video.find({ category: userCategory }).populate('owner');
     const video = await Video.findOne({ _id: req.params.video, category: userCategory }).populate('owner');
     
     if (!video) {
@@ -325,7 +324,16 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     
     const threadedComments = organizeComments(comments);
 
-    // Render the watch page
+    
+    const videoData = {
+      channelName: video.owner.username, 
+      title: video.title,
+      description: video.description
+    };
+
+    const get_ids = await getrecommendations(videoData);
+    const get_videos = await Video.find({ _id: { $in: get_ids } }).populate('owner');
+    const allVideos = get_videos.filter(video => video._id.toString() !== req.params.video);
     res.render("pages/watch.ejs", {
       req,
       currentUser: req.user,
@@ -336,13 +344,6 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
       likesCount
     });
 
-    const videoData = {
-      channelName: video.owner.username, 
-      title: video.title,
-      description: video.description
-    };
-
-    getrecommendations(videoData);
 
   } catch (err) {
     console.error(err);
@@ -352,13 +353,19 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
 
 const getrecommendations= async(videoData)=> {
    try {
-    await fetch("http://localhost:8000/", {
+    const response = await fetch("http://localhost:8000/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(videoData)
+
     });
+    const data = await response.json();
+    console.log(data);
+    if(data.message === "Recommendations fetched successfully"){ 
+      return data.recommended_ids;
+    }
    } catch (error) {
     console.log(error,"ml model is not running");
    }
