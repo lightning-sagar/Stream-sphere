@@ -736,13 +736,17 @@ app.put("/user/:id/edit/profile", ensureAuthenticated, upload.fields([
       }
       avatarUrl = avatarResponse.secure_url;
     }
-    console.log(category)
+    let categoriesArray;
+    if (category) {
+      categoriesArray = category.split(",").map(item => item.trim());
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
         ...(username && { username }),  
         ...(email && { email }),   
-        ...(category && { categories: category }), 
+        ...(category && { categories: categoriesArray  }), 
         ...(avatarUrl && { avatar: avatarUrl })  
       },
       { new: true }
