@@ -205,7 +205,8 @@ app.get('/category',ensureAuthenticated,async (req, res) => {
 app.put('/user/:id/submit', ensureAuthenticated, async (req, res) => {
   try {
     const userId = req.params.id;
-    const categories = Array.isArray(req.body.categories) ? req.body.categories : [req.body.categories]; // Ensure categories is an array
+    console.log(req.body,"req.body");
+    const categories = Array.isArray(req.body.categories) ? req.body.categories : [req.body.categories]; 
     console.log(categories);  
 
     const newUser = await User.findByIdAndUpdate(userId, {
@@ -215,7 +216,7 @@ app.put('/user/:id/submit', ensureAuthenticated, async (req, res) => {
     
 
 
-    console.log("User updated:", newUser);
+    // console.log("User updated:", newUser);
     res.redirect(`/user/${userId}`);
   } catch (error) {
     console.error("Error updating user:", error);
@@ -228,6 +229,7 @@ app.get('/user/:id', ensureAuthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const userCategories = user.categories;
+    console.log(userCategories);
     const allVideos = await Video.find({ categories: { $in: userCategories } }).populate('owner');
     const waitingUsers = [];
     for (const requestID of user.waiting) {
@@ -722,7 +724,6 @@ app.put("/user/:id/edit/profile", ensureAuthenticated, upload.fields([
     const { id } = req.params;
     const { username, email, category } = req.body;
     
-    // Check if avatar field is present in the request body
     let avatarUrl;
     if (req.files['avatar'] && req.files['avatar'].length > 0) {
       const avatarLocalPath = req.files['avatar'][0].path;
@@ -735,15 +736,14 @@ app.put("/user/:id/edit/profile", ensureAuthenticated, upload.fields([
       }
       avatarUrl = avatarResponse.secure_url;
     }
-    
-    // Find the user by ID and update the fields
+    console.log(category)
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        ...(username && { username }), // If username exists, update it
-        ...(email && { email }), // If email exists, update it
-        ...(category && { category }), // If category exists, update it
-        ...(avatarUrl && { avatar: avatarUrl }) // If avatarUrl exists, update it
+        ...(username && { username }),  
+        ...(email && { email }),   
+        ...(category && { categories: category }), 
+        ...(avatarUrl && { avatar: avatarUrl })  
       },
       { new: true }
     );
