@@ -336,14 +336,22 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
       likesCount
     });
 
-    // Now send an API request to http://localhost:8000/ with video details
     const videoData = {
-      channelName: video.owner.username, // Assuming `username` is a property of the owner
+      channelName: video.owner.username, 
       title: video.title,
       description: video.description
     };
 
-    // Send the API request using fetch
+    getrecommendations(videoData);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+const getrecommendations= async(videoData)=> {
+   try {
     await fetch("http://localhost:8000/", {
       method: "POST",
       headers: {
@@ -351,12 +359,10 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
       },
       body: JSON.stringify(videoData)
     });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+   } catch (error) {
+    console.log(error,"ml model is not running");
+   }
+}
 
 function organizeComments(comments) {
   const commentMap = {};
