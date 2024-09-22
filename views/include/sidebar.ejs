@@ -70,7 +70,11 @@
     
     /* Sidebar*/
     .sidebar{
-        background: #0e0f0f; /* Light gray background */
+        background: #0e0f0f; 
+        box-shadow: 0 2px 4px rgba(216, 213, 213, 0.423);
+        position: fixed;
+        left: 0;
+        top: 40px;
         width: 84px;
         height: 100vh;
         position: fixed;
@@ -101,6 +105,7 @@
         height: 1px;
         background: #ccc;
         width: 85%;
+        margin-left: -10px;
     }
     
     .subscribed-list h3{
@@ -138,6 +143,8 @@
     
     /* Main Body */
     .container{
+    margin-top: 40px;
+
         background: #0e0f0f; /* White background */
         padding-left: 3%;
         margin-right: 0;
@@ -260,7 +267,7 @@
             </div>
             <div class="text-center pt-4 pb-3">
                 <a href="/login">
-                    <i class="fa-solid fa-upload"></i>
+                    <i class="fa-solid fa-upload" style="color: #bcafaf;"></i>
 
                 </a>
             </div>

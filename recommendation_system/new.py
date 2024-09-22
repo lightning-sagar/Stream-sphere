@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request  
+from fastapi import FastAPI, Request , HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 # import recommend from app.py
 from app import recommend
@@ -16,15 +16,14 @@ app.add_middleware(
 @app.post("/")
 async def read_root(request: Request):
     body = await request.json()
-    print(body)
+    print(body)  
     title = body.get('title')   
-    print(title)
+    print(title)   
     if not title:
-        return {"error": "Title is required in the request body"}
+        raise HTTPException(status_code=400, detail="Title is required in the request body")
 
-    # Call the recommend function
     recommended_ids = recommend(title)
-    print(recommended_ids)
+    print(recommended_ids)  # Debugging: Print the recommended IDs
     
-    # # Return the recommendations
+    # Return the recommendations
     return {"message": "Recommendations fetched successfully", "recommended_ids": recommended_ids}

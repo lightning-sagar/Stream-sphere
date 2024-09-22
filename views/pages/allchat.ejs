@@ -50,14 +50,16 @@
   }
 
   .logos {
+    margin-top: 27px;
+
     width: 320px;
     height: 657px;
     top: 64px;
     left: 84px;
     gap: 0px;
     border: 0px 2px 0px 2px;
-    opacity: 0px;
-    background: #7f8396;
+    opacity: 0px; 
+      background-color: #2f3036;
     color: #333;
     padding: 20px;
     box-sizing: border-box;
@@ -87,6 +89,8 @@
   }
 
   .chat-container {
+    margin-top: 27px;
+
     width: 100%;
     background-color: #0e0f0f;
     padding: 20px;
@@ -100,13 +104,13 @@
   .chat-container h2 {
     margin-bottom: 0;
     font-size: 24px;
-    color: #000000;
+    color: #fff7f7;
     font: bold;
     font-weight: 700;
   }
   .chat-container p {
     margin-bottom: 0;
-      color: #000000;
+    color: #f6c9c9;
     font: bold;
   }
 
@@ -185,7 +189,7 @@
   left: 0;
 }
 .sender-user {
-    background-color: #0e0f0f;
+  background-color: #4c5252;
     color: white;
     margin-left: auto;
     text-align: left;
@@ -193,7 +197,7 @@
 
   .receiver-user {
     background-color: #FFFFFF;
-    color: #d6d6d6;
+    color: #000000;
     margin-right: auto;
     text-align: left;
   }
@@ -237,7 +241,10 @@ sub{
   opacity: 0px;
   background: #0e0f0f;
 }
-</style>
+.text-muted{
+  color: #f0e4e4;
+}
+</style>  
 
 <body>
   <div class="cont">
@@ -392,7 +399,7 @@ sub{
                   currentChatUser = newReceiverId;
                   chatContainer.innerHTML = `
                       <h2>Chat with ${username}</h2>
-                      <p>Keep your conversation long-lasting</p>
+                      <p class="text-muted">Keep your conversation long-lasting</p>
                       <div id="messages" class="messages"></div>
                       <div class="send">
                           <input type="text" id="messageInput" placeholder="Type your message here...">

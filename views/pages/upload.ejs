@@ -7,18 +7,88 @@
   }
 
   .container{
+    margin-top: 40px;
     position: fixed;
-    left: 88px;
+    left: 208px
   }
 
   .max-width-800 {
     max-width: 800px;
   }
+/* Step 2 container */
+.step-two {
+  background-color: #1e2022;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.step-two h3 {
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  border-bottom: 2px solid #5680cf;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Step 2 input field improvements */
+.form-control {
+  width: 90%; /* Wider width for better visibility */
+  padding: 12px; /* Larger padding */
+  font-size: 16px; /* Increased font size */
+  margin-bottom: 20px; /* Spacing between fields */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #2b2d31; /* Dark background */
+  color: #fff; /* Text color */
+}
+
+
+textarea.form-control {
+  height: 180px; /* Larger height for the textarea */
+  resize: none; /* Prevent resizing */
+}
+
+/* Button styling */
+.btn-generate {
+  background-color: #43a047;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s;
+}
+
+.btn-generate:hover {
+  background-color: #388e3c;
+}
+
+.btn-primary {
+  background-color: #5680cf;
+  padding: 12px 24px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #4362ab;
+}
 
   .form-label {
     font-weight: bold;
     margin-bottom: 10px; /* Add space between label and input */
     display: block; /* Ensure labels are displayed as blocks */
+    color: #fff;
   }
 
   .form-control,
@@ -48,11 +118,34 @@
   .btn-primary:hover {
     background-color: #4362ab; /* Darker blue on hover */
   }
+
   .container{
     background-color: #0e0f0f;
     padding-bottom: 150px;
   }
-  /* Custom styles for two-step upload process */
+
+  /* Step 1 custom styles */
+  .step-one h3 {
+    color: #fff;
+    font-size: 26px;
+    text-align: center;
+    border-bottom: 2px solid #5680cf;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .step-one .form-group {
+    background-color: #1e2022;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .step-one .form-group input {
+    width: 100%;
+  }
+
+  /* Custom styles for step progress */
   .step-container {
     display: flex;
     justify-content: space-between;
@@ -78,50 +171,92 @@
     color: #fff;  
   }
 
+  /* Custom styles for Step 2 */
   .step-two {
     display: none; 
   }
+
+  .step-two textarea {
+    height: 150px; /* Increased height for larger textbox */
+  }
+
+  .btn-auto-generate {
+    background-color: #68b0cf;
+    margin-bottom: 10px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  .btn-auto-generate:hover {
+    background-color: #5292ab;
+  }
+  .step-two .form-control {
+    width: 100%;  
+  }
+  @media (max-width: 1024px) {
+      .video-container {
+        flex-direction: column;
+      }
+      .container {
+        /* flex-direction: column; */
+        margin-left: 0;
+        left: 0;
+      }
+      .other-container{
+        width: 80%;
+      }
+      .video-details, .comments {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
 </style>
+
+
 <div class="container pt-5">
-  <form action="/user/<%= req.user._id %>/upload" id="uploadForm" class="max-width-800 mx-auto" enctype="multipart/form-data" method="post">
+  <form enctype="multipart/form-data" id="uploadForm" class="max-width-900 mx-auto"  method="post">
     <!-- Step indicators -->
     <div class="step-container">
       <div class="step-circle active" data-step="1">1</div>
       <div class="step-circle" data-step="2">2</div>
     </div>
 
-    <!-- Step 1: Upload Video File -->
-    <div class="step-one">
-      <h3 class="mb-4">Step 1: Upload Video File</h3>
+    <!-- Step 1: Upload Video File and Thumbnail -->
+    <div class="step-one" style="color: white;">
+      <h3 class="mb-4">Step 1: Upload Video and Thumbnail</h3>
       <div class="form-group">
         <label for="videoFile" class="form-label">Select Video File</label>
         <input type="file" class="form-control-file" id="videoFile" name="videoFile" accept="video/*" required>
       </div>
+      <div class="form-group">
+        <label for="thumbnail" class="form-label">Select Thumbnail</label>
+        <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*" required>
+      </div>
+   
       <button type="button" class="btn btn-primary next-step">Next</button>
     </div>
 
-    <!-- Step 2: Upload thumbnail, title, description, category -->
-    <div class="step-two" style="display: none;">
+    <!-- Step 2: Enter title and auto-generate description -->
+    <div class="step-two" style="display: none; color: white;">
       <h3 class="mb-4">Step 2: Fill In Details</h3>
-      <div class="form-group">
-        <label for="thumbnail" class="form-label">Select Thumbnail</label>
-        <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">
-      </div>
       <div class="form-group">
         <label for="title" class="form-label">Title</label>
         <input type="text" class="form-control" id="title" name="title" required>
       </div>
       <div class="form-group">
-        <label for="description" class="form-label">Description</label>
+        <label for="description" class="form-label">Description (auto-generated)</label>
         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label for="categories" class="form-label">Categories (comma-separated)</label>
-        <input type="text" class="form-control" id="categories" name="categories">
+        <input type="text" class="form-control" id="categories" name="categories" placeholder="e.g., Coding, Food" required>
       </div>
-      
+      <button type="button" class="btn-generate">Auto-generate Description</button>
       <button type="submit" class="btn btn-primary">Upload</button>
     </div>
+
   </form>
 </div>
 
@@ -131,53 +266,116 @@
     const stepTwo = document.querySelector('.step-two');
     const nextBtn = document.querySelector('.next-step');
     const stepCircles = document.querySelectorAll('.step-circle');
-    const form = document.querySelector('form');
+    const videoFileInput = document.getElementById('videoFile');
+    const thumbnailInput = document.getElementById('thumbnail');
+    const descriptionField = document.getElementById('description');
+    const generateBtn = document.querySelector('.btn-generate');
+    const form = document.getElementById('uploadForm'); // Form reference
+    let dataUplad;
+    const userId = '<%= currentUser._id %>';
 
-    
-    nextBtn.addEventListener('click', function() {
-      // Validation logic for step 1 fields
-      const videoFile = document.getElementById('videoFile');
-      if (videoFile.value === '') {
-        alert('Please select a video file.');
+    nextBtn.addEventListener('click', async function() {
+      if (!videoFileInput.files.length || !thumbnailInput.files.length) {
+        alert('Please select both video and thumbnail files.');
         return;
       }
 
-      // Proceed to step 2
-      stepOne.style.display = 'none';
-      stepTwo.style.display = 'block';
-      stepCircles[1].classList.add('active');
-    });
+      const formData = new FormData();
+      formData.append('videoFile', videoFileInput.files[0]);
+      formData.append('thumbnail', thumbnailInput.files[0]);
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default form submission
+      try {
+        console.log('Uploading files:', videoFileInput.files[0], thumbnailInput.files[0]);
 
-      // Validation logic for step 2 fields
-      const thumbnail = document.getElementById('thumbnail');
-      const title = document.getElementById('title');
-      if (thumbnail.value === '' || title.value === '') {
-        alert('Please select a thumbnail and enter a title.');
-        return;
-      }
+        const response = await fetch('/upload-files', {
+          method: 'POST',
+          body: formData
+        });
 
-      // If everything is valid, submit the form
-      this.submit(); // Submit the form
-    });
-
-    stepCircles.forEach(function(circle) {
-      circle.addEventListener('click', function() {
-        const stepNumber = parseInt(circle.getAttribute('data-step'));
-        if (stepNumber === 1) {
-          stepOne.style.display = 'block';
-          stepTwo.style.display = 'none';
-          stepCircles[0].classList.add('active');
-          stepCircles[1].classList.remove('active');
-        } else if (stepNumber === 2) {
+        const data = await response.json(); // Parse JSON response
+        console.log('Server response:', data);
+        dataUplad = data;
+        console.log(dataUplad);
+        if (data.success) {
           stepOne.style.display = 'none';
           stepTwo.style.display = 'block';
-          stepCircles[0].classList.remove('active');
           stepCircles[1].classList.add('active');
+          stepCircles[0].style.pointerEvents = 'none';
+        } else {
+          alert('File upload failed.');
+        }
+      } catch (error) {
+        console.error('Error during upload:', error);
+      }
+    });
+
+    generateBtn.addEventListener('click', async function() {
+      console.log(dataUplad,"dataUplad");
+      const geminiResponse = await fetch('/generate-description', {
+        method: 'POST',
+        body: JSON.stringify({
+          thumbnailUrl: dataUplad.thumbnailUrl  
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
         }
       });
+
+      const geminiData = await geminiResponse.json();
+      if (geminiData.success) {
+        descriptionField.value = geminiData.description;
+      } else {
+        alert('Failed to generate description.');
+      }
+    });
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();  
+
+      const titleInput = document.getElementById('title');
+      const categoriesInput = document.getElementById('categories');
+
+      const categories = categoriesInput.value.split(',').map(category => category.trim()); 
+
+      const formData = new FormData();  
+      formData.append('title', titleInput.value);
+      formData.append('description', descriptionField.value);
+      formData.append('categories', categories.join(',')); 
+      formData.append('videoFile', videoFileInput.files[0]);  
+      formData.append('thumbnail', thumbnailInput.files[0]); 
+
+      console.log('Uploading form data:', formData);
+      try {
+        console.log('Uploading files:', dataUplad.videoUrl);
+        const response = await fetch(`/user/${userId}/upload`, {
+          method: 'POST',
+          
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: titleInput.value,
+            description: descriptionField.value,
+            categories: categories.join(','),
+            videoFileUrl:dataUplad.videoUrl,
+            thumbnailUrl:  dataUplad.thumbnailUrl,
+          }),
+           
+        });
+        const data = await response.json();
+
+        console.log('Server response:', data);
+        if (data.success) {
+          window.location.href = `/user/${userId}`;
+        } else {
+          alert('Upload failed: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error during form submission:', error);
+        alert('An error occurred during the upload process.');
+      }
     });
   });
 </script>

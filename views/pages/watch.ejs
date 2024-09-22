@@ -1,131 +1,225 @@
 <% layout('layout/boilerplate') %>
 
 <style>
-  .bg-red{
-    background-color: red!important;
-  }
-  body {
+  /* Like/Unlike Button */
+.like, .subscribe {
+    cursor: pointer;
+    color: #ff0000; /* Active color */
+    font-size: 24px;
+    transition: color 0.3s ease-in-out;
+}
+
+.unlike, .unsubscribe {
+    cursor: pointer;
+    color: #ccc; /* Inactive color instead of black */
+    transition: color 0.3s ease-in-out;
+}
+
+.like:hover, .subscribe:hover {
+    color: #5680cf; /* Hover color when active */
+}
+
+.unlike:hover, .unsubscribe:hover {
+    color: #999; /* Hover color when inactive */
+}
+
+ 
+ 
+
+.unlike:hover {
+    color: #333;
+}
+
+ 
+.container {
+    position: absolute;
+    background: #0e0f0f;
+    padding-left: 3%;
+    margin-right: 0;
+    left: 90px;
+    padding-bottom: 68px;
+}
+body {
     font-family: Arial, sans-serif;
     color: #ffffffef;
+    background-color: #121212;
+    margin: 0;
+    padding: 0;
+}
 
-  }
+/* Utility Classes */
+.bg-red {
+    background-color: rgb(9, 9, 9) !important;
+}
 
-  .all-comments {
-    max-height: 400px;
-    overflow-y: scroll;
-    padding-right: 15px; /* To avoid scrollbar overlap */
-  }
+.flex {
+    display: flex;
+}
 
-  .card {
-    margin-left: 0;
-  }
+.align-center {
+    align-items: center;
+}
 
-  .card .card {
-    margin-left: 40px; /* Indent nested comments */
-  }
+.justify-between {
+    justify-content: space-between;
+}
 
-  .container {
-    margin-left: 84px;
-  }
+.rounded {
+    border-radius: 5px;
+}
 
-  .video-container {
-    width: 115%;
-    margin-left: 68px;
+.shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Video Player Section */
+.video-container {
+  width: 120%;
+    margin: 0 auto;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-  }
+}
 
-  .video-details {
-    flex: 3; /* Increase flex to make this section larger */
+.video-details {
+    flex: 3;
     padding: 20px;
-    color: #fff!important;
+    color: #ffffffef !important;
     background-color: #0e0f0f;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
     margin-bottom: 20px;
-  }
+}
 
-  video {
+video {
     width: 100%;
     border-radius: 5px;
-  }
+    margin-bottom: 20px;
+}
 
-  .comments {
+h2 {
+    text-align: center;
+    color: #ffffffef;
+    margin-top: 0;
+}
+
+p {
+    color: #ffffffef;
+    margin: 0;
+}
+
+/* Channel Info Section */
+.channel-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.channel-info p {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.channel-info img.avatar {
+    margin-right: 10px;
+}
+
+.right-side {
+    display: flex;
+    align-items: center;
+}
+
+.likes-count {
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+.like-form {
+    display: flex;
+    align-items: center;
+}
+
+.material-icons {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.like:hover, .subscribe:hover {
+    color: #5680cf;
+}
+
+.unlike, .unsubscribe {
+    cursor: pointer;
+    color: #000000;
+    transition: color 0.3s;
+}
+
+.unlike:hover, .unsubscribe:hover {
+    color: #333;
+}
+.channel-info .right-side {
+    display: flex;
+    align-items: center;
+}
+
+.channel-info .right-side p,
+.channel-info .right-side form {
     margin-left: 20px;
-    flex: 1;  
-    background-color: #ffffff;
+}
+
+
+/* Comments Section */
+.comments {
+      margin-top: 28px;
+    flex: 1;
+    background-color: #272525;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-  }
+}
 
-  h2 {
-    text-align: center;
-    color: #ffffffef;
-    margin-top: 0;
-  }
+h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
 
-  p {
-    color: #ffffffef;
-    margin: 0;
-  }
-
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  .card-img-top {
-    object-fit: cover;
-    height: 200px;
-    width: 100%;
-  }
-
-  .comment-form {
+.comment-form {
     margin-top: 20px;
-  }
+}
 
-  .collapse {
-    display: none;
-  }
-
-  .collapse.show {
-    display: block;
-  }
-
-  .nested-comments {
-    margin-left: 40px; /* Indent nested comments */
-  }
-
-  .comment-input-container {
+.comment-input-container {
     display: flex;
     align-items: center;
-  }
+}
 
-  .comment-input {
+.comment-input {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px 0 0 5px;
-  }
+}
 
-  .send-button {
+.send-button {
     background-color: #5680cf;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
-  }
+}
 
-  .card {
+.all-comments {
+    max-height: 400px;
+    overflow-y: hidden;
+    padding-right: 15px;
+}
+
+.card {
     padding: 5px;
-    transition: transform 0.3s;
     background-color: #151414;
     color: #ffffffef;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -134,186 +228,121 @@
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-  }
+    transition: transform 0.3s;
+}
 
-  .card:hover {
+.card:hover {
     transform: translateY(-5px);
-  }
+}
 
-  .card-body {
-    width: fit-content;
+.card-body {
+    display: flex;
+    justify-content: space-between; /* This ensures elements are spread */
+    align-items: center;
     padding: 15px;
-  }
-
-  .card-title {
+    flex-wrap: wrap; /* Wrap content to allow new input below */
+}
+.card-title {
     color: #ffffffef;
     margin: 0;
     flex: 1;
-  }
+}
 
-  .card-text {
+.card-text {
     color: #ffffffef;
     margin: 0;
     display: flex;
     align-items: center;
-  }
+}
 
-  .profile-avatar {
-    margin-right: 10px;
-  }
+.card-img-top {
+    object-fit: cover;
+    height: 200px;
+    width: 100%;
+}
 
-  .comment-form input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
+/* Nested Commenting */
+.nested-comments {
+    margin-left: 40px;
+}
 
-  .comment-form button[type="submit"] {
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
+/* Like Buttons in Comments */
+.comment-like-form button {
+    background-color: transparent;
     border: none;
-    border-radius: 5px;
+    color: inherit;
     cursor: pointer;
-  }
+}
 
-  .like, .subscribe {
-    cursor: pointer;
-    color: #ff0000;
-    transition: color 0.3s;
-  }
-
-  .like:hover, .subscribe:hover {
-    color: #5680cf;
-  }
-
-  .unlike, .unsubscribe {
-    cursor: pointer;
-    color: #000000;
-    transition: color 0.3s;
-  }
-
-  .unlike:hover, .unsubscribe:hover {
-    color: #333;
-  }
-
-  .right-side {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .channel-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-  }
-
-  .channel-info p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  .channel-info .right-side form {
-    margin-left: 20px;
-  }
-
-  .channel-info .right-side button {
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-
-  .channel-info .right-side button:hover {
-    background-color: #466fb1;
-  }
-
-  .other-videos {
+/* Video Suggestions (Other Videos Section) */
+.other-videos {
     padding: 20px 0;
     width: 100%;
-  }
+}
+.delete-btn-comment{
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
 
-  .other-videos .other-container {
+}
+.other-videos .other-container {
+  margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-  }
+}
 
-  .other-videos .card-wrapper {
+.other-videos .card-wrapper {
     flex: 1 1 calc(33.333% - 20px);
     box-sizing: border-box;
-  }
-
-  .card-body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .card-body .card-title {
-    flex: 1;
-    margin: 0;
-  }
-
-  .card-body .card-text {
-    margin-right: 20px;
-    display: flex;
-    align-items: center;
-  }
-
-  .card-body .views {
-    color: #ffffffef;
-    margin: 0;
-  }
-
-  .rounded-circle {
+}
+.comments h3{
+  color: #ccc;
+}
+.rounded-circle {
     border-radius: 50%;
-  }
+}
 
-  /* Responsive Styles */
-  @media (max-width: 1024px) {
+/* Responsive Styles */
+@media (max-width: 1024px) {
     .video-container {
-      flex-direction: column;
+        flex-direction: column;
     }
-
+    .container {
+        /* flex-direction: column; */
+        /* position: absolute; */
+        left: 0;
+    }
+    .other-videos,.video-container{
+      width: 90%;
+    }
     .video-details, .comments {
-      width: 100%;
-      margin-bottom: 20px;
+        width: 100%;
+        margin-bottom: 20px;
     }
-  }
+}
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .other-videos .card-wrapper {
-      flex: 1 1 calc(50% - 20px);
+        flex: 1 1 calc(50% - 20px);
     }
-  }
+}
 
-  @media (max-width: 480px) {
+@media (max-width: 480px) {
     .other-videos .card-wrapper {
-      flex: 1 1 100%;
+        flex: 1 1 100%;
     }
 
     .channel-info {
-      flex-direction: column;
+        flex-direction: column;
     }
 
     .channel-info p, .channel-info .right-side {
-      margin-top: 10px;
+        margin-top: 10px;
     }
-  }
+}
 
-  .reply-form {
-    margin-top: 10px;
-  }
 </style>
 <body>
   <div class="video-container">
@@ -336,26 +365,25 @@
         <div class="right-side">
           <p class="likes-count"><%= likesCount %> likes</p>
           <form action="/toggle/v/<%= video._id %>" method="POST" class="like-form">
-            <button type="submit" class="like-button">
-              <% if (currentUser && Array.isArray(video.likes) && video.likes.includes(currentUser._id)) { %>
-                <span class="material-symbols-outlined unlike">thumb_up</span>
-              <% } else { %>
-                <span class="material-symbols-outlined like">thumb_up</span>
-              <% } %>
-            </button>
+              <span class="material-icons like-button">
+                  <% if (currentUser && Array.isArray(video.likes) && video.likes.includes(currentUser._id)) { %>
+                      <span class="material-icons unlike">thumb_up</span>
+                  <% } else { %>
+                      <span class="material-icons like">thumb_up_off_alt</span>
+                  <% } %>
+              </span>
           </form>
           <% if (String(currentUser._id) !== String(video.owner._id)) { %>
             <form action="/s/<%= video.owner._id %>" method="POST">
-              <button type="submit" class="subscribe-button">
-                <% if (currentUser && subscribed) { %>
-                  <span class="unsubscribe">unsubscribe</span>
-                <% } else { %>
-                  <span class="subscribe">subscribe</span>
-                <% } %>
-              </button>
+              <% if (currentUser && subscribed) { %>
+                <span class="material-icons unsubscribe">notifications_off</span>
+              <% } else { %>
+                <span class="material-icons subscribe">notifications</span>
+              <% } %>
             </form>
           <% } %>
-        </div>
+      </div>
+
       </div>
       <p>Description: <%= video.description %></p>
     </div>
@@ -382,7 +410,7 @@
                   <p class="card-text">
                     <img src="<%= otherVideo.owner.avatar %>" width="30" height="30" class="rounded-circle" alt="">
                   </p>
-                  <h5 class="card-title"><%= otherVideo.title %></h5>
+                  <h5 class="card-title"><%= otherVideo.title && otherVideo.title.length > 28 ? otherVideo.title.slice(0, 28) + '...' : otherVideo.title %></h5>
                 </div>
               </div>
             </a>
@@ -395,45 +423,101 @@
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const avaClick = document.querySelector('#avatarr-click');
+    const likeForms = document.querySelectorAll('.like-form');
+    
+    likeForms.forEach(form => {
+      form.addEventListener('click', function(event) {
+        event.preventDefault();
+        const likesCountElement = document.querySelector('.likes-count');
+        fetch(form.action, {
+          method: form.method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const likeIcon = form.querySelector('.material-icons');
+            likeIcon.textContent = likeIcon.textContent === 'thumb_up' ? 'thumb_up_off_alt' : 'thumb_up';
+            likesCountElement.textContent = `${data.likesCount} likes`;
+          } else {
+            alert(data.message);
+          }
+        });
+      });
+    });
+  
+    const subscribeButtons = document.querySelectorAll('.subscribe, .unsubscribe');
 
+    subscribeButtons.forEach(button => {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = button.closest('form');
+        
+        fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Toggle the button text/content based on success response
+            if (data.subscribed) {
+              button.textContent = 'notifications_off';
+              button.classList.remove('subscribe');
+              button.classList.add('unsubscribe');
+            } else {
+              button.textContent = 'notifications';
+              button.classList.remove('unsubscribe');
+              button.classList.add('subscribe');
+            }
+            // Update likesCount or any other relevant UI elements
+            const likesCountElement = document.querySelector('.likes-count');
+            likesCountElement.textContent = `${data.likesCount} likes`;
+          } else {
+            alert(data.message);
+          }
+        });
+      });
+    });
+
+    const avaClick = document.querySelector('#avatarr-click');
     avaClick.addEventListener('click', () => {
       window.location.href = `/user/<%= req.user._id %>/dashboard/<%= video.owner.username %>`;
     });
-
-
-
-
+  
     const deleteBtns = document.querySelectorAll('.delete-btn-comment');
-
     deleteBtns.forEach(btn => {
-          btn.addEventListener('click', async (event) => {
-            event.preventDefault();
-            const commentId = btn.getAttribute('data-comment-id');
-            if (commentId) {
-              try {
-                const response = await fetch(`/comments/${commentId}`, {
-                  method: 'DELETE',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                });
-
-                if (response.ok) {
-                  const commentElement = btn.closest('.card-body');
-                  commentElement.remove();
-                } else {
-                  console.error('Failed to delete comment');
-                }
-              } catch (error) {
-                console.error('Error:', error);
-              }
+      btn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const commentId = btn.getAttribute('data-comment-id');
+        if (commentId) {
+          try {
+            const response = await fetch(`/comments/${commentId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            if (response.ok) {
+              const commentElement = btn.closest('.card-body');
+              commentElement.remove();
+            } else {
+              console.error('Failed to delete comment');
             }
-          });
-        });
-
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        }
+      });
+    });
+  
+    // Video Quality Switcher (Plyr Integration)
     const player = new Plyr('#player');
-
     const qualitySwitcher = document.createElement('div');
     qualitySwitcher.className = 'plyr__menu plyr__menu--settings plyr__menu--open';
     qualitySwitcher.innerHTML = `
@@ -443,9 +527,8 @@
         <button type="button" class="plyr__control" data-quality="best">best</button>
       </div>
     `;
-
     player.elements.controls.appendChild(qualitySwitcher);
-
+  
     qualitySwitcher.addEventListener('click', (event) => {
       const quality = event.target.getAttribute('data-quality');
       if (quality) {
@@ -453,7 +536,7 @@
         const isPaused = player.paused;
         const videoElement = document.querySelector('#player');
         const newSource = videoElement.querySelector(`source[data-quality="${quality}"]`);
-
+  
         if (newSource) {
           videoElement.src = newSource.getAttribute('src');
           videoElement.load();
@@ -466,65 +549,39 @@
         }
       }
     });
-  });
-</script>
-<script>
-   document.querySelectorAll('.reply-btn').forEach(button => {
-  button.addEventListener('click', function() {
-    const commentId = this.dataset.commentId;
-    const replyForm = document.getElementById(`reply-form-${commentId}`);
-    replyForm.classList.toggle('show');
-  });
-});
-
-
-  document.querySelectorAll('.like-form').forEach(form => {
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const likesCountElement = document.querySelector('.likes-count');
-      fetch(form.action, {
-        method: form.method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(Object.fromEntries(new FormData(form)))
-      }).then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const likeIcon = form.querySelector('.material-symbols-outlined');
-          likeIcon.classList.toggle('unlike');
-          likeIcon.classList.toggle('like');
-          likesCountElement.textContent = `${data.likesCount} likes`;
-        } else {
-          alert(data.message);
-        }
+  
+    // Handling Reply Button in Comments
+    document.querySelectorAll('.reply-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        replyForm.classList.toggle('show');
+      });
+    });
+  
+    // Handling Comment Likes
+    document.querySelectorAll('.comment-like-form').forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetch(form.action, {
+          method: form.method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const likeIcon = form.querySelector('.material-icons');
+            likeIcon.textContent = likeIcon.textContent === 'thumb_up' ? 'thumb_up_off_alt' : 'thumb_up';
+            form.nextElementSibling.textContent = `${data.likesCount} likes`;
+          } else {
+            alert(data.message);
+          }
+        });
       });
     });
   });
-
-  document.querySelectorAll('.comment-like-form').forEach(form => {
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      fetch(form.action, {
-        method: form.method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(Object.fromEntries(new FormData(form)))
-      }).then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const likeIcon = form.querySelector('.material-symbols-outlined');
-          likeIcon.classList.toggle('unlike');
-          likeIcon.classList.toggle('like');
-          form.nextElementSibling.textContent = `${data.likesCount} likes`;
-        } else {
-          alert(data.message);
-        }
-      });
-    });
-  });
-</script>
+  </script>
   

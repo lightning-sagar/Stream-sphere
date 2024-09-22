@@ -242,6 +242,7 @@ p {
 }
 
 .other-videos .other-container {
+  margin-top: 50px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -283,7 +284,11 @@ p {
   .video-container {
     flex-direction: column;
   }
-
+  .container {
+        /* flex-direction: column; */
+        /* position: absolute; */
+        left: 0;
+    }
   .video-details, .comments {
     width: 100%;
     margin-bottom: 20px;
@@ -326,83 +331,19 @@ p {
 <div class="comments">
   <form class="comment-form" action="/c/<%= req.user._id %>" method="POST">
     <div class="comment-input-container">
-      <input class="comment-input" type="text" name="content" placeholder="Write a comment..." required>
-      <button class="send-button" type="submit">Send</button>
+      <input class="comment-input" type="text" name="content" placeholder="Tweet your reply..." required>
+      <button class="send-button" type="submit">Tweet</button>
     </div>
   </form>
+
   <div class="all-comments mt-2">
-    <%- include('../include/tweet.ejs', { comments: allTweets }) %>
+    <%- include('../include/tweet.ejs', { comments: allTweets, level: 0 }) %> 
   </div>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-
-    function toggleLikeComment(commentId) {
-      const likeBtn = document.getElementById(`like-btn-${commentId}`);
-      const unlikeBtn = document.getElementById(`unlike-btn-${commentId}`);
-      const likeCount = document.getElementById(`like-count-${commentId}`);
-
-      if (likeBtn) {
-        likeBtn.style.display = 'none';
-        unlikeBtn.style.display = 'inline-block';
-        likeCount.style.display = 'inline-block';
-      }
-
-      if (unlikeBtn) {
-        unlikeBtn.style.display = 'none';
-        likeBtn.style.display = 'inline-block';
-        likeCount.style.display = 'none';
-      }
-
-      // Send a fetch request to the server to update the comment like count
-      fetch(`/c/${commentId}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.likeCount) {
-            likeCount.textContent = data.likeCount;
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-
-      // Send a fetch request to the server to update the comment like count
-    }
-
-    const deleteBtns = document.querySelectorAll('.delete-btn-comment');
-
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', async (event) => {
-        event.preventDefault();
-        const tweetId = btn.getAttribute('data-comment-id');
-        if (tweetId) {
-          try {
-            const response = await fetch(`/c/${tweetId}`, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-
-            if (response.ok) {
-              const commentElement = btn.closest('.card-body');
-              commentElement.remove();
-            } else {
-              console.error('Failed to delete comment');
-            }
-          } catch (error) {
-            console.error('Error:', error);
-          }
-        }
-      });
-    });
-
+    // Toggle Reply Form Visibility
     document.querySelectorAll('.reply-btn').forEach(button => {
       button.addEventListener('click', function() {
         const commentId = this.dataset.commentId;
@@ -423,12 +364,11 @@ p {
       });
     });
 
-    document.querySelectorAll('.load-more-replies').forEach(button => {
+    // Toggle Like Button
+    document.querySelectorAll('.like-btn').forEach(button => {
       button.addEventListener('click', function() {
         const commentId = this.dataset.commentId;
-        const hiddenReplies = document.getElementById(`hidden-replies-${commentId}`);
-        hiddenReplies.classList.toggle('show');
-        button.style.display = 'none';
+        // Add a fetch call here to send like data to the server
       });
     });
   });

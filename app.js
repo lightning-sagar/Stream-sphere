@@ -1,15 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const {isValidObjectId} = require('mongoose');
-const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const axios = require('axios')
 
 const http = require('http');
 const socketIO = require('socket.io');
+const {GoogleGenerativeAI} = require('@google/generative-ai');
 
+const fs = require('fs');
+const path = require('path');
+const csvWriter = require('csv-write-stream');
+
+const genAI = new GoogleGenerativeAI("AIzaSyBzAaNuBfgF8-_S3xHkBEaQcXdO8Q3hVE0");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const User = require('./models/user.js');
 const Comment = require('./models/comment.js');
 const {Tweet,Membership} = require('./models/community.js');
@@ -126,6 +133,8 @@ app.use((req, res, next) => {
 
 
 //homepage
+
+
 app.get('/', async (req, res) => {
   if(req.isAuthenticated()){
     res.redirect(`/user/${req.user._id}`);
@@ -224,13 +233,36 @@ app.put('/user/:id/submit', ensureAuthenticated, async (req, res) => {
   }
 });
 
+const getrecommendations = async (videoData) => {
+  try {
+    const response = await fetch("http://localhost:8000/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(videoData)
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.message === "Recommendations fetched successfully") { 
+      return data.recommended_ids;
+    } else {
+      console.log("Error fetching recommendations:", data);
+      return [];  // Return an empty array if no recommendations are fetched
+    }
+  } catch (error) {
+    console.error("ML model is not running:", error);
+    return [];  // Return an empty array in case of errors
+  }
+}
 
 app.get('/user/:id', ensureAuthenticated, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate('watchHistory');
     const userCategories = user.categories;
     console.log(userCategories);
     const allVideos = await Video.find({ categories: { $in: userCategories } }).populate('owner');
+
     const waitingUsers = [];
     for (const requestID of user.waiting) {
       const requestUser = await User.findById(requestID);
@@ -238,7 +270,36 @@ app.get('/user/:id', ensureAuthenticated, async (req, res) => {
         waitingUsers.push(requestUser);
       }
     }
-    res.render('pages/index.ejs', { user, currentUser: req.user, req, allVideos,waitingUsers });
+
+    // Fetching initial recommendations based on user's last watched video
+    let recommendedVideos = [];
+    if (user.watchHistory.length > 0) {
+      let lastWatchHistoryEntry = user.watchHistory[user.watchHistory.length - 1]; // Get the last WatchHistory object ID
+      let watchHistory = await WatchHistory.findById(lastWatchHistoryEntry).populate('video'); // Fetch the WatchHistory object with the video populated
+      let lastWatchedVideo = watchHistory.video;
+
+      let recommendationIds = await getrecommendations({ title: lastWatchedVideo.title });
+
+      // Fetching recommended videos based on IDs
+      recommendedVideos = await Video.find({ _id: { $in: recommendationIds } }).populate('owner');
+      
+      // Ensuring at least 15 recommended videos
+      while (recommendedVideos.length < 15) {
+        let additionalIds = await getrecommendations({ title: recommendedVideos[recommendedVideos.length - 1].title });
+        let additionalVideos = await Video.find({ _id: { $in: additionalIds } }).populate('owner');
+        recommendedVideos.push(...additionalVideos);
+        recommendedVideos = [...new Set(recommendedVideos.map(v => v._id.toString()))].map(id => recommendedVideos.find(v => v._id.toString() === id));
+      }
+    }
+
+    res.render('pages/index.ejs', {
+      user,
+      currentUser: req.user,
+      req,
+      allVideos,
+      waitingUsers,
+      recommendedVideos: recommendedVideos.slice(0, 15) // Send top 15 recommended videos
+    });
   } catch (error) {
     console.error("Error fetching user's videos:", error);
     res.status(500).send("Error fetching user's videos");
@@ -246,96 +307,298 @@ app.get('/user/:id', ensureAuthenticated, async (req, res) => {
 });
 
 
-//upload
+ 
+
+
 app.get("/user/:id/upload", ensureAuthenticated, (req, res) => {
   res.render("pages/upload.ejs", { req, currentUser: req.user });
 })
-app.post("/user/:id/upload", upload.fields([
-  {
-      name: "videoFile",
-      maxCount: 1,
-  },
-  {
-      name: "thumbnail",
-      maxCount: 1,
-  }
-]), ensureAuthenticated, async (req, res) => {
+const { Parser } = require('json2csv');
+
+
+app.post("/user/:id/upload", ensureAuthenticated, async (req, res) => {
   try {
-      const { title, description, categories } = req.body; 
-      console.log(req.body);
-      if (!title || !description) {
-          req.flash('error', 'Title and description are required.');
-          return res.redirect(`/user/${req.user._id}/upload`);
+    console.log("req.body", req.body);
+
+    const { title, description, categories, videoFileUrl, thumbnailUrl } = req.body;
+
+    if (!title || !description || !videoFileUrl || !thumbnailUrl) {
+      req.flash('error', 'Title and description are required.');
+      return res.redirect(`/user/${req.user._id}/upload`);
+    }
+
+    const publishVideo = await Video.create({
+      videoFile: videoFileUrl,
+      thumbnail: thumbnailUrl,
+      title,
+      description,
+      isPublished: false,
+      categories,
+      owner: req.user._id,
+    });
+
+    if (!publishVideo) {
+      console.error("Error publishing video:", publishVideo);
+      return res.redirect(`/user/${req.user._id}/upload`);
+    }
+
+    await publishVideo.save();
+    const videoId = publishVideo._id;
+    const data = await Video.find({ _id: videoId });
+
+    // Function to escape and format the data for CSV
+    function escapeField(field) {
+      if (typeof field === 'string') {
+        // Remove Markdown characters and escape quotes
+        return field.replace(/[*]+/g, '').replace(/"/g, '""').replace(/\n/g, ' ').trim();
       }
-      console.log(req.files);
-      const thumbnailLocalPath = req.files['thumbnail'][0].path;
-      const videoLocalPath = req.files['videoFile'][0].path;
+      return field;
+    }
 
-      console.log(videoLocalPath, thumbnailLocalPath);
+    // Convert the data to the required format (array of values as strings)
+    function convertToCSVFormat(data) {
+      return data.map(item => ([
+        `"${item._id}"`, // ID as string
+        `"${item.videoFile}"`, // Video URL as string
+        `"${item.thumbnail}"`, // Thumbnail URL as string
+        `"${escapeField(item.title)}"`, // Title
+        `"${escapeField(item.description)}"`, // Description
+        `${item.views || 0}`, // Views as string (default to 0 if undefined)
+        `${item.isPublished}`, // Is Published status (boolean as string)
+        `"${item.categories.join(", ")}"`,  // Categories (array converted to string)
+        `"${item.owner}"`, // Owner ID as string
+        `"${item.createdAt.toISOString()}"`, // Created at timestamp as string
+        `"${item.updatedAt.toISOString()}"`   // Updated at timestamp as string
+      ]));
+    }
 
-      const [thumbnailResponse, videoResponse] = await Promise.all([
-          uploadOnCloudinary(thumbnailLocalPath),
-          uploadOnCloudinary(videoLocalPath),
-      ]);
+    const csvDataArray = convertToCSVFormat(data);
 
-      if (!thumbnailResponse || !videoResponse) {
-          req.flash('error', 'Error uploading files to Cloudinary.');
-          return res.redirect(`/user/${req.user._id}/upload`);
+    try {
+      const csvFilePath = path.join(__dirname, 'recommendation_system', 'datasets', 'videos_data.csv');
+      const fileExists = fs.existsSync(csvFilePath);
+
+      const csvDataString = csvDataArray.map(row => row.join(",")).join("\n");
+
+      if (!fileExists) {
+        // Write new CSV without headers
+        fs.writeFileSync(csvFilePath, csvDataString, { flag: 'w' });
+      } else {
+        // Append raw CSV data without headers
+        fs.appendFileSync(csvFilePath, csvDataString + "\n", { flag: 'a' });
       }
 
-      const publishVideo = await Video.create({
-          videoFile: videoResponse.secure_url,
-          thumbnail: thumbnailResponse.secure_url,
-          title,
-          description,
-          isPublished: false,
-          categories: categories.split(",").map(category => category.trim()),  
-          owner: req.user._id,
-      });
+      console.log("Data successfully written to videos_data.csv");
+    } catch (err) {
+      console.error("Error generating CSV:", err);
+      return res.status(500).json({ success: false, message: "Failed to generate CSV" });
+    }
 
-      if (!publishVideo) {
-          req.flash('error', 'Error creating video entry in the database.');
-          return res.redirect(`/user/${req.user._id}/upload`);
-      }
+    console.log("Video published and saved to CSV:", publishVideo);
+    res.status(200).json({ success: true });
 
-      console.log("Video uploaded successfully:", publishVideo);
-      req.flash('success', 'Video uploaded successfully.');
-      res.redirect(`/user/${req.user._id}`); // Redirect to the user's home page
   } catch (error) {
-      console.error("Error uploading video:", error);
-      req.flash('error', 'Error uploading video.');
-      res.redirect(`/user/${req.user._id}/upload`);
+    console.error("Error uploading video:", error);
+    req.flash('error', 'Error uploading video.');
+    res.redirect(`/user/${req.user._id}/upload`);
   }
 });
 
+
+
+
+
+
+app.post("/upload-files", upload.fields([
+  { name: "videoFile", maxCount: 1 },
+  { name: "thumbnail", maxCount: 1 }
+]), ensureAuthenticated, async (req, res) => {
+  try {
+    const videoLocalPath = req.files['videoFile'][0].path;
+    const thumbnailLocalPath = req.files['thumbnail'][0].path;
+
+    const [thumbnailResponse, videoResponse] = await Promise.all([
+      uploadOnCloudinary(thumbnailLocalPath),
+      uploadOnCloudinary(videoLocalPath),
+    ]);
+
+    if (!thumbnailResponse || !videoResponse) {
+      return res.status(500).json({ success: false, message: "File upload failed" });
+    }
+
+    res.status(200).json({
+      success: true,
+      videoUrl: videoResponse.secure_url,
+      thumbnailUrl: thumbnailResponse.secure_url
+    });
+  } catch (error) {
+    console.error("Error uploading files:", error);
+    res.status(500).json({ success: false, message: "Error uploading files" });
+  }
+});
+
+async function fileToGenerativePart(url, mimeType) {
+  try {
+    console.log(`Downloading image from: ${url}`);
+    
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    console.log('Image downloaded successfully.');
+
+    // Assign the downloaded data to a buffer variable
+    const buffer = Buffer.from(response.data); // Correctly define buffer
+
+    console.log('Image converted to buffer.');
+
+    const base64Image = buffer.toString("base64");
+    console.log('Image converted to Base64.');
+
+    return {
+      inlineData: {
+        data: base64Image,
+        mimeType,
+      },
+    };
+  } catch (error) {
+    console.error('Error in fileToGenerativePart:', error);
+    throw error;  
+  }
+}
+
+async function deleteFromCloudinary(publicId) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        console.error("Error deleting from Cloudinary:", error);
+        return reject(error);
+      }
+      console.log("Successfully deleted from Cloudinary:", result);
+      resolve(result);
+    });
+  });
+}
+
+app.post("/delete-files", ensureAuthenticated, async (req, res) => {
+  const { videoUrl, thumbnailUrl } = req.body;
+
+  try {
+    // Extract public IDs from URLs
+    const videoPublicId = videoUrl.split('/').pop().split('.')[0]; // Adjust based on your URL format
+    const thumbnailPublicId = thumbnailUrl.split('/').pop().split('.')[0]; // Adjust based on your URL format
+
+    // Delete files from Cloudinary
+    await deleteFromCloudinary(videoPublicId);
+    await deleteFromCloudinary(thumbnailPublicId);
+
+    res.status(200).json({ success: true, message: "Files deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting files:", error);
+    res.status(500).json({ success: false, message: "Error deleting files." });
+  }
+});
+
+app.post("/generate-description", ensureAuthenticated, async (req, res) => {
+  try {
+    console.log("Generating description...", req.body);
+    const { thumbnailUrl } = req.body;
+    console.log(`Received thumbnail URL: ${thumbnailUrl}`);
+
+    const imagePart = await fileToGenerativePart(thumbnailUrl, "image/jpeg");
+    console.log('Image part generated:', imagePart);
+
+    const prompt = "Describe how this product might be manufactured.";
+    console.log('Prompt:', prompt);
+
+    const result = await model.generateContent([prompt, imagePart]);
+    console.log('Generative model result:', result);
+
+    const candidate = result.response.candidates[0];
+    console.log('First candidate:', candidate);
+
+    const description = candidate.content.parts[0];   
+    console.log('Description generated:', description);
+
+    if (description) {
+      res.status(200).json({
+        success: true,
+        description:description.text
+      });
+    } else {
+      console.log('Failed to generate description:', result);
+      res.status(500).json({
+        success: false,
+        message: "Failed to generate description"
+      });
+    }
+  } catch (error) {
+    console.error("Error generating description:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error generating description"
+    });
+  }
+});
+
+app.get("/videos/:id", ensureAuthenticated, async (req, res) => {
+  res.redirect('/login')
+})
 //watch video
+const WatchHistory = require('./models/watchHistory');
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
   try {
-    const userCategory = req.user.category;
-    const video = await Video.findOne({ _id: req.params.video, category: userCategory }).populate('owner');
+    // Get the user's category
+    const userCategory = req.user.categories;
+
+    // Find the video based on the ID and category
+    const video = await Video.findOne({ _id: req.params.video}).populate('owner');
     
     if (!video) {
       return res.status(404).send("Video not found");
     }
 
+    // Check if the user is subscribed to the video owner's channel
     const videoOwnerId = video.owner._id.toString();
     const subscription = await Subscription.findOne({ subscriber: req.user._id, channel: videoOwnerId });
     const subscribed = !!subscription;
+
+    // Count the number of likes on the video
     const likesCount = await Like.countDocuments({ video: req.params.video });
+
+    // Fetch comments and organize them into threads
     const comments = await Comment.find({ video: req.params.video }).populate('owner').lean();
-    
     const threadedComments = organizeComments(comments);
 
-    
+    // Add video to user's watch history
+    const existingWatchHistory = await WatchHistory.findOne({
+      user: req.user._id,
+      video: req.params.video
+    });
+
+    if (!existingWatchHistory) {
+      const newWatchHistory = new WatchHistory({
+        user: req.user._id,
+        video: req.params.video
+      });
+
+      await newWatchHistory.save();
+
+      // Update the user's watch history by adding the watch history entry ID
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: { watchHistory: newWatchHistory._id }
+      });
+    }
+
+    // Get video recommendations
     const videoData = {
       channelName: video.owner.username, 
       title: video.title,
       description: video.description
     };
-
+    
     const get_ids = await getrecommendations(videoData);
     const get_videos = await Video.find({ _id: { $in: get_ids } }).populate('owner');
-    const allVideos = get_videos.filter(video => video._id.toString() !== req.params.video);
+    const allVideos = get_videos.filter(v => v._id.toString() !== req.params.video);
+
+    // Render the watch page
     res.render("pages/watch.ejs", {
       req,
       currentUser: req.user,
@@ -346,32 +609,52 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
       likesCount
     });
 
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
 
-const getrecommendations= async(videoData)=> {
-   try {
-    const response = await fetch("http://localhost:8000/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(videoData)
+app.get("/user/:id/history", ensureAuthenticated, async (req, res) => {
+  try {
+    const watchHistory = await WatchHistory.find({ user: req.params.id }).populate('video').sort({ watchedAt: -1 });
 
-    });
-    const data = await response.json();
-    console.log(data);
-    if(data.message === "Recommendations fetched successfully"){ 
-      return data.recommended_ids;
+    if (!watchHistory) {
+      return res.status(404).send("No watch history found.");
     }
-   } catch (error) {
-    console.log(error,"ml model is not running");
-   }
-}
+
+    res.render("pages/history.ejs", {
+      req,
+      currentUser: req.user,
+      watchHistory
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+app.delete("/user/:id/history/:historyId", ensureAuthenticated, async (req, res) => {
+  try {
+    const { historyId, id } = req.params;
+
+    // Ensure the user can only delete their own history
+    const historyItem = await WatchHistory.findOne({ _id: historyId, user: id });
+
+    if (!historyItem) {
+      return res.status(404).send('History item not found.');
+    }
+
+    // Remove the video from the user's watch history
+    await WatchHistory.deleteOne({ _id: historyId });
+
+    res.status(200).send('History item deleted successfully.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error.');
+  }
+});
+
 
 function organizeComments(comments) {
   const commentMap = {};
@@ -509,7 +792,7 @@ app.get("/s/:channelId", ensureAuthenticated, async (req, res) => {
 
     const subscribedList = await Subscription.aggregate(aggregate);
 
-   console.log(subscribedList, "subscribedList");
+  console.log(subscribedList, "subscribedList");
 })
 app.post("/s/:channelId", ensureAuthenticated, async (req, res) => {
   try {
@@ -518,7 +801,7 @@ app.post("/s/:channelId", ensureAuthenticated, async (req, res) => {
 
     const channel = await User.findById(channelId);
     if (!channel) {
-      return res.status(404).send("Channel not found");
+      return res.status(404).json({ success: false, message: "Channel not found" });
     }
 
     const existingSubscription = await Subscription.findOne({
@@ -529,20 +812,32 @@ app.post("/s/:channelId", ensureAuthenticated, async (req, res) => {
     if (existingSubscription) {
       await Subscription.findByIdAndDelete(existingSubscription._id);
       console.log("Unsubscribed successfully");
+      return res.json({ success: true, subscribed: false, likesCount: await getSubscriberCount(channelId) });
     } else {
       await Subscription.create({
         subscriber: userId,
         channel: channelId
       });
       console.log("Subscribed successfully");
+      return res.json({ success: true, subscribed: true, likesCount: await getSubscriberCount(channelId) });
     }
-
-    res.redirect('back')
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+// Helper function to get subscriber count
+async function getSubscriberCount(channelId) {
+  const aggregate = [
+    { $match: { channel: channelId } },
+    { $group: { _id: null, totalCount: { $sum: 1 } } }
+  ];
+  
+  const result = await Subscription.aggregate(aggregate);
+  return result.length > 0 ? result[0].totalCount : 0;
+}
+
 
 app.get('/user/:id/subscribed', ensureAuthenticated, async (req, res) => {
   try {

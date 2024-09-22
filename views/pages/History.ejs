@@ -1,0 +1,136 @@
+<% layout('layout/boilerplate') %>
+
+<style>
+.container {
+  width: 100%;
+}
+
+.history-page-container {
+  margin-top: 80px;
+  width: 98%;
+  padding: 20px;  
+}
+
+.history-page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.history-page-list {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-page-item {
+    width: 100%;
+    position: absolute;
+    /* margin-right: 180px; */
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+    left: -190px;
+}
+
+.history-page-video-thumbnail img {
+  width: 200px; /* Increased width */
+  height: 120px; /* Increased height */
+  object-fit: cover;
+  border-radius: 5px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.history-page-video-thumbnail:hover img {
+  transform: scale(1.05); /* Zoom on hover */
+}
+
+.history-page-video-info {
+  margin-left: 20px;
+}
+
+.history-page-video-title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.history-page-video-description {
+  color: #666;
+  font-size: 14px;
+}
+
+.history-page-watched-at {
+  font-size: 12px;
+  color: #999;
+}
+
+.history-page-no-history {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Delete button on hover */
+.history-page-delete-btn {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.history-page-item:hover .history-page-delete-btn {
+  display: block; /* Show on hover */
+}
+</style>
+
+<div class="history-page-container">
+  <h1 class="history-page-title">Your Watch History</h1>
+
+  <% if (watchHistory.length > 0) { %>
+    <ul class="history-page-list">
+      <% watchHistory.forEach(historyItem => { %>
+        <li class="history-page-item">
+          <div class="history-page-video-thumbnail">
+            <a href="/user/<%= currentUser._id %>/videos/<%= historyItem.video._id %>">
+              <img src="<%= historyItem.video.thumbnail %>" alt="<%= historyItem.video.title %>">
+            </a>
+          </div>
+          <div class="history-page-video-info">
+            <h3 class="history-page-video-title"><%= historyItem.video.title %></h3>
+            <p class="history-page-video-description"><%= historyItem.video.description %></p>
+            <p class="history-page-watched-at">Watched on: <%= new Date(historyItem.watchedAt).toLocaleDateString() %></p>
+          </div>
+          <!-- Delete button -->
+          <button class="history-page-delete-btn" data-history-id="<%= historyItem._id %>">Delete</button>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="history-page-no-history">No watch history available.</p>
+  <% } %>
+</div>
+
+<script>
+  document.querySelectorAll('.history-page-delete-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const historyId = e.target.getAttribute('data-history-id');
+      
+      // Make a request to delete the watch history
+      const response = await fetch(`/user/<%= currentUser._id %>/history/${historyId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Reload the page after deletion
+        window.location.reload();
+      } else {
+        alert('Failed to delete history item');
+      }
+    });
+  });
+</script>

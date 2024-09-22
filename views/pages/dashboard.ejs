@@ -1,32 +1,36 @@
 <% layout('/layout/boilerplate.ejs') %>
 
 <style>
+  /* Global Variables for Theme Colors */
+  :root {
+    --primary-color: #5680cf;
+    --secondary-color: #4a6da8;
+    --light-bg: #f9f9f9;
+    --dark-bg: #0e0f0f;
+    --profile-bg: #2c2c2c; /* Dark gray background for profile section */
+    --text-color: #ffffff; /* White text */
+    --secondary-text-color: #bbbbbb; /* Light gray for secondary text */
+    --btn-hover: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Global Styling */
   body {
-    color: #ffffffef;
+    color: var(--text-color);
     font-family: Arial, sans-serif;
+    background-color: var(--dark-bg);
     overflow-y: auto;
-    position: relative; /* Ensure positioning context for overlay */
   }
 
-  /* Background overlay */
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: 9998;
-    display: none;
-  }
-
+  /* Profile Section */
   .profile-section {
-    background-color: #f9f9f9;
+    background-color: var(--profile-bg); /* Dark gray background */
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+    display: flex;
+    align-items: center;
     margin-bottom: 30px;
+    color: var(--text-color); /* Ensure text is white */
   }
 
   .profile-avatar {
@@ -34,344 +38,247 @@
     height: 80px;
     border-radius: 50%;
     margin-right: 20px;
-  }
-
-  .cbox {
-    overflow: hidden;
-    background: #0e0f0f;
-    padding-right: 5%;
-    margin-left: -240px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    border: 2px solid var(--primary-color); /* Primary color for avatar border */
   }
 
   .profile-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+    flex-grow: 1;
   }
 
   .profile-name {
     font-weight: bold;
-    font-size: 20px;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #ffffffef;
-    font-size: 24px;
-    cursor: pointer;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: var(--text-color); /* Ensure name is white */
   }
 
   .profile-email {
-    color: #888;
+    color: var(--secondary-text-color); /* Light gray for email text */
     margin-bottom: 10px;
   }
 
   .profile-category {
     font-style: italic;
-    color: #ffffffef;
+    color: var(--primary-color); /* Category text in primary color */
   }
 
+  /* Action Buttons */
+  .btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.2s;
+    margin-left: 10px;
+  }
+
+  .btn:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Overlay for Modals */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 9998;
+    display: none;
+  }
+
+  /* Container Styling */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Video Section */
   .video-section {
-    background-color: #f9f9f9;
+    background-color: #1f1f1f;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-  }
-
-  .video-thumbnail {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-
-  .video-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
-  .video-views {
-    color: #888;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .video-container {
-    padding: 50px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    overflow-y:auto;
-    position: fixed;
-    left: 84px;
+    gap: 20px;
   }
 
-  .video-details {
-    width: calc(100% - 360px);
-    padding: 20px;
-    color: #fff!important;
-    background-color: #0e0f0f;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
-    margin-bottom: 20px;
-  }
-
-  .video {
-    width: 100%;
-  }
-
-  video {
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  .comments {
-    width: 350px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-
-  h2 {
-    text-align: center;
-    color: #ffffffef;
-    margin-top: 0;
-  }
-
-  p {
-    color: #ffffffef;
-    margin: 0;
-  }
-
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  .card-img-top {
-    height: 200px;
-    object-fit: cover;
-  }
-
-  .comment-form {
-    margin-top: 20px;
-  }
-
-  .comment-input-container {
-    display: flex;
-  }
-
-  .comment-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-  }
-
-  .send-button {
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-  }
-
-  .card {
-    transition: transform 0.3s;
+  .video-card {
+    flex: 1 1 calc(33.333% - 20px);
     background-color: #151414;
-    color: #ffffffef;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    text-decoration: none;
+    color: var(--text-color);
   }
 
-  .card:hover {
+  .video-card:hover {
     transform: translateY(-5px);
   }
 
-  .card-title {
-    color: #5680cf; 
-    margin-left: 15px;
-  }
-
-  .card-text {
-    color: #ffffffef;
-    margin-top: 10px;
-  }
-
-  .comment-form input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
-
-  .comment-form button[type="submit"] {
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .addfriend {
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .editbtn {
-    margin-left: 500px;
-    background-color: #5680cf;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .profile-right{
+  .video-card img.video-thumbnail {
     width: 100%;
+    border-radius: 10px 10px 0 0;
   }
-  .profile-right button{
-    float: right;
-    margin-right: 30px;
+
+  .video-card img.avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .video-title {
+    margin: 10px 0 5px;
+    font-size: 1.1rem;
+    text-decoration: none;
+
+  }
+
+  .video-views {
+    color: var(--secondary-text-color);
+    margin-bottom: 10px;
+  }
+
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: var(--text-color);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Popup styles */
+  .popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--light-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .video-card {
+      flex: 1 1 100%;
+    }
   }
 </style>
 
 <body>
   <div class="overlay"></div>
-  <div class="cbox">
+  <div class="container">
+    <!-- Profile Section -->
     <div class="profile-section">
-      <div class="profile-info">
-        <% console.log(profile) %>
-        <% if(profile.avatar){ %>
+      <% if (profile.avatar) { %>
         <img src="<%= profile.avatar %>" alt="Avatar" class="profile-avatar">
+      <% } else { %>
+        <span class="material-symbols-outlined profile-avatar">account_circle</span>
+      <% } %>
+      <div class="profile-info">
+        <div class="profile-name"><%= profile.username %></div>
+        <div class="profile-email"><%= profile.email %></div>
+        <div class="profile-category">Category: <%= profile.categories %></div>
+      </div>
+      <div class="profile-actions">
+        <% if (profile._id.equals(currentuser._id)) { %>
+          <button class="btn editbtn">Edit Profile</button>
         <% } else { %>
-          <span class="material-symbols-outlined profile-avatar">
-            account_circle
-            </span>
+          <% if (currentuser.sendreq.some(waitingUser => waitingUser._id.equals(profile._id))) { %>
+            <button class="btn" disabled><i class="fa-solid fa-check"></i>&nbsp;Sent</button>
+          <% } else if (currentuser.friends.some(friend => friend._id.equals(profile._id))) { %>
+            <button class="btn" onclick="window.location.href='/<%= req.user._id %>/chat/<%= profile._id %>'">Chat</button>
+          <% } else { %>
+            <form action="/user/<%= req.user._id %>/<%= profile.username %>?_method=PUT" method="POST">
+              <button type="submit" class="btn addfriend">Add Friend</button>
+            </form>
+          <% } %>
         <% } %>
-        <div>
-          <div class="profile-name"><%= profile.username %></div>
-          <div class="profile-email"><%= profile.email %></div>
-          <div class="profile-category">Category: <%= profile.categories %></div>
-        </div>
-          <div class="profile-right">
-          <% if (profile._id.equals(currentuser._id)) { %>
-            <button type="submit" class="btn btn-primary editbtn">Edit Profile</button>
-          <% } else { %>
-            <% if (currentuser.sendreq.some(waitingUser => waitingUser._id.equals(profile._id))) { %>
-              <button type="button" class="btn btn-primary addfriend" disabled><i class="fa-solid fa-check"></i>&nbsp;Sent</button>
-            <% } else if (currentuser.friends.some(friend => friend._id.equals(profile._id))) { %>
-              <button type="button" class="btn btn-primary" onclick="window.location.href='/<%= req.user._id %>/chat/<%= profile._id %>'">Chat</button>
-            <% } else { %>
-              <form action="/user/<%= req.user._id %>/<%= profile.username %>?_method=PUT" method="POST">
-                <button type="submit" class="btn btn-primary addfriend">Add friend</button>
-              </form>
-            <% } %>
-          <% } %>
-            <% if (currentUser && subscribed) { %>
-              <form action="/s/<%= profile._id %>" method="POST">
-                  <button class=" btn btn-primary addfriend">
-                      unsubscribe
-                  </button>
-              </form>
-          <% } else { %>
-              <% if(currentuser._id.toString() !== profile._id.toString()){ %>
-                  <form action="/s/<%= profile._id %>" method="POST">
-                      <button>
-                          <span class="  btn btn-primary addfriend">subscribe</span>
-                      </button>
-                  </form>
-            <% } %>
-  
-          <% } %>
-        </div>
+        <% if (currentUser && subscribed) { %>
+          <form action="/s/<%= profile._id %>" method="POST">
+            <button type="submit" class="btn">Unsubscribe</button>
+          </form>
+        <% } else if (currentuser._id.toString() !== profile._id.toString()) { %>
+          <form action="/s/<%= profile._id %>" method="POST">
+            <button type="submit" class="btn">Subscribe</button>
+          </form>
+        <% } %>
       </div>
     </div>
-    <!-- add btn here -->
+
+    <!-- Video Section -->
     <div class="video-section">
-        <div class="btn-group mb-3" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-light">Playlist</button>
-          <button type="button" class="btn btn-light" style="background-color: #5680cf">Latest</button>
-          <button type="button" class="btn btn-light">Like</button>
-          <!-- Add more buttons as needed -->
-        </div>
-      <h3 class="mb-4">Latest Video</h3>
-      <div class="row">
+      <h3 class="mb-4">Latest Videos</h3>
+      <div class="video-container">
         <% videos.forEach(video => { %>
-          <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-              <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
-              <div class="card-body">
-                <h5 class="card-title center"><%= video.title %></h5>
-                <p class="card-text"><% video.owner.categories %></p>
-                <% if(!currentUser){%>
-                  <a href="/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                <%}else{ %>
-                  <a href="/user/<%= req.user._id %>1/videos/<%= video._id %>" class="btn btn-primary">Watch Video</a>
-                  <img src="<%= video.owner.avatar %>" class="rounded-circle" width="40" height="40" alt="Avatar">
-                <% } %>
-              </div>
+          <a href="/user/<%= req.user._id %>/videos/<%= video._id %>" class="video-card">
+            <img src="<%= video.thumbnail %>" alt="Thumbnail" class="video-thumbnail">
+            <div class="card-body">
+              <h5 class="video-title"><%= video.title %></h5>
+              <p class="video-views"><%= video.owner.categories %></p>
+              <img src="<%= video.owner.avatar %>" class="avatar" alt="Avatar">
             </div>
-          </div>
+          </a>
         <% }); %>
       </div>
     </div>
   </div>
 </body>
+
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const editButtons = document.querySelectorAll('.editbtn');
-    const addButtons = document.querySelectorAll('.addfriend');
     const overlay = document.querySelector('.overlay');
 
     editButtons.forEach(button => {
       button.addEventListener('click', async () => {
-        const userId = button.dataset.userId; // Assuming you have a data attribute for user ID
+        const userId = button.dataset.userId;
         try {
-          const response = await fetch(`/user/<%= profile._id %>/edit`); // Fetch the edit form content
+          const response = await fetch(`/user/<%= profile._id %>/edit`);
           const editFormContent = await response.text();
 
           const popupContainer = document.createElement('div');
-          popupContainer.innerHTML = editFormContent;
           popupContainer.classList.add('popup-container');
-          document.body.appendChild(popupContainer);
+          popupContainer.innerHTML = editFormContent;
 
-          // Apply styles to the popup container
-          popupContainer.style.position = 'fixed';
-          popupContainer.style.top = '50%';
-          popupContainer.style.left = '50%';
-          popupContainer.style.transform = 'translate(-50%, -50%)';
-          popupContainer.style.backgroundColor = '#fff';
-          popupContainer.style.padding = '20px';
-          popupContainer.style.borderRadius = '10px';
-          popupContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-          popupContainer.style.zIndex = '9999';
-          // Add close button
-          const closeButton = document.createElement('button');
-          closeButton.innerHTML = '✖️';  
-          closeButton.classList.add('close-btn');
-          closeButton.addEventListener('click', () => {
-            document.body.removeChild(popupContainer);
-            overlay.style.display = 'none'; // Hide the overlay
-            document.body.style.overflow = ''; // Restore scrollability
+          document.body.appendChild(popupContainer);
+          overlay.style.display = 'block';
+
+          overlay.addEventListener('click', () => {
+            popupContainer.remove();
+            overlay.style.display = 'none';
           });
-          popupContainer.appendChild(closeButton);
-          overlay.style.display = 'block'; // Show the overlay
-          document.body.style.overflow = 'hidden'; // Hide vertical scrollbar
+
+          document.querySelector('.close-btn').addEventListener('click', () => {
+            popupContainer.remove();
+            overlay.style.display = 'none';
+          });
         } catch (error) {
-          console.error('Error fetching edit form content:', error);
+          console.error('Error fetching edit form:', error);
         }
       });
     });

@@ -1,324 +1,318 @@
 <% layout('/layout/boilerplate.ejs') %>
 
 <style>
-    .bg-red{
-      background-color: red!important;
+  .video-container {
+    width: 115%;
+    margin-left: 6px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Stack the sections vertically */
+    gap: 20px;
+}
+.other-videos h2{
+  left: 20%;
+}
+.recommended-videos .other-container,
+.other-videos .other-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-wrapper {
+    flex: 1 1 calc(33.333% - 20px); /* 3 columns */
+    box-sizing: border-box;
+    max-width: calc(33.333% - 20px);
+}
+
+@media (max-width: 768px) {
+    .card-wrapper {
+        flex: 1 1 calc(50% - 20px); /* 2 columns on smaller screens */
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .card-wrapper {
+        flex: 1 1 100%; /* Full width on mobile */
+        max-width: 100%;
+    }
+}
+
+    .bg-red {
+        background-color: red !important;
     }
     body {
-      font-family: Arial, sans-serif;
-      color: #ffffffef;
-  
+        font-family: Arial, sans-serif;
+        color: #ffffffef;
     }
-  
     .all-comments {
-      max-height: 400px;
-      overflow-y: scroll;
-      padding-right: 15px; /* To avoid scrollbar overlap */
+        max-height: 400px;
+        overflow-y: scroll;
+        padding-right: 15px; /* To avoid scrollbar overlap */
     }
-  
     .card {
-      margin-left: 0;
+        margin-left: 0;
     }
-  
     .card .card {
-      margin-left: 40px; /* Indent nested comments */
+        margin-left: 40px; /* Indent nested comments */
     }
-  
     .container {
-      margin-left: 84px;
+        margin-left: 84px;
     }
-  
     .video-container {
-      width: 115%;
-      margin-left: 6px;
-      padding: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+        margin-top: 80px;
+        width: 115%;
+        margin-left: 6px;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
-  
     .video-details {
-      flex: 3; /* Increase flex to make this section larger */
-      padding: 20px;
-      background-color: #0e0f0f!important;
-      color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
-      margin-bottom: 20px;
-    }
-  
-    video {
-      width: 100%;
-      border-radius: 5px;
-    }
-  
-    .comments {
-      margin-left: 20px;
-      flex: 1;  
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-  
-    h2 {
-      text-align: center;
-      color: #ffffffef;
-      margin-top: 0;
-    }
-  
-    p {
-      color: #666;
-      margin: 0;
-    }
-  
-    .avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-  
-    .card-img-top {
-      object-fit: cover;
-      height: 200px;
-      width: 100%;
-    }
-  
-    .comment-form {
-      margin-top: 20px;
-    }
-  
-    .collapse {
-      display: none;
-    }
-  
-    .collapse.show {
-      display: block;
-    }
-  
-    .nested-comments {
-      margin-left: 40px; /* Indent nested comments */
-    }
-  
-    .comment-input-container {
-      display: flex;
-      align-items: center;
-    }
-  
-    .comment-input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px 0 0 5px;
-    }
-  
-    .send-button {
-      background-color: #5680cf;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-    }
-  
-    .card {
-      padding: 5px;
-      transition: transform 0.3s;
-      background-color: #151414;
-      color: #151414;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-  
-    .card:hover {
-      transform: translateY(-5px);
-    }
-  
-    .card-body {
-      width: fit-content;
-      padding: 15px;
-    }
-  
-    .card-title {
-      color: #ffffffef;
-      margin: 0;
-      flex: 1;
-    }
-  
-    .card-text {
-      color: #ffffffef;
-      margin: 0;
-      display: flex;
-      align-items: center;
-    }
-  
-    .profile-avatar {
-      margin-right: 10px;
-    }
-  
-    .comment-form input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-right: 10px;
-    }
-  
-    .comment-form button[type="submit"] {
-      background-color: #5680cf;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  
-    .like, .subscribe {
-      cursor: pointer;
-      color: #ff0000;
-      transition: color 0.3s;
-    }
-  
-    .like:hover, .subscribe:hover {
-      color: #5680cf;
-    }
-  
-    .unlike, .unsubscribe {
-      cursor: pointer;
-      color: #000000;
-      transition: color 0.3s;
-    }
-  
-    .unlike:hover, .unsubscribe:hover {
-      color: #ffffffef;
-    }
-  
-    .right-side {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-  
-    .channel-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    }
-  
-    .channel-info p {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-  
-    .channel-info .right-side form {
-      margin-left: 20px;
-    }
-  
-    .channel-info .right-side button {
-      background-color: #5680cf;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-  
-    .channel-info .right-side button:hover {
-      background-color: #466fb1;
-    }
-  
-    .other-videos {
-      padding: 20px 0;
-      width: 100%;
-    }
-  
-    .other-videos .other-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-  
-    .other-videos .card-wrapper {
-      flex: 1 1 calc(33.333% - 20px);
-      box-sizing: border-box;
-    }
-  
-    .card-body {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
-    .card-body .card-title {
-      flex: 1;
-      margin: 0;
-    }
-  
-    .card-body .card-text {
-      margin-right: 20px;
-      display: flex;
-      align-items: center;
-    }
-  
-    .card-body .views {
-      color: #ffffffef;
-      margin: 0;
-    }
-  
-    .rounded-circle {
-      border-radius: 50%;
-    }
-  
-    /* Responsive Styles */
-    @media (max-width: 1024px) {
-      .video-container {
-        flex-direction: column;
-      }
-  
-      .video-details, .comments {
-        width: 100%;
+        flex: 3; /* Increase flex to make this section larger */
+        padding: 20px;
+        background-color: #0e0f0f !important;
+        color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
         margin-bottom: 20px;
-      }
     }
-  
-    @media (max-width: 768px) {
-      .other-videos .card-wrapper {
-        flex: 1 1 calc(50% - 20px);
-      }
+    video {
+        width: 100%;
+        border-radius: 5px;
     }
-  
-    @media (max-width: 480px) {
-      .other-videos .card-wrapper {
-        flex: 1 1 100%;
-      }
-  
-      .channel-info {
+    .comments {
+        margin-left: 20px;
+        flex: 1;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    h2 {
+        /* text-align: center; */
+        color: #ffffffef;
+        margin-top: 0;
+    }
+    p {
+        color: #666;
+        margin: 0;
+    }
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .card-img-top {
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+    }
+    .comment-form {
+        margin-top: 20px;
+    }
+    .collapse {
+        display: none;
+    }
+    .collapse.show {
+        display: block;
+    }
+    .nested-comments {
+        margin-left: 40px; /* Indent nested comments */
+    }
+    .comment-input-container {
+        display: flex;
+        align-items: center;
+    }
+    .comment-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+    }
+    .send-button {
+        background-color: #5680cf;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+    .card {
+        padding: 5px;
+        transition: transform 0.3s;
+        background-color: #151414;
+        color: #151414;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        display: flex;
         flex-direction: column;
-      }
-  
-      .channel-info p, .channel-info .right-side {
-        margin-top: 10px;
-      }
+        justify-content: space-between;
     }
-  
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .card-body {
+        width: fit-content;
+        padding: 15px;
+    }
+    .card-title {
+        color: #ffffffef;
+        margin: 0;
+        flex: 1;
+    }
+    .card-text {
+        color: #ffffffef;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+    .profile-avatar {
+        margin-right: 10px;
+    }
+    .comment-form input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+    .comment-form button[type="submit"] {
+        background-color: #5680cf;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .like, .subscribe {
+        cursor: pointer;
+        color: #ff0000;
+        transition: color 0.3s;
+    }
+    .like:hover, .subscribe:hover {
+        color: #5680cf;
+    }
+    .unlike, .unsubscribe {
+        cursor: pointer;
+        color: #000000;
+        transition: color 0.3s;
+    }
+    .unlike:hover, .unsubscribe:hover {
+        color: #ffffffef;
+    }
+    .right-side {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .channel-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .channel-info p {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .channel-info .right-side form {
+        margin-left: 20px;
+    }
+    .channel-info .right-side button {
+        background-color: #5680cf;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .channel-info .right-side button:hover {
+        background-color: #466fb1;
+    }
+    .other-videos {
+        padding: 20px 0;
+        width: 100%;
+    }
+    .other-videos .other-container {
+        margin-top: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .other-videos .card-wrapper {
+        flex: 1 1 calc(33.333% - 20px);
+        box-sizing: border-box;
+    }
+    .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .card-body .card-title {
+        flex: 1;
+        margin: 0;
+    }
+    .card-body .card-text {
+        margin-right: 20px;
+        display: flex;
+        align-items: center;
+    }
+    .card-body .views {
+        color: #ffffffef;
+        margin: 0;
+    }
+    .rounded-circle {
+        border-radius: 50%;
+    }
+    /* Responsive Styles */
+    @media (max-width: 724px) {
+        .video-container {
+            flex-direction: column;
+            width: 90%;
+            flex-direction: column;
+        }
+        .container {
+            /* flex-direction: column; */
+            margin-left: 0;
+            left: 0;
+        }
+        .video-details, .comments {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    }
+    @media (max-width: 768px) {
+        .other-videos .card-wrapper {
+            flex: 1 1 calc(50% - 20px);
+        }
+    }
+    @media (max-width: 480px) {
+        .other-videos .card-wrapper {
+            flex: 1 1 100%;
+        }
+        .channel-info {
+            flex-direction: column;
+        }
+        .channel-info p, .channel-info .right-side {
+            margin-top: 10px;
+        }
+    }
     .reply-form {
-      margin-top: 10px;
+        margin-top: 10px;
     }
 </style>
 <body>
   <div class="video-container">
     <div class="row card-container">
-      <% if (allVideos.length === 0) { %>
+      <% if (recommendedVideos.length === 0 && allVideos.length === 0) { %>
         <div class="col-md-12 mb-4">
           <div class="card">
             <div class="card-body">
@@ -327,18 +321,21 @@
           </div>
         </div>
       <% } else { %>
-        <div class="other-videos">
+        <% if (recommendedVideos.length > 0) { %>
+          <div class="recommended-videos">
             <div class="other-container">
-              <% allVideos.forEach(otherVideo => { %>
+              <% recommendedVideos.forEach(video => { %>
                 <div class="card-wrapper">
-                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
-                    <div class="card" style="height: 300px;">
-                      <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
+                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${video._id}` : `/videos/${video._id}` %>">
+                    <div class="card">
+                      <img class="card-img-top" src="<%= video.thumbnail %>" alt="Card image cap">
                       <div class="card-body">
                         <p class="card-text">
-                          <img src="<%= otherVideo.owner.avatar %>" width="30" height="30" class="rounded-circle" alt="">
+                          <img src="<%= video.owner.avatar %>" class="avatar" alt="">
                         </p>
-                        <h5 class="card-title"><%= otherVideo.title %></h5>
+                        <h5 class="card-title">
+                          <%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %>
+                        </h5>
                       </div>
                     </div>
                   </a>
@@ -346,6 +343,31 @@
               <% }) %>
             </div>
           </div>
+        <% } %>
+        <% if (allVideos.length > 0) { %>
+          <div class="other-videos">
+            <h2>Explore More</h2>
+            <div class="other-container">
+              <% allVideos.forEach(otherVideo => { %>
+                <div class="card-wrapper">
+                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
+                    <div class="card">
+                      <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
+                      <div class="card-body">
+                        <p class="card-text">
+                          <img src="<%= otherVideo.owner.avatar %>" class="avatar" alt="">
+                        </p>
+                        <h5 class="card-title">
+                          <%= otherVideo.title && otherVideo.title.length > 28 ? otherVideo.title.slice(0, 28) + '...' : otherVideo.title %>
+                        </h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
       <% } %>
     </div>
   </div>

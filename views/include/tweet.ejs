@@ -32,7 +32,7 @@
     <div class="nested-comments collapse" id="nested-comments-<%= comment._id %>">
       <% if (comment.children && comment.children.length > 0) { %>
         <div class="initial-replies">
-          <%- include('../include/tweet.ejs', { comments: comment.children.slice(0, 3) }) %>
+          <%- include('../include/tweet.ejs', { comments: comment.children.slice(0, 3) }) %> 
         </div>
         <% if (comment.children.length > 3) { %>
           <p class="load-more-replies" data-comment-id="<%= comment._id %>">Load more replies</p>
@@ -45,3 +45,4 @@
   </div>
 <% }) %>
 <% layout('/layout/boilerplate.ejs') %>
+ 

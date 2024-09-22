@@ -28,13 +28,14 @@ const uploadOnCloudinary = async (localFilePath) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public')
+    cb(null, './public');  // Save uploaded files to 'public' folder
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
-})
+    cb(null, Date.now() + '-' + file.originalname);  // Add timestamp to file names
+  },
+});
 
-const upload = multer({ storage })
+const upload = multer({ storage });
+
 
 module.exports = { cloudinary,storage,uploadOnCloudinary,upload };
