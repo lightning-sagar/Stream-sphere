@@ -76,19 +76,22 @@ body {
 .video-container {
   width: 120%;
     margin: 0 auto;
+    background: linear-gradient(to bottom right, #0e0f0f 75%, #ef73ff 25%) !important;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
-
+:root {
+  --plyr-color-main: #ef73ff;
+}
 .video-details {
     flex: 3;
     padding: 20px;
     color: #ffffffef !important;
     background-color: #0e0f0f;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
+    box-shadow: 0 2px 4px #ef73ff ;
     margin-bottom: 20px;
 }
 
@@ -170,15 +173,14 @@ p {
     margin-left: 20px;
 }
 
-
 /* Comments Section */
 .comments {
-      margin-top: 28px;
     flex: 1;
-    background-color: #272525;
+    margin-left: 50px;
+    background-color: #0e0f0f;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #ffb3ff;
     margin-bottom: 20px;
 }
 
@@ -220,9 +222,10 @@ h3 {
 
 .card {
     padding: 5px;
-    background-color: #151414;
+    background-color: #0e0f0f;
     color: #ffffffef;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #ef73ff;
+
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 20px;
@@ -296,6 +299,7 @@ h3 {
 .other-videos .card-wrapper {
     flex: 1 1 calc(33.333% - 20px);
     box-sizing: border-box;
+    border: 
 }
 .comments h3{
   color: #ccc;
@@ -342,7 +346,28 @@ h3 {
         margin-top: 10px;
     }
 }
+.plyr__controls {
+    background-color: #121212;
+    /* Change control background color if necessary */
+  }
 
+  .plyr--full-ui input[type=range] {
+    color: #ef73ff;
+    /* Change the color of range inputs like volume and progress bars */
+  }
+
+  /* Changing the hover and active state of control buttons */
+  .plyr__controls button {
+    color: #ef73ff;
+    /* Set button icons to your color */
+    transition: color 0.3s ease;
+  }
+
+  .plyr__controls button:hover,
+  .plyr__controls button:focus {
+    color: #ffb3ff;
+    /* Slightly lighter color on hover */
+  }
 </style>
 <body>
   <div class="video-container">
@@ -519,11 +544,10 @@ h3 {
     // Video Quality Switcher (Plyr Integration)
     const player = new Plyr('#player');
     const qualitySwitcher = document.createElement('div');
-    qualitySwitcher.className = 'plyr__menu plyr__menu--settings plyr__menu--open';
+    qualitySwitcher.className = 'plyr__menu--settings plyr__menu--open';
     qualitySwitcher.innerHTML = `
       <div role="menu">
         <button type="button" class="plyr__control" data-quality="low">Low</button>
-        <button type="button" class="plyr__control" data-quality="eco">eco</button>
         <button type="button" class="plyr__control" data-quality="best">best</button>
       </div>
     `;

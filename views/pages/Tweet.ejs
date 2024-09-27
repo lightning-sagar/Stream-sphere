@@ -14,8 +14,9 @@
         margin-right: 10px;
     }
     .post {
+        margin-left: -200;
         background: #0e0f0f;
-        width: 100%; /* corrected to fit container */
+        max-width: 80%; /* corrected to fit container */
         margin-bottom: 20px;
         padding: 15px;
         border-radius: 8px;
@@ -48,6 +49,14 @@
         font-size: 12px; 
         color: #888; 
         white-space: nowrap;
+    }
+    .trash{
+        top: 34;
+        right: -8;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        fill: #657786;
     }
     .container-tweet { 
         width: 100%; 
@@ -189,7 +198,7 @@
 }
 .post-image{
     cursor: pointer;
-    width: 100%;
+    max-width: 80%;
     max-height: 430px;
 }
  .post-info{
@@ -264,6 +273,10 @@
     cursor: pointer;
 }
 
+.liked {
+        color: #ef73ff; /* Color for when the post is liked */
+        fill: #ef73ff; /* Change the color of the heart icon */
+    }
 .actions .like-btn:hover, .actions .reply-btn:hover {
     color: #1da1f2;
 }
@@ -278,7 +291,8 @@
     padding: 20px;
     display: flex;
     border-radius: 8px;
-    min-height: 150px; /* Ensure the card has enough height */
+    width: 100%;
+    min-height: 150px;    
 }
 </style>
 
@@ -306,44 +320,54 @@
 <div class="container-tweet">
     <%if(getTweet &&  getTweet.length>0){%>
         <% getTweet.forEach(t => { %>
-            <% console.log(t)%>
-            <div class="post">
-                <div class="t-card">
-                    
-                    <div class="vertical-line-container"> 
-                        <img src="<%=t.posted_by.avatar%>" alt="Profile Image" class="profile-image">
-                        <hr class="vertical-line"></hr> 
-                    </div>
-                    <div class="post-info">
-                        <div class="d-flex align-items-center">
-                            <span class="author"><%=t.posted_by.username%></span>
-                            <span class="time"><%=gettimeapprox(t.createdAt)%></span>
+            <div class="post"  data-id="<%=t._id%>">
+                <a href="/t/r/<%=t._id%>">
+                    <div class="t-card">
+                        <div class="vertical-line-container"> 
+                            <img src="<%=t.posted_by.avatar%>" alt="Profile Image" class="profile-image">
+                            <hr class="vertical-line"></hr> 
                         </div>
-                        <div class="content">
-                            <p><%=t.text%></p>
-                            <% if (t.img) { %>
-                                <img src="<%=t.img%>" alt="Post Image" class="post-image">
-                            <% } %>
-                        </div>
-                        <div class="actions">
-                            <!-- Like and Reply buttons -->
-                            <div class="like-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-5.477 5.479a2.121 2.121 0 01-3 0 2.121 2.121 0 010-3l5.477-5.478m1.414-1.414a2.121 2.121 0 013 0 2.121 2.121 0 010 3l-5.478 5.477" />
-                                </svg>
-                                <span>Like</span>
+                        <div class="post-info">
+                            <div class="d-flex align-items-center">
+                                <span class="author"><%=t.posted_by.username%></span>
+                                
+                                <% if (req.user && req.user.id === t.posted_by._id.toString()) { %>
+                                    <span class="delete-btn time trash" onclick="deletePost('<%= t._id %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                <% } %>
+                                
+                                <span class="time"><%=gettimeapprox(t.createdAt)%></span>
                             </div>
-                            <div class="reply-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h13.5M12 15.75l-6.75-6.75 6.75 6.75zm6.75 0l-6.75-6.75 6.75 6.75z" />
-                                </svg>
-                                <span>Reply</span>
+                            
+                            <div class="content">
+                                <p><%=t.text%></p>
+                                <% if (t.img) { %>
+                                    <img src="<%=t.img%>" alt="Post Image" class="post-image">
+                                <% } %>
+                            </div>
+                
+                            <div class="actions">
+                                <% console.log(t.likes)%>
+                                <!-- Like and Reply buttons -->
+                                <div class="like-btn <% t.likes ? 'liked':'' %>"   >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-5.477 5.479a2.121 2.121 0 01-3 0 2.121 2.121 0 010-3l5.477-5.478m1.414-1.414a2.121 2.121 0 013 0 2.121 2.121 0 010 3l-5.478 5.477" />
+                                    </svg>
+                                    <span>Like</span>
+                                </div>
+                                <div class="reply-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h13.5M12 15.75l-6.75-6.75 6.75 6.75zm6.75 0l-6.75-6.75 6.75 6.75z" />
+                                    </svg>
+                                    <span>Reply</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                </a>
             </div>
+            
         <% }) %>
     <% } %>
     
@@ -378,6 +402,21 @@
     </div>
 </div>
 
+<div id="replyModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <p class="create-tweet">Reply to Post</p>
+
+        <div class="form-group mt-2">
+            <label for="replyText" hidden>Reply Text:</label>
+            <textarea id="replyText" rows="4" placeholder="Write your reply..." class="transparent-textarea"></textarea>
+        </div>
+
+        <button id="submitReply" class="btn submitPost">Submit Reply</button>
+    </div>
+</div>
+
+
 </body>
 
 <script>
@@ -388,7 +427,7 @@
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
     const uploadBtn = document.getElementById('uploadBtn');
-
+    const likeButton = document.querySelector('.like-btn');
     createPostBtn.addEventListener('click', function() {
         modal.style.display = 'flex';
     });
@@ -398,21 +437,79 @@
         modal.style.display = 'none';
         resetForm();
     });
-// Handle like and reply actions
-document.querySelectorAll('.like-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        alert('You liked this post!');
-        // Add logic for liking the post
-    });
-});
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.closest('.post').dataset.id; // Get the post ID
+            const likeIcon = this.querySelector('svg'); // Get the SVG inside the button
+            const isLiked = this.classList.contains('liked'); // Check if it's already liked
 
-document.querySelectorAll('.reply-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        alert('Reply to this post!');
-        // Add logic for replying to the post
+            // Make a fetch request to like/unlike the post
+            fetch(`/t/${postId}/likeunlike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data, "data");
+                if (data.message === "success") {
+                    this.classList.toggle('liked');
+                } else {
+                    console.error('Error liking/unliking the post');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
     });
-});
 
+    function deletePost(postId) {
+        fetch(`/t/${postId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'success') {
+                alert('Post deleted successfully');
+                // Optionally remove the post from the UI
+                document.querySelector(`[data-id="${postId}"]`).remove();
+            } else {
+                alert('Error deleting post');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    const replyModal = document.getElementById('replyModal');
+    const closeReplyModalBtn = replyModal.querySelector('.close-btn');
+    const replyText = document.getElementById('replyText');
+
+    document.querySelectorAll('.reply-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.closest('.post').dataset.id; // Get post ID for the reply
+            replyModal.style.display = 'flex';
+
+            // Handle reply submission
+            document.getElementById('submitReply').addEventListener('click', function() {
+                fetch(`/t/${postId}/reply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ replyText: replyText.value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Reply posted:', data);
+                    replyModal.style.display = 'none';
+                    replyText.value = ''; // Reset the textarea after submission
+                });
+            });
+        });
+    });
+
+ 
     // Close modal when user clicks outside the modal content
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
@@ -420,7 +517,19 @@ document.querySelectorAll('.reply-btn').forEach(button => {
             resetForm();
         }
     });
+    closeReplyModalBtn.addEventListener('click', function() {
+        replyModal.style.display = 'none';
+    });
 
+    // Close modals by clicking outside of them
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+        if (event.target === replyModal) {
+            replyModal.style.display = 'none';
+        }
+    });
     // Handle file upload button click
     uploadBtn.addEventListener('click', function() {
         imageInput.click(); 

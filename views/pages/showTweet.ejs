@@ -1,0 +1,414 @@
+<% layout('layout/boilerplate') %>
+<style>
+    body { 
+        margin-top: 20px; 
+        background-color: #0e0f0f;
+        font-family: Arial, sans-serif;
+    }
+    .profile-image { 
+        height: 50px; 
+        width: 50px; 
+        object-fit: cover; 
+        border-radius: 50%; 
+        margin-right: 10px;
+    }
+    .post {
+        margin-left: -200;
+        background: #0e0f0f;
+        max-width: 80%; /* corrected to fit container */
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        color: #dfe1e5;
+        align-items: flex-start;
+        position: relative;
+    }
+    .author { 
+        font-weight: bold; 
+        font-size: 16px;
+    }
+    .handle {
+        color: #657786;
+        font-size: 14px;
+        margin-left: 5px;
+    }
+    .content { 
+        color: #ffffff; 
+        font-size: 15px;
+        line-height: 1.4;
+        margin: 10px 0;
+    }
+    .content {
+    margin-left: 20px; /* Add space between the vertical line and content */
+}
+    .time { 
+        position: absolute;
+        right: 17px;
+        font-size: 12px; 
+        color: #888; 
+        white-space: nowrap;
+    }
+    .trash{
+        top: 34;
+        right: -8;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        fill: #657786;
+    }
+    .container-tweet { 
+        width: 100%; 
+        position: relative;
+        margin: 0 auto;
+        top: -50px;
+        padding: 20px;
+    }
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-top: 10px;
+    }
+    .actions svg {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        fill: #657786;
+    }
+    .actions svg:hover {
+        fill: #1da1f2;
+    }
+    .create-post { 
+        position: fixed; 
+        bottom: 20px; 
+        right: 20px; 
+        background-color: #ef73ff; 
+        color: white; 
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 50px; 
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .create-post:hover { 
+        background-color: #0a85d0; 
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+ 
+ 
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .preview-img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+    .transparent-textarea {
+        border: 1px solid #ef73ff;
+        background: none;
+        /* border: none; */
+        color: #dfe1e5;
+        border-radius: 10px;
+        font-size: 16px;
+        width: 100%;
+        padding: 10px;
+
+        resize: none;
+    }
+    .transparent-textarea:focus {
+        outline: none;
+        border: 1px solid #ef73ff;
+        padding: 10px;
+    }
+    #imageInput {
+        display: none; 
+    }
+      
+    .upload-btn {
+        background-color: #0e0f0f;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+    }
+    .submitPost:hover{
+        background-color: #ef73ff;
+        color: #0e0f0f;
+    }
+    .submitPost{
+        background-color: #0e0f0f; color: ef73ff; border: 1px solid #ef73ff;
+    }
+    .post:hover{
+        /* make the transition faster and make it up more */
+        transform: scale(1.01);
+    }
+    .modal-content {
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        background-color: #0e0f0f;
+        padding: 20px;
+        width: 400px;
+        max-width: 90%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.create-tweet {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.close-btn {
+    cursor: pointer;
+    color: #888;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+.post-image{
+    cursor: pointer;
+    max-width: 80%;
+    max-height: 430px;
+}
+ .post-info{
+    margin-top: 9px;
+ }
+.vertical-line-container {
+    position: relative;
+    width: 50px; /* Adjust width for the avatar spacing */
+}
+
+.vertical-line {
+    height: -webkit-fill-available;
+    background-color: #ef73ff;
+    width: 2px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%; /* Centers the line in the container */
+}
+
+
+.profile-image {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-top: 10px; /* ensure the avatar aligns properly */
+}
+.profile-image {
+    margin-bottom: 10px;
+}
+.post {
+    display: flex;
+    align-items: flex-start;
+    padding-left: 20px; /* Adjust the padding for better alignment */
+    position: relative;
+}
+
+ 
+
+.author {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+}
+.actions {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
+    color: #657786;
+}
+.actions svg {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.actions svg:hover {
+    fill: #1da1f2;
+}
+
+.actions .like-btn, .actions .reply-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.liked {
+        color: #ef73ff; /* Color for when the post is liked */
+        fill: #ef73ff; /* Change the color of the heart icon */
+    }
+.actions .like-btn:hover, .actions .reply-btn:hover {
+    color: #1da1f2;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+.t-card {
+    position: relative;
+    padding: 20px;
+    display: flex;
+    border-radius: 8px;
+    width: 100%;
+    min-height: 150px;    
+}
+</style>
+
+<body>
+    <% 
+        const gettimeapprox = (date) => {
+            const time = new Date(date).getTime();
+            const now = new Date().getTime();
+            const diff = now - time;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            if (seconds < 60) {
+                return `${seconds} seconds ago`;
+            } else if (minutes < 60) {
+                return `${minutes} minutes ago`;
+            } else if (hours < 24) {
+                return `${hours} hours ago`;
+            } else {
+                return `${days} days ago`;
+            }
+        } 
+    %>
+
+    <div class="container-tweet">
+
+        <!-- Part 1: Showing Tweet Content -->
+        <% if (tweet) { %>
+            <div class="post" data-id="<%= tweet._id %>">
+                <div class="t-card">
+                    <div class="vertical-line-container"> 
+                        <img src="<%= tweet.posted_by.avatar %>" alt="Profile Image" class="profile-image">
+                        <hr class="vertical-line"></hr> 
+                    </div>
+                    <div class="post-info">
+                        <div class="d-flex align-items-center">
+                            <span class="author"><%= tweet.posted_by.username %></span>
+                            
+                            <% if (req.user && req.user.id === tweet.posted_by._id.toString()) { %>
+                                <span class="delete-btn time trash" onclick="deletePost('<%= tweet._id %>')">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            <% } %>
+                            
+                            <span class="time"><%= gettimeapprox(tweet.createdAt) %></span>
+                        </div>
+                        
+                        <div class="content">
+                            <p><%= tweet.text %></p>
+                            <% if (tweet.img) { %>
+                                <img src="<%= tweet.img %>" alt="Post Image" class="post-image">
+                            <% } %>
+                        </div>
+            
+                        <div class="actions">
+                            <div class="like-btn <% tweet.likes.includes(req.user.id) ? 'liked' : '' %>">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-5.477 5.479a2.121 2.121 0 01-3 0 2.121 2.121 0 010-3l5.477-5.478m1.414-1.414a2.121 2.121 0 013 0 2.121 2.121 0 010 3l-5.478 5.477" />
+                                </svg>
+                                <span>Like</span>
+                            </div>
+                            <div class="reply-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h13.5M12 15.75l-6.75-6.75 6.75 6.75zm6.75 0l-6.75-6.75 6.75 6.75z" />
+                                </svg>
+                                <span>Reply</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Part 2: Showing Replies -->
+        <div class="replies-section">
+            <h3>Replies</h3>
+            <% if (replies && replies.length > 0) { %>
+                <% replies.forEach(reply => { %>
+                    <div class="reply" data-id="<%= reply._id %>">
+                        <div class="reply-card">
+                            <div class="vertical-line-container"> 
+                                <img src="<%= reply.posted_by.avatar %>" alt="Profile Image" class="profile-image">
+                                <hr class="vertical-line"></hr> 
+                            </div>
+                            <div class="reply-info">
+                                <div class="d-flex align-items-center">
+                                    <span class="author"><%= reply.posted_by.username %></span>
+                                    <span class="time"><%= gettimeapprox(reply.createdAt) %></span>
+                                </div>
+                                
+                                <div class="content">
+                                    <p><%= reply.text %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No replies yet.</p>
+            <% } %>
+        </div>
+    
+    </div>
+
+    <!-- Reply Modal -->
+    <div id="replyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <p class="create-tweet">Reply to Post</p>
+
+            <div class="form-group mt-2">
+                <label for="replyText" hidden>Reply Text:</label>
+                <textarea id="replyText" rows="4" placeholder="Write your reply..." class="transparent-textarea"></textarea>
+            </div>
+
+            <button id="submitReply" class="btn submitPost">Submit Reply</button>
+        </div>
+    </div>
+</body>

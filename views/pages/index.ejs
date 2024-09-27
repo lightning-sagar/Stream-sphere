@@ -3,7 +3,6 @@
 <style>
   .video-container {
     width: 115%;
-    margin-left: 6px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -95,7 +94,6 @@
   .video-container {
     background: linear-gradient(to bottom right, #0e0f0f 75%, #ef73ff 25%) !important;
     width: 115%;
-    margin-left: 6px;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
@@ -490,13 +488,11 @@
   .plyr__controls button:hover,
   .plyr__controls button:focus {
     color: #ffb3ff;
-    /* Slightly lighter color on hover */
   }
 </style>
 <style>
   .video-container {
     width: 115%;
-    margin-left: 6px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -775,14 +771,7 @@
 <script>
   const player = new Plyr('#player');
   const qualitySwitcher = document.createElement('div');
-  qualitySwitcher.className = 'plyr__menu plyr__menu--settings plyr__menu--open';
-  qualitySwitcher.innerHTML = `
-      <div role="menu">
-        <button type="button" class="plyr__control" data-quality="low">Low</button>
-        <button type="button" class="plyr__control" data-quality="mid">mid</button>
-        <button type="button" class="plyr__control" data-quality="best">best</button>
-      </div>
-    `;
+  qualitySwitcher.className = 'plyr__menu--settings plyr__menu--open';
   player.elements.controls.appendChild(qualitySwitcher);
 
   qualitySwitcher.addEventListener('click', (event) => {

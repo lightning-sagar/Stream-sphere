@@ -186,6 +186,7 @@ app.post("/signup", async (req, res) => {
     res.redirect("/signup");
   }
 });
+
 app.get("/logout", (req, res) => {
   req.logout((err) => {
     if (err) {
@@ -760,6 +761,93 @@ app.post("/t/:id", async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 });
+app.delete("/t/:id", async (req, res) => {
+  try {
+    const {id} = req.params;
+    const post = await Post.findById(id);
+    if(!post) return res.status(400).json({error:"Post not found"});
+
+    if(post.posted_by.toString() !== req.user._id.toString()){
+        return res.status(400).json({error:"not authorized"});
+    }
+
+    if(post.img){
+        const publicId = post.img.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(publicId);
+    }
+
+    await Post.findByIdAndDelete(id);
+    res.status(200).json({message:"success"});
+  } catch (error) {
+    console.log(error)
+    return res.status(500).send("Internal Server Error");
+  }
+})
+app.post("/t/:id/likeunlike", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById(id);
+    if (!post) return res.status(400).json({ error: "Post not found" });
+
+    const userLikePost = post.likes.includes(req.user._id);
+
+    if (userLikePost) {
+      // Unlike post
+      await Post.findByIdAndUpdate(id, { $pull: { likes: req.user._id } });
+      res.status(200).json({ message: "success" });
+    } else {
+      // Like post
+      post.likes.push(req.user._id);
+      await post.save();
+      res.status(200).json({ message: "success" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+})
+
+app.post("/t/:id/reply", async (req, res) => {
+  try {
+    console.log(req.body)
+    const { id: postId } = req.params;
+    const { text } = req.body;
+    const userId = req.user._id;
+    const userProfilepic = req.user.avatar;
+    const username = req.user.username;
+
+    if (!text) return res.status(400).json({ error: "All fields are required" });
+    const post = await Post.findById(postId);
+    if (!post) return res.status(400).json({ error: "Post not found" });
+
+    const newReply = {
+        userId,
+        userPic:userProfilepic,
+        username,
+        text
+    };
+    console.log(newReply)
+    post.replies.push(newReply);
+    await post.save();
+
+    res.status(200).json({ reply: newReply });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+}
+})
+app.get('/t/r/:id',async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const post = await Post.findById(id);
+    const reply = post.replies;
+    res.render('pages/showTweet.ejs',{req,replies:reply,tweet:post.populate});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Internal Server Error");
+  }
+})
+
 
 //comment
 app.post("/v/:videoId", async (req, res) => {
