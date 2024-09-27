@@ -3,7 +3,10 @@
   body {
     background-color: #0e0f0f!important; 
     color: #333;  
-    font-family: Arial, sans-serif;  
+    font-family: "Playfair Display", serif !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400;
+  font-style: normal !important;
   }
 
   .container{
@@ -29,7 +32,7 @@
   color: #fff;
   font-size: 24px;
   text-align: center;
-  border-bottom: 2px solid #5680cf;
+  border-bottom: 2px solid #ef73ff;
   padding-bottom: 10px;
   margin-bottom: 20px;
 }
@@ -71,7 +74,7 @@ textarea.form-control {
 }
 
 .btn-primary {
-  background-color: #5680cf;
+  background-color: #ef73ff;
   padding: 12px 24px;
   border-radius: 5px;
   color: #fff;
@@ -106,7 +109,7 @@ textarea.form-control {
   }
 
   .btn-primary {
-    background-color: #5680cf; /* Blue button color */
+    background-color: #ef73ff; /* Blue button color */
     color: #fff; /* Light text color */
     border: none;
     border-radius: 5px;
@@ -129,7 +132,7 @@ textarea.form-control {
     color: #fff;
     font-size: 26px;
     text-align: center;
-    border-bottom: 2px solid #5680cf;
+    border-bottom: 2px solid #ef73ff;
     padding-bottom: 10px;
     margin-bottom: 20px;
   }
@@ -157,7 +160,7 @@ textarea.form-control {
     height: 40px;
     border-radius: 50%;
     background-color: #fff;
-    color: #5680cf;
+    color: #ef73ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,7 +170,7 @@ textarea.form-control {
   }
 
   .step-circle.active {
-    background-color: #5680cf;
+    background-color: #ef73ff;
     color: #fff;  
   }
 
@@ -212,10 +215,22 @@ textarea.form-control {
         margin-bottom: 20px;
       }
     }
+    .upload-btn{
+      background-color: black;
+      color: #ef73ff;
+      border: 2px solid #ef73ef
+    }
+    .mRGIN-NEG{
+      margin-top: 40px;
+    }
+    .sidebar .shortcut-links a .upload-icon {
+     color: #ef73ff;
+    }
+ 
 </style>
 
 
-<div class="container pt-5">
+<div class="container mRGIN-NEG">
   <form enctype="multipart/form-data" id="uploadForm" class="max-width-900 mx-auto"  method="post">
     <!-- Step indicators -->
     <div class="step-container">
@@ -254,7 +269,7 @@ textarea.form-control {
         <input type="text" class="form-control" id="categories" name="categories" placeholder="e.g., Coding, Food" required>
       </div>
       <button type="button" class="btn-generate">Auto-generate Description</button>
-      <button type="submit" class="btn btn-primary">Upload</button>
+      <button type="submit" class="btn btn-primary upload-btn">Upload</button>
     </div>
 
   </form>

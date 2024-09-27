@@ -1,70 +1,163 @@
 <% layout('/layout/boilerplate.ejs') %>
  
 <style>
- 
-  .con-sub {
-    box-sizing: border-box;
-    margin-bottom: -1000px;
-    width: 118%;
-    display: flex;
-    height: 90.7vh;
-    color: #333;
-  }
-
-  .chat-sidebar {
-    background-color: #0e0f0f;
-    box-shadow: 0 2px 4px rgb(255 255 255 / 69%);
-    position: fixed;
-    width: 95px;
-    right: 0;
-    height: 657px;
-    top: 64px;
-    gap: 0px;
-    opacity: 0px;
-    color: #333;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .channel-info{
-    margin-top: 20px;
-  }
-  .container{
-    background-color: #0e0f0f;
-    margin-left: 84px;
-  }
-  .video-cont{
-    margin-top: 50px;
-    margin-left: 25px;
+    .con-sub {
+      box-sizing: border-box;
+      margin-top: -70px;
+      width: 129%; /* Make it responsive */
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      position: relative;
+      color: #333;
+    }
+  
+    .chat-sidebar {
+      background-color: #0e0f0f;
+      position: fixed;
+      right: 0;
+      height: 657px;
+      top: 64px;
+      color: #333;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0px;
+      /* width: 10%; Adjust for responsiveness */
+    }
+  
+    .channel-info {
+      border-right: 5px solid transparent;
+      margin-top: 20px;
+    }
+  
+    .container {
+      background-color: #0e0f0f;
+      margin-left: 84px;
+      width: 100%;
+    }
+  
+    .video-cont {
+      margin-top: 50px;
+      margin-left: 25px;
+      width: calc(100% - 104px);
+    }
+  
+    .mright {
+      margin-right: 10px;
+    }
+  
+    .active-channel {
+      background-color: #ddd !important;
+    }
+  
+    .bg-sub {
+      background-color: #0e0f0f;
+    }
+  
+    .card {
+      padding: 5px;
+      transition: transform 0.3s;
+      background-color: #0e0f0f;
+      color: #f3eaea;
+      box-shadow: 0 2px 4px #ef73ff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    h5 {
+      color: #ffffffef;
+    }
+  
+    .card-wrapper {
+      flex: 1 1 calc(33.333% - 20px);
+      box-sizing: border-box;
+      max-width: calc(33.333% - 20px);
+    }
+  
+    .channel-info.active .channel-avatar {
+      border: 3px solid #ef73ff; /* Active border for avatar */
+      border-radius: 50%; /* Ensure round shape */
+    }
+  
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container{
+            margin-left: 0px;
+            margin-top: 20px;
+        }
+      .chat-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        padding: 10px 0;
+        white-space: nowrap;
       }
-  .mright{
-    margin-right: 10px;
-  }
-  .active-channel {
-    background-color: #ddd !important;
-  }
-  .bg-sub{
-    background-color: #0e0f0f;
-  }
-  .card {
-    padding: 5px;
-    transition: transform 0.3s;
-    background-color: #151414;
-    color: #ffffffef;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  } 
-  h5{
-    color: #ffffffef;
-  }
-</style>
+  
+      .chat-sidebar::-webkit-scrollbar {
+        display: none; /* Hide scrollbar */
+      }
+  
+      .chat-sidebar {
+        -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+      }
+  
+      .video-cont {
+        margin-top: 20px;
+        width: 100%;
+      }
+  
+      .card-wrapper {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+  
+      .channel-info {
+        margin-right: 15px;
+        flex-shrink: 0; /* Prevent shrinking of elements */
+      }
+      .con-sub{
+        margin-top: 0px;
+            width: 100%;
+        }
+    }
+
+    .sidebar .shortcut-links a .sub-icon {
+     color: #ef73ff;
+    }
+  
+    @media (max-width: 480px) {
+        .container{
+            margin-left: 0px;
+            margin-top: 20px;
+        }
+        .con-sub{
+            margin-top: 0px;
+            width: 100%;
+        }
+      .chat-sidebar {
+        padding: 5px 0;
+      }
+  
+      .card-wrapper {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+  
 <body>
 <div class="con-sub">
     <div class="chat-sidebar">
@@ -100,38 +193,68 @@
                 </div>
             <% } %>
             <% allVideos.forEach(video => { %>
-                <div class="col-md-3 mb-4">
-                    <a href="<%= currentUser ? `/user/${req.user._id}1/videos/${video._id}` : `/videos/${video._id}` %>" class="card shadow-sm">
-                        <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <p class="card-text">
-                                    <% if (video.owner.avatar) { %>
-                                        <img src="<%= video.owner.avatar %>" class="rounded-circle mright" width="30" height="30" alt="Avatar">
-                                    <% } else { %>
-                                        <span class="material-symbols-outlined profile-avatar center rounded-circle">
-                                            account_circle
-                                        </span>
-                                    <% } %>
-                                </p>
-                                <h5 class="card-title"><%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %></h5>
+                    <div class="card-wrapper"> 
+                        <a href="<%= currentUser ? `/user/${req.user._id}1/videos/${video._id}` : `/videos/${video._id}` %>" class="card">
+                            <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <p class="card-text">
+                                        <% if (video.owner.avatar) { %>
+                                            <img src="<%= video.owner.avatar %>" class="rounded-circle mright" width="30" height="30" alt="Avatar">
+                                        <% } else { %>
+                                            <span class="material-symbols-outlined profile-avatar center rounded-circle">
+                                                account_circle
+                                            </span>
+                                        <% } %>
+                                    </p>
+                                    <h5 class="card-title"><%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %></h5>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
             <% }); %>
         </div>
     </div>
 </div>
 </body>
 <script>
-    const channel = document.querySelectorAll('.channel-avatar');
-        for (let i = 0; i < channel.length; i++) {
-            channel[i].addEventListener('click', (e) => {
-                const userId = e.currentTarget.dataset.userid
-                double = false
+    document.addEventListener('DOMContentLoaded', () => {
+        const channels = document.querySelectorAll('.channel-info');
+        let activeChannel = null;
 
-                window.location.href = `/user/<%= req.user._id %>/${userId}/videos`
-            })
+        // Check localStorage for the active channel's userId on page load
+        const storedUserId = localStorage.getItem('activeChannelUserId');
+        if (storedUserId) {
+            channels.forEach((chan) => {
+                const userId = chan.querySelector('.channel-avatar').dataset.userid;
+                if (userId === storedUserId) {
+                    chan.classList.add('active');
+                    activeChannel = chan;
+                }
+            });
         }
+
+        // Add click listeners to each channel
+        channels.forEach((channel) => {
+            channel.addEventListener('click', (e) => {
+                const userId = e.currentTarget.querySelector('.channel-avatar').dataset.userid;
+                console.log("User ID clicked:", userId);
+
+                // Remove the active class from the previously active channel
+                if (activeChannel) {
+                    activeChannel.classList.remove('active');
+                }
+
+                // Add the active class to the currently clicked channel
+                e.currentTarget.classList.add('active');
+                activeChannel = e.currentTarget;
+
+                // Store the active channel's userId in localStorage
+                localStorage.setItem('activeChannelUserId', userId);
+
+                // Redirect to the user's video page
+                window.location.href = `/user/<%= req.user._id %>/${userId}/videos`;
+            });
+        });
+    });
 </script>

@@ -6,369 +6,805 @@
     margin-left: 6px;
     padding: 20px;
     display: flex;
-    flex-direction: column; /* Stack the sections vertically */
+    flex-direction: column;
+    margin-top: -30px;
     gap: 20px;
-}
-.other-videos h2{
-  left: 20%;
-}
-.recommended-videos .other-container,
-.other-videos .other-container {
+  }
+
+  .other-videos h2 {
+    left: 20%;
+  }
+
+  .recommended-videos .other-container,
+  .other-videos .other-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-}
+  }
 
-.card-wrapper {
-    flex: 1 1 calc(33.333% - 20px); /* 3 columns */
+  .card-wrapper {
+    flex: 1 1 calc(33.333% - 20px);
+    /* 3 columns */
     box-sizing: border-box;
     max-width: calc(33.333% - 20px);
-}
+  }
 
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
     .card-wrapper {
-        flex: 1 1 calc(50% - 20px); /* 2 columns on smaller screens */
-        max-width: calc(50% - 20px);
+      flex: 1 1 calc(50% - 20px);
+      /* 2 columns on smaller screens */
+      max-width: calc(50% - 20px);
     }
-}
+  }
 
-@media (max-width: 480px) {
+  @media (max-width: 480px) {
     .card-wrapper {
-        flex: 1 1 100%; /* Full width on mobile */
-        max-width: 100%;
+      flex: 1 1 100%;
+      /* Full width on mobile */
+      max-width: 100%;
     }
-}
+  }
 
-    .bg-red {
-        background-color: red !important;
-    }
-    body {
-        font-family: Arial, sans-serif;
-        color: #ffffffef;
-    }
-    .all-comments {
-        max-height: 400px;
-        overflow-y: scroll;
-        padding-right: 15px; /* To avoid scrollbar overlap */
-    }
-    .card {
-        margin-left: 0;
-    }
-    .card .card {
-        margin-left: 40px; /* Indent nested comments */
-    }
-    .container {
-        margin-left: 84px;
-    }
+  .bg-red {
+    background-color: red !important;
+  }
+
+  body {
+    width: 100% !important;
+    font-family: "Righteous", sans-serif !important;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+    background-color: #121212;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-family: "Righteous", sans-serif !important;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .text-container {
+    font-family: "Righteous", sans-serif !important;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .all-comments {
+    max-height: 400px;
+    overflow-y: scroll;
+    padding-right: 15px;
+  }
+
+  .card {
+    margin-left: 0;
+  }
+
+  .card .card {
+    margin-left: 40px;
+  }
+
+  .container {
+    width: 100% !important;
+    margin-top: 0px !important;
+    margin-left: 84px;
+  }
+
+  .video-container {
+    background: linear-gradient(to bottom right, #0e0f0f 75%, #ef73ff 25%) !important;
+    width: 115%;
+    margin-left: 6px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .video-details {
+    flex: 3;
+    /* Increase flex to make this section larger */
+    padding: 20px;
+    background-color: #0e0f0f !important;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
+    margin-bottom: 20px;
+  }
+
+  video {
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  .comments {
+    margin-left: 20px;
+    flex: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    /* text-align: center; */
+    color: #ffffffef;
+    margin-top: 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .card-img-top {
+    border-radius: calc(.25rem - 1px) !important;
+    object-fit: cover;
+    height: 200px;
+    width: 100%;
+  }
+
+  .comment-form {
+    margin-top: 20px;
+  }
+
+  .collapse {
+    display: none;
+  }
+
+  .collapse.show {
+    display: block;
+  }
+
+  .nested-comments {
+    margin-left: 40px;
+    /* Indent nested comments */
+  }
+
+  .comment-input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .comment-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .send-button {
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+
+  .card {
+    padding: 5px;
+    transition: transform 0.3s;
+    background-color: #0e0f0f;
+    color: #151414;
+    box-shadow: 0 2px 4px #ef73ff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    width: fit-content;
+    padding: 15px;
+  }
+
+  .card-title {
+    color: #ffffffef;
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-text {
+    color: #ffffffef;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-avatar {
+    margin-right: 10px;
+  }
+
+  .comment-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+
+  .comment-form button[type="submit"] {
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .like,
+  .subscribe {
+    cursor: pointer;
+    color: #ff0000;
+    transition: color 0.3s;
+  }
+
+  .like:hover,
+  .subscribe:hover {
+    color: #5680cf;
+  }
+
+  .unlike,
+  .unsubscribe {
+    cursor: pointer;
+    color: #000000;
+    transition: color 0.3s;
+  }
+
+  .unlike:hover,
+  .unsubscribe:hover {
+    color: #ffffffef;
+  }
+
+  .right-side {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .channel-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .channel-info p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .channel-info .right-side form {
+    margin-left: 20px;
+  }
+
+  .channel-info .right-side button {
+    background-color: #5680cf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .channel-info .right-side button:hover {
+    background-color: #466fb1;
+  }
+
+  .other-videos {
+    padding: 20px 0;
+    width: 100%;
+  }
+
+  .other-videos .other-container {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .other-videos .card-wrapper {
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+  }
+
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-body .card-title {
+    flex: 1;
+    margin: 0;
+  }
+
+  .card-body .card-text {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .card-body .views {
+    color: #ffffffef;
+    margin: 0;
+  }
+
+  .rounded-circle {
+    border-radius: 50%;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 724px) {
     .video-container {
-        margin-top: 80px;
-        width: 115%;
-        margin-left: 6px;
-        padding: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+      flex-direction: column;
+      width: 90%;
+      flex-direction: column;
     }
-    .video-details {
-        flex: 3; /* Increase flex to make this section larger */
-        padding: 20px;
-        background-color: #0e0f0f !important;
-        color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgb(164 148 148 / 10%);
-        margin-bottom: 20px;
+
+    .container {
+      /* flex-direction: column; */
+      margin-left: 0;
+      left: 0;
     }
-    video {
-        width: 100%;
-        border-radius: 5px;
-    }
+
+    .video-details,
     .comments {
-        margin-left: 20px;
-        flex: 1;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
+      width: 100%;
+      margin-bottom: 20px;
     }
-    h2 {
-        /* text-align: center; */
-        color: #ffffffef;
-        margin-top: 0;
-    }
-    p {
-        color: #666;
-        margin: 0;
-    }
-    .avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-    .card-img-top {
-        object-fit: cover;
-        height: 200px;
-        width: 100%;
-    }
-    .comment-form {
-        margin-top: 20px;
-    }
-    .collapse {
-        display: none;
-    }
-    .collapse.show {
-        display: block;
-    }
-    .nested-comments {
-        margin-left: 40px; /* Indent nested comments */
-    }
-    .comment-input-container {
-        display: flex;
-        align-items: center;
-    }
-    .comment-input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px 0 0 5px;
-    }
-    .send-button {
-        background-color: #5680cf;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 0 5px 5px 0;
-        cursor: pointer;
-    }
-    .card {
-        padding: 5px;
-        transition: transform 0.3s;
-        background-color: #151414;
-        color: #151414;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-    }
-    .card-body {
-        width: fit-content;
-        padding: 15px;
-    }
-    .card-title {
-        color: #ffffffef;
-        margin: 0;
-        flex: 1;
-    }
-    .card-text {
-        color: #ffffffef;
-        margin: 0;
-        display: flex;
-        align-items: center;
-    }
-    .profile-avatar {
-        margin-right: 10px;
-    }
-    .comment-form input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-right: 10px;
-    }
-    .comment-form button[type="submit"] {
-        background-color: #5680cf;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .like, .subscribe {
-        cursor: pointer;
-        color: #ff0000;
-        transition: color 0.3s;
-    }
-    .like:hover, .subscribe:hover {
-        color: #5680cf;
-    }
-    .unlike, .unsubscribe {
-        cursor: pointer;
-        color: #000000;
-        transition: color 0.3s;
-    }
-    .unlike:hover, .unsubscribe:hover {
-        color: #ffffffef;
-    }
-    .right-side {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-    .channel-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-    }
-    .channel-info p {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    .channel-info .right-side form {
-        margin-left: 20px;
-    }
-    .channel-info .right-side button {
-        background-color: #5680cf;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .channel-info .right-side button:hover {
-        background-color: #466fb1;
-    }
-    .other-videos {
-        padding: 20px 0;
-        width: 100%;
-    }
-    .other-videos .other-container {
-        margin-top: 50px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
+  }
+
+  @media (max-width: 768px) {
     .other-videos .card-wrapper {
-        flex: 1 1 calc(33.333% - 20px);
-        box-sizing: border-box;
+      flex: 1 1 calc(50% - 20px);
     }
-    .card-body {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+  }
+
+  @media (max-width: 480px) {
+    .other-videos .card-wrapper {
+      flex: 1 1 100%;
     }
-    .card-body .card-title {
-        flex: 1;
-        margin: 0;
+
+    .channel-info {
+      flex-direction: column;
     }
-    .card-body .card-text {
-        margin-right: 20px;
-        display: flex;
-        align-items: center;
+
+    .channel-info p,
+    .channel-info .right-side {
+      margin-top: 10px;
     }
-    .card-body .views {
-        color: #ffffffef;
-        margin: 0;
+  }
+
+  .reply-form {
+    margin-top: 10px;
+  }
+
+  .main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    width: 100%;
+  }
+
+  /* Text Section */
+  .text-container {
+    flex: 1;
+    padding-right: 50px;
+  }
+
+  .text-container h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .text-container p {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin-bottom: 40px;
+  }
+
+  .text-container a {
+    color: #ef73ff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    border: 2px solid #ef73ff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .text-container a:hover {
+    background-color: #ef73ff;
+    color: #fff;
+  }
+
+  /* Video Section */
+  .video-container {
+    flex: 1;
+    width: 124%;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .main-container {
+      flex-direction: column;
     }
-    .rounded-circle {
-        border-radius: 50%;
+
+    .text-container {
+      padding-right: 0;
+      margin-bottom: 30px;
     }
-    /* Responsive Styles */
-    @media (max-width: 724px) {
-        .video-container {
-            flex-direction: column;
-            width: 90%;
-            flex-direction: column;
-        }
-        .container {
-            /* flex-direction: column; */
-            margin-left: 0;
-            left: 0;
-        }
-        .video-details, .comments {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-    }
-    @media (max-width: 768px) {
-        .other-videos .card-wrapper {
-            flex: 1 1 calc(50% - 20px);
-        }
-    }
-    @media (max-width: 480px) {
-        .other-videos .card-wrapper {
-            flex: 1 1 100%;
-        }
-        .channel-info {
-            flex-direction: column;
-        }
-        .channel-info p, .channel-info .right-side {
-            margin-top: 10px;
-        }
-    }
-    .reply-form {
-        margin-top: 10px;
-    }
+  }
+
+  :root {
+    --plyr-color-main: #ef73ff;
+    /* This changes the primary color of the player */
+  }
+
+  /* You can also tweak other styles if needed */
+  .plyr__controls {
+    background-color: #121212;
+    /* Change control background color if necessary */
+  }
+
+  .plyr--full-ui input[type=range] {
+    color: #ef73ff;
+    /* Change the color of range inputs like volume and progress bars */
+  }
+
+  /* Changing the hover and active state of control buttons */
+  .plyr__controls button {
+    color: #ef73ff;
+    /* Set button icons to your color */
+    transition: color 0.3s ease;
+  }
+
+  .plyr__controls button:hover,
+  .plyr__controls button:focus {
+    color: #ffb3ff;
+    /* Slightly lighter color on hover */
+  }
 </style>
+<style>
+  .video-container {
+    width: 115%;
+    margin-left: 6px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: -30px;
+    gap: 20px;
+  }
+  .sidebar .shortcut-links a .home-icon {
+     color: #ef73ff;
+  }
+  @media (max-width: 768px) {
+    .video-container {
+      width: 100%;
+      margin-left: 0;
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .video-container {
+      margin-top: 10px;
+      width: 100%;
+      padding: 5px;
+    }
+  }
+
+  .main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .main-container {
+      flex-direction: column;
+      padding: 20px;
+    }
+  }
+
+  .text-container {
+    flex: 1;
+    padding-right: 50px;
+  }
+
+  @media (max-width: 768px) {
+    .text-container {
+      padding-right: 0;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  }
+
+  .text-container h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  @media (max-width: 480px) {
+    .text-container h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .text-container p {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 480px) {
+    .text-container p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+  }
+
+  .video {
+    flex: 1;
+    width: 100%;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    video {
+      border-radius: 5px;
+    }
+  }
+
+  .card-container {
+    width: 104%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-left: 20px;
+  }
+
+  .card-wrapper {
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+    max-width: calc(33.333% - 20px);
+  }
+
+  @media (max-width: 768px) {
+    .card-wrapper {
+      flex: 1 1 calc(50% - 20px);
+      max-width: calc(50% - 20px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .card-wrapper {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
+
+  .card {
+    padding: 5px;
+    transition: transform 0.3s;
+    background-color: #0e0f0f;
+    color: #151414;
+    box-shadow: 0 2px 4px #ef73ff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .rounded-circle {
+    border-radius: 50%;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  /* Responsive styles for other-videos */
+  .other-videos {
+    width: 100%;
+  }
+
+  .other-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .other-container {
+      justify-content: center;
+    }
+  }
+</style>
+
 <body>
   <div class="video-container">
-    <div class="row card-container">
-      <% if (recommendedVideos.length === 0 && allVideos.length === 0) { %>
-        <div class="col-md-12 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <p class="text-center">No videos found.</p>
-            </div>
-          </div>
+    <div class="main-container">
+      <!-- Text Section -->
+      <div class="text-container">
+        <h1>Join the Future of Social Media</h1>
+        <p>Techn Social is the new hub for innovation, creativity, and community. Connect with fellow developers, share your projects, and stay up to date with the latest tech trends.</p>
+        <a href="/signup">Get Started Now</a>
+      </div>
+
+      <!-- Video Section -->
+      <div class="video-container">
+        <div class="video">
+          <video id="player" playsinline controls data-poster="https://the7eagles.com/wp-content/uploads/2024/05/What-is-an-Image-URL.webp">
+            <source src="/7670218-uhd_2732_1440_25fps.mp4" type="video/mp4" data-quality="low" />
+            <source src="/7670218-uhd_2732_1440_25fps.mp4" type="video/mp4" data-quality="eco" />
+            <source src="/7670218-uhd_2732_1440_25fps.mp4" type="video/mp4" data-quality="best" />
+            <track kind="captions" label="English captions" src="/path/to/captions.vtt" srclang="en" default />
+          </video>
         </div>
+      </div>
+    </div>
+    <div class="row card-container">
+      <% if (req.user && recommendedVideos.length === 0 && allVideos.length === 0) { %>
+      <div class="other-videos">
+        <h2>Explore More</h2>
+        <div class="other-container">
+          <% allVideos.forEach(otherVideo => { %>
+          <div class="card-wrapper">
+            <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
+              <div class="card">
+                <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">
+                    <img src="<%= otherVideo.owner.avatar %>" class="avatar" alt="">
+                  </p>
+                  <h5 class="card-title">
+                    <%= otherVideo.title && otherVideo.title.length > 28 ? otherVideo.title.slice(0, 28) + '...' : otherVideo.title %>
+                  </h5>
+                </div>
+              </div>
+            </a>
+          </div>
+          <% }) %>
+        </div>
+      </div>
       <% } else { %>
-        <% if (recommendedVideos.length > 0) { %>
-          <div class="recommended-videos">
-            <div class="other-container">
-              <% recommendedVideos.forEach(video => { %>
-                <div class="card-wrapper">
-                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${video._id}` : `/videos/${video._id}` %>">
-                    <div class="card">
-                      <img class="card-img-top" src="<%= video.thumbnail %>" alt="Card image cap">
-                      <div class="card-body">
-                        <p class="card-text">
-                          <img src="<%= video.owner.avatar %>" class="avatar" alt="">
-                        </p>
-                        <h5 class="card-title">
-                          <%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %>
-                        </h5>
-                      </div>
-                    </div>
-                  </a>
+      <% if (req.user && recommendedVideos.length > 0) { %>
+      <div class="recommended-videos">
+        <div class="other-container">
+          <% recommendedVideos.forEach(video => { %>
+          <div class="card-wrapper">
+            <a href="<%= currentUser ? `/user/${req.user._id}/videos/${video._id}` : `/videos/${video._id}` %>">
+              <div class="card">
+                <img class="card-img-top" src="<%= video.thumbnail %>" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">
+                    <img src="<%= video.owner.avatar %>" class="avatar" alt="">
+                  </p>
+                  <h5 class="card-title">
+                    <%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %>
+                  </h5>
                 </div>
-              <% }) %>
-            </div>
+              </div>
+            </a>
           </div>
-        <% } %>
-        <% if (allVideos.length > 0) { %>
-          <div class="other-videos">
-            <h2>Explore More</h2>
-            <div class="other-container">
-              <% allVideos.forEach(otherVideo => { %>
-                <div class="card-wrapper">
-                  <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
-                    <div class="card">
-                      <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
-                      <div class="card-body">
-                        <p class="card-text">
-                          <img src="<%= otherVideo.owner.avatar %>" class="avatar" alt="">
-                        </p>
-                        <h5 class="card-title">
-                          <%= otherVideo.title && otherVideo.title.length > 28 ? otherVideo.title.slice(0, 28) + '...' : otherVideo.title %>
-                        </h5>
-                      </div>
-                    </div>
-                  </a>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+      <% if (!req.user && allVideos.length > 0) { %>
+      <div class="other-videos">
+        <h2>Explore More</h2>
+        <div class="other-container">
+          <% allVideos.forEach(otherVideo => { %>
+          <div class="card-wrapper">
+            <a href="<%= currentUser ? `/user/${req.user._id}/videos/${otherVideo._id}` : `/videos/${otherVideo._id}` %>">
+              <div class="card">
+                <img class="card-img-top" src="<%= otherVideo.thumbnail %>" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">
+                    <img src="<%= otherVideo.owner.avatar %>" class="avatar" alt="">
+                  </p>
+                  <h5 class="card-title">
+                    <%= otherVideo.title && otherVideo.title.length > 28 ? otherVideo.title.slice(0, 28) + '...' : otherVideo.title %>
+                  </h5>
                 </div>
-              <% }) %>
-            </div>
+              </div>
+            </a>
           </div>
-        <% } %>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
       <% } %>
     </div>
   </div>
 </body>
+<script src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
+
+<script>
+  const player = new Plyr('#player');
+  const qualitySwitcher = document.createElement('div');
+  qualitySwitcher.className = 'plyr__menu plyr__menu--settings plyr__menu--open';
+  qualitySwitcher.innerHTML = `
+      <div role="menu">
+        <button type="button" class="plyr__control" data-quality="low">Low</button>
+        <button type="button" class="plyr__control" data-quality="mid">mid</button>
+        <button type="button" class="plyr__control" data-quality="best">best</button>
+      </div>
+    `;
+  player.elements.controls.appendChild(qualitySwitcher);
+
+  qualitySwitcher.addEventListener('click', (event) => {
+    const quality = event.target.getAttribute('data-quality');
+    if (quality) {
+      const currentTime = player.currentTime;
+      const isPaused = player.paused;
+      const videoElement = document.querySelector('#player');
+      const newSource = videoElement.querySelector(`source[data-quality="${quality}"]`);
+
+      if (newSource) {
+        videoElement.src = newSource.getAttribute('src');
+        videoElement.load();
+        videoElement.addEventListener('loadedmetadata', () => {
+          videoElement.currentTime = currentTime;
+          if (!isPaused) {
+            videoElement.play();
+          }
+        }, {
+          once: true
+        });
+      }
+    }
+  });
+</script>

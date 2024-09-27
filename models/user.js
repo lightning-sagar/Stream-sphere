@@ -20,7 +20,7 @@ const userSchema = new Schema({
   }],
   avatar: {
     type: String, 
-    default: "https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+    default: "https://w7.pngwing.com/pngs/177/551/png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail.png" 
   },
   coverImage: {
     type: String,

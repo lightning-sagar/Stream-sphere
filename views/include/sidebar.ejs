@@ -1,4 +1,20 @@
 <style>
+.shortcut-links a {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: fit-content;
+    padding: 10px; /* Add some padding for better clickability */
+    flex-wrap: wrap;
+    margin-top: 13px;
+    position: relative; /* For the border positioning */
+}
+
+.shortcut-links a.active {
+    border-left: 4px solid #ef73ff;  
+    color: #000;  
+}
+
     *{
         margin: 0;
         padding: 0;
@@ -69,32 +85,34 @@
     }
     
     /* Sidebar*/
-    .sidebar{
-        background: #0e0f0f; 
-        box-shadow: 0 2px 4px rgba(216, 213, 213, 0.423);
-        position: fixed;
-        left: 0;
-        top: 40px;
-        width: 84px;
-        height: 100vh;
-        position: fixed;
-        padding-left: 2%;
-        padding-top: 10px;
-    }
+    .sidebar {
+    background: #0e0f0f;
+    /* box-shadow: 0 2px 4px rgba(216, 213, 213, 0.423); */
+    position: fixed;
+    left: 0;
+    top: 40px;
+    width: 84px;
+    height: 100vh;
+    position: fixed;
+    padding-left: 2%;
+    margin-top: 68px;
+}
+.sidebar {
+    background: #0e0f0f;
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 40px; /* It will stay 40px below the top of the viewport */
+    height: calc(100vh - 50px); /* Ensures the sidebar occupies the full height minus the top offset */
+    padding-left: 2%;
+    margin-top: 68px;
+}
+
     
     .shortcut-links a img{
         width: 20px;
         margin-right: 20px;
     }
-    
-    .shortcut-links a{
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        width: fit-content;
-        flex-wrap: wrap;
-        margin-top: 13px;
-    }
+ 
     
     .shortcut-links a:first-child{
         color: #000000; /* Red color */
@@ -141,6 +159,15 @@
         display: none;
     }
     
+    .sidebar .shortcut-links a i {
+        font-size: 19px; /* Increased icon size */
+        color: #bcafaf; /* Existing icon color */
+        display: block; /* Centers the icon */
+    }
+
+     
+
+
     /* Main Body */
     .container{
     margin-top: 40px;
@@ -231,6 +258,7 @@
         }
     }
     .text-center{
+        margin-left: 15px;
         text-align: center;
         margin-bottom: 0!important;
     }
@@ -240,42 +268,83 @@
     .margin{
         margin-top: 25%!important;
     }
+
 </style>
 <div class="sidebar">
     <div class="shortcut-links">
         <% if(currentUser){ %>
-            
-            <div class="text-center pt-4 margin pb-3" >
-                <a href="/user/<%= req.user._id %>/upload" >
-                    <i class="fa-solid fa-upload" style="color: #bcafaf;" ></i>
+            <div class="text-center pt-3 pb-3">
+                <a href="/" class="shortcut-btn">
+                    <i class="fa-solid fa-home home-icon"></i>
                 </a>
             </div>
             <div class="text-center pt-3 pb-3">
-                <a href="/c/<%= req.user._id %>">
-                    <i class="fa-solid fa-comments" style="color: #bcafaf;"></i>
+                <a href="/user/<%= req.user._id %>/upload" class="shortcut-btn">
+                    <i class="fa-solid fa-upload upload-icon"></i>
                 </a>
             </div>
-            
             <div class="text-center pt-3 pb-3">
-                <a href="/user/<%= req.user._id %>/subscribed">
-                    <i class="fa-brands fa-youtube" style="color: #bcafaf;"></i>
+                <a href="/t/<%= req.user._id %>" class="shortcut-btn">
+                    <i class="fa-solid fa-comments comment-icon"></i>
                 </a>
             </div>
-        <% }else{ %>
             <div class="text-center pt-3 pb-3">
-                
+                <a href="/user/<%= req.user._id %>/subscribed" class="shortcut-btn">
+                    <i class="fa-brands fa-youtube sub-icon"></i>
+                </a>
+            </div>
+        <% } else { %>
+            <div class="text-center pt-3 pb-3">
+                <a href="/" class="shortcut-btn">
+                    <i class="fa-solid fa-home home-icon"></i>
+                </a>
             </div>
             <div class="text-center pt-4 pb-3">
-                <a href="/login">
-                    <i class="fa-solid fa-upload" style="color: #bcafaf;"></i>
-
-                </a>
-            </div>
-            <div class="text-center pt-3 pb-3">
-                <a href="/login">
+                <a href="/login" class="shortcut-btn">
+                    <i class="fa-solid fa-upload"></i>
                 </a>
             </div>
         <% } %>
     </div>  
-    <hr>
-   </div>
+</div>
+
+<script>
+    window.addEventListener("scroll", function() {
+    const sidebar = document.querySelector('.sidebar');
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    
+    if (scrollY > 10) { // Adjust this value as needed
+        sidebar.style.position = "fixed";
+        sidebar.style.top = "30px"; // Adjust the offset if needed
+    } else {
+        sidebar.style.position = "fixed";
+        sidebar.style.top = "80px"; 
+        sidebar.style.marginTop = "0";
+    }
+    const buttons = document.querySelectorAll('.shortcut-btn');
+
+// Function to activate a button
+const activateButton = (button) => {
+    buttons.forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+};
+
+const activeUrl = localStorage.getItem('activeButton');
+
+if (activeUrl) {
+    const activeButton = [...buttons].find(btn => btn.href === activeUrl);
+    if (activeButton) {
+        activateButton(activeButton);
+    }
+}
+
+buttons.forEach(button => {
+    button.addEventListener('click', function() {
+        localStorage.setItem('activeButton', this.href);
+        activateButton(this);
+    });
+});
+});
+ 
+
+</script>

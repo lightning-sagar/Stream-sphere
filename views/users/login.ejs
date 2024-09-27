@@ -1,115 +1,73 @@
 <% layout('layout/boilerplate') %>
 
-<style>
-  /* General body styling */
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #000000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ <style>
+  .cont_login{
+    margin-left: -20%;
   }
-
-  .container{
-    background-color: #000000!important;
-
+  .custom-negative-margin {
+    margin-left: -210px;
   }
-  
-  /* Main container */
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 380px;
-    padding: 30px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  }
-
-  /* Heading */
-  .login-container h1 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-    font-weight: 600;
-  }
-
-  /* Label for input fields */
-  .form-label {
-    font-weight: 500;
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #555;
-  }
-
-  /* Input fields */
-  .form-control {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    background-color: #fafafa;
-    transition: border-color 0.3s;
-    font-size: 14px;
-    color: #333;
-  }
-
-  .form-control:focus {
-    outline: none;
-    border-color: #2d9cdb;
-  }
-
-  /* Login Button */
-  .btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: none;
-    background-color: #2d9cdb;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn:hover {
-    background-color: #1a82c4;
-  }
-
-  /* Center align the form with some spacing */
-  .login-container form {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .login-container {
-      width: 90%;
-    }
-  }
-</style>
-
-<body>
-  <div class="login-container">
-    <h1>Login</h1>
-    <form class="needs-validation" novalidate method="POST" action="/login">
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input name="username" id="username" required class="form-control" type="text" placeholder="Enter your username" />
+ </style>
+<section class="vh-100 position-absolute top-0  custom-negative-margin">
+  <div class="container-fluid cont_login h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+          class="img-fluid" alt="Sample image">
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input name="password" id="password" required class="form-control" type="password" placeholder="Enter your password" />
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form class="needs-validation" novalidate method="POST" action="/login">
+          <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+
+            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-twitter"></i>
+            </button>
+
+            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-linkedin-in"></i>
+            </button>
+          </div>
+
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0">Or</p>
+          </div>
+
+          <!-- username input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input name="username" id="username" required class="form-control" type="text" placeholder="Enter your username" />
+            <label class="form-label" for="username">username</label>
+          </div>
+
+          <!-- Password input -->
+          <div data-mdb-input-init class="form-outline mb-3">
+            <input name="password" id="password" required class="form-control" type="password" placeholder="Enter your password" />
+            <label class="form-label" for="password">Password</label>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
+              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+              <label class="form-check-label" for="form2Example3">
+                Remember me
+              </label>
+            </div>
+          </div>
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;" >Login</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/signup"
+                class="link-danger">Register</a></p>
+          </div>
+
+        </form>
       </div>
-      <button class="btn" type="submit">Login</button>
-    </form>
+    </div>
   </div>
-</body>
+ 
+</section>
