@@ -811,11 +811,11 @@ app.post("/t/:id/reply", async (req, res) => {
   try {
     console.log(req.body)
     const { id: postId } = req.params;
-    const { text } = req.body;
+    const { replyText } = req.body;
     const userId = req.user._id;
     const userProfilepic = req.user.avatar;
     const username = req.user.username;
-
+    const text = replyText;
     if (!text) return res.status(400).json({ error: "All fields are required" });
     const post = await Post.findById(postId);
     if (!post) return res.status(400).json({ error: "Post not found" });
@@ -839,9 +839,10 @@ app.post("/t/:id/reply", async (req, res) => {
 app.get('/t/r/:id',async(req,res)=>{
   try {
     const {id} = req.params;
-    const post = await Post.findById(id);
-    const reply = post.replies;
-    res.render('pages/showTweet.ejs',{req,replies:reply,tweet:post.populate});
+    const post = await Post.findById(id).populate('posted_by', 'username avatar');
+    const reply = post.replies
+    console.log(reply);
+    res.render('pages/showTweet.ejs',{req,replies:reply,tweet:post});
   } catch (error) {
     console.log(error);
     return res.status(500).send("Internal Server Error");

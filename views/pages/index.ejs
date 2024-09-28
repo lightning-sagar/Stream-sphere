@@ -70,6 +70,58 @@
     font-weight: bold;
     font-size: 16px;
   }
+  .text-container h1,
+.text-container p {
+  color: #ffffff;
+}
+.cta-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 2px solid #b945ff;
+  color: #ff36ff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #ff36ff;
+  color: #ffffff;
+}
+
+/* .typing-effect {
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid #ff36ff;
+  animation: typing 3.5s steps(30, end), blink 0.75s step-end infinite;
+} */
+.typing-effect {
+  font-family: monospace;
+  overflow: hidden;
+  border-right: 0.15em solid #ff36ff;
+  white-space: nowrap;
+  animation: typing 3.5s steps(30, end), blink 0.75s step-end infinite;
+  max-width: 100%;  /* Ensure the text doesn't exceed container width */
+  width: fit-content;  /* Adjust to the content size dynamically */
+}
+
+/* Typing Animation */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; } /* Type up to the max width set */
+}
+
+/* Blinking Cursor */
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: #ff36ff; }
+}
+
 
   .all-comments {
     max-height: 400px;
@@ -534,6 +586,7 @@
   }
 
   .text-container {
+    font-family: 'Cascadia Code', monospace!important;
     flex: 1;
     padding-right: 50px;
   }
@@ -560,6 +613,8 @@
   }
 
   .text-container p {
+    font-family: 'Cascadia Code', monospace;
+    font-weight: 300;
     font-size: 1.2rem;
     color: #b0b0b0;
     margin-bottom: 40px;
@@ -666,6 +721,29 @@
       justify-content: center;
     }
   }
+  p {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        .code-block {
+            
+            border-radius: 5px;
+            display: inline-block;
+            text-align: left;
+            font-family: 'Cascadia Code', monospace;
+            color: #333;
+            font-size: 1em;
+        }
+        .code-block .keyword {
+            color: #d73a49;
+            font-weight: bold;
+        }
+        .code-block .variable {
+            color: #6f42c1;
+        }
+        .code-block .function {
+            color: #005cc5;
+        }
 </style>
 
 <body>
@@ -673,9 +751,18 @@
     <div class="main-container">
       <!-- Text Section -->
       <div class="text-container">
-        <h1>Join the Future of Social Media</h1>
-        <p>Techn Social is the new hub for innovation, creativity, and community. Connect with fellow developers, share your projects, and stay up to date with the latest tech trends.</p>
-        <a href="/signup">Get Started Now</a>
+        <h1><span class="code">Join TechSphere</span></h1>
+        <p class="code-block">
+          <span class="keyword">import</span> techsphere <br>
+          <span class="variable">lst</span> = [<span class="variable">youtube</span>, <span class="variable">linkedin</span>, <span class="variable">X</span>, <span class="variable">instagram</span>, <span class="variable">reddit</span>] <br>
+          <span class="keyword">if</span> user == <span class="variable">"tech"</span>: <br>
+          &nbsp;&nbsp;<span class="keyword">for</span> platform <span class="keyword">in</span> <span class="variable">lst</span>:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> platform == <span class="variable">"techsphere"</span>:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">return</span> <span class="variable">"good life"</span> <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">else</span>:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function typing-effect">print(<span class="variable ">"sad"</span>)</span>
+      </p>
+        <a href="/signup" class="cta-button">Get Started Now</a>
       </div>
 
       <!-- Video Section -->

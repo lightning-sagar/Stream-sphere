@@ -1,35 +1,102 @@
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign Up</p>
+
+                <!-- Form begins here -->
+                <form class="mx-1 mx-md-4 needs-validation" novalidate method="POST" action="/signup">
+                  
+                  <!-- Username Field -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                      <input name="user[username]" type="text" id="form3Example1c" required class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your Name</label>
+                      <div class="invalid-feedback">Please enter your username.</div>
+                    </div>
+                  </div>
+
+                  <!-- Email Field -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                      <input name="user[email]" type="email" id="form3Example3c" required class="form-control" />
+                      <label class="form-label" for="form3Example3c">Your Email</label>
+                      <div class="invalid-feedback">Please enter a valid email.</div>
+                    </div>
+                  </div>
+
+                  <!-- Password Field -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                      <input name="user[password]" type="password" id="form3Example4c" required class="form-control" />
+                      <label class="form-label" for="form3Example4c">Password</label>
+                      <div class="invalid-feedback">Please enter a password.</div>
+                    </div>
+                  </div>
+
+                  <!-- Repeat Password Field -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                      <input name="user[confirm_password]" type="password" id="form3Example4cd" required class="form-control" />
+                      <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                      <div class="invalid-feedback">Please repeat your password.</div>
+                    </div>
+                  </div>
+
+                  <!-- Terms and Conditions Checkbox -->
+                  <div class="form-check d-flex justify-content-center mb-5">
+                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required />
+                    <label class="form-check-label" for="form2Example3c">
+                      I agree to all statements in <a href="#!">Terms of service</a>
+                    </label>
+                    <div class="invalid-feedback">You must agree before submitting.</div>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                  </div>
+                </form>
+                <!-- Form ends here -->
+
+              </div>
+              
+              <!-- Image Section -->
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  class="img-fluid" alt="Sample image">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <% layout('layout/boilerplate') %>
+
 <style>
   .container {
     position: fixed;
     left: 84px;
-  } 
+  }
 </style>
+
 <div class="row mt-5">
   <div class="col-md-6 offset-md-3">
     <h3 class="mb-4">Sign Up</h3>
-    
-    <form class="needs-validation" novalidate method="POST" action="/signup">
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input name="user[username]" id="username" required class="form-control" type="text" />
-      </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input name="user[email]" id="email" required class="form-control" type="email" />
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input name="user[password]" id="password" required class="form-control" type="password" />
-      </div>
-
-      <button class="btn btn-success btn-block">Sign Up</button>
-    </form>
-
-    <hr class="my-4">
-
+    <!-- Error Handling Section -->
     <% if (error && error.length) { %>
       <div class="alert alert-danger" role="alert">
         <%= error %>

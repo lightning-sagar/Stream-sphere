@@ -293,6 +293,9 @@
     width: 100%;
     min-height: 150px;    
 }
+.replies-section{
+    margin-left:-200px
+}
 </style>
 
 <body>
@@ -371,16 +374,16 @@
             <h3>Replies</h3>
             <% if (replies && replies.length > 0) { %>
                 <% replies.forEach(reply => { %>
-                    <div class="reply" data-id="<%= reply._id %>">
-                        <div class="reply-card">
+                    <div class="reply d-flex " data-id="<%= reply._id %>">
+                        <div class="t-card">
+                            
                             <div class="vertical-line-container"> 
-                                <img src="<%= reply.posted_by.avatar %>" alt="Profile Image" class="profile-image">
+                                <img src="<%= reply.userPic %>" alt="Profile Image" class="profile-image">
                                 <hr class="vertical-line"></hr> 
                             </div>
-                            <div class="reply-info">
+                            <div class="post-info">
                                 <div class="d-flex align-items-center">
-                                    <span class="author"><%= reply.posted_by.username %></span>
-                                    <span class="time"><%= gettimeapprox(reply.createdAt) %></span>
+                                    <span class="author"><%= reply.username %></span>
                                 </div>
                                 
                                 <div class="content">
