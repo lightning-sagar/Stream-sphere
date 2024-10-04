@@ -35,7 +35,7 @@
     "socket.io": "^4.7.5"
   },
   "scripts": {
-    "start": "concurrently \"nodemon app.js\" \"cd recommendation_system && uvicorn new:app --reload\""
+    "start": "bash install_and_run.sh"
   },
   "devDependencies": {
     "chai": "^4.2.0",
