@@ -309,42 +309,51 @@
 </div>
 
 <script>
+    window.addEventListener("load", function() {
+        window.scrollTo({
+            top: 500, // Adjust this value to scroll to the desired position
+            behavior: "smooth" // Enables smooth scrolling
+        });
+    });
     window.addEventListener("scroll", function() {
     const sidebar = document.querySelector('.sidebar');
+    const container = document.querySelector('.container');
+
     const scrollY = window.scrollY || document.documentElement.scrollTop;
-    
-    if (scrollY > 10) { // Adjust this value as needed
-        sidebar.style.position = "fixed";
-        sidebar.style.top = "30px"; // Adjust the offset if needed
+
+    // Use sticky instead of fixed to avoid overlap and better behavior.
+    if (scrollY > 10) { // Adjust the value as needed
+        sidebar.style.top = "30px";
     } else {
-        sidebar.style.position = "fixed";
-        sidebar.style.top = "80px"; 
-        sidebar.style.marginTop = "0";
+        sidebar.style.top = "80px"; // Adjust the offset if needed
     }
+
+    // Handle shortcut button active state
     const buttons = document.querySelectorAll('.shortcut-btn');
 
-// Function to activate a button
-const activateButton = (button) => {
-    buttons.forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
-};
+    // Function to activate a button
+    const activateButton = (button) => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+    };
 
-const activeUrl = localStorage.getItem('activeButton');
+    const activeUrl = localStorage.getItem('activeButton');
 
-if (activeUrl) {
-    const activeButton = [...buttons].find(btn => btn.href === activeUrl);
-    if (activeButton) {
-        activateButton(activeButton);
+    if (activeUrl) {
+        const activeButton = [...buttons].find(btn => btn.href === activeUrl);
+        if (activeButton) {
+            activateButton(activeButton);
+        }
     }
-}
 
-buttons.forEach(button => {
-    button.addEventListener('click', function() {
-        localStorage.setItem('activeButton', this.href);
-        activateButton(this);
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            localStorage.setItem('activeButton', this.href);
+            activateButton(this);
+        });
     });
 });
-});
+
  
 
 </script>
