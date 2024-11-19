@@ -1,4 +1,5 @@
 uvicorn
 numpy
 pandas
+fastapi
 scikit-learn

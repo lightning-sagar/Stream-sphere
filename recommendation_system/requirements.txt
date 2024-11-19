@@ -2,3 +2,4 @@ uvicorn
 numpy
 pandas
 scikit-learn
+fastapi
