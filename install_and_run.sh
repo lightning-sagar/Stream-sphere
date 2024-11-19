@@ -1,11 +1,23 @@
 #!/bin/bash
 npm install
+rm -rf myenv
+
 # Navigate to the recommendation_system directory
 cd recommendation_system
 
-# Create and activate virtual environment
+# Deactivate the current environment if active
+deactivate
+# Remove the current environment folder (myenv)
+rm -rf myenv
+# Create a new environment
 python -m venv myenv
-source myenv/bin/activate  # Use 'source myenv/Scripts/Activate' for Windows
+# Activate the environment again
+source myenv/bin/activate   # Linux/macOS
+# or
+.\myenv\Scripts\Activate     # Windows
+# Install the dependencies
+pip install -r requirements.txt
+
 
 pip install -r requirements.txt
 
