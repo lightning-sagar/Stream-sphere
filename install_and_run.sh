@@ -1,4 +1,5 @@
 #!/bin/bash
+npm install -g concurrently
 
 # Install npm dependencies
 npm install
