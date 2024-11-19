@@ -1,3 +1,4 @@
 node_modules/
-
+myenv
 .env
+recommendation_system/myenv
