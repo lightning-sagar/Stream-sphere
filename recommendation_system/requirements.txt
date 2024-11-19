@@ -1,5 +1,4 @@
 uvicorn
 numpy==1.26.4
 pandas==2.1.4
-python>=3.9
 scikit-learn
