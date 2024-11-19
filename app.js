@@ -229,7 +229,7 @@ app.put("/user/:id/submit", ensureAuthenticated, async (req, res) => {
 
 const getrecommendations = async (videoData) => {
   try {
-    const response = await fetch("http://localhost:4000/", {
+    const response = await fetch("https://stream-sphere.onrender.com/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
