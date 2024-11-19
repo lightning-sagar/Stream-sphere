@@ -4,7 +4,7 @@ npm install
 cd recommendation_system
 
 # Install Python packages
-pip install pip install -r requirements.txt
+pip install -r requirements.txt
 
 # Go back to the root directory
 cd ..
