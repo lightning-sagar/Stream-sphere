@@ -2,4 +2,3 @@ uvicorn
 numpy
 pandas
 scikit-learn
-Python==3.10.x
