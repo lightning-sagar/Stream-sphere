@@ -1,24 +1,30 @@
 #!/bin/bash
+
+# Install npm dependencies
 npm install
+
+# Remove any existing virtual environment
 rm -rf myenv
 
 # Navigate to the recommendation_system directory
 cd recommendation_system
 
-# Deactivate the current environment if active
-deactivate
-# Remove the current environment folder (myenv)
-rm -rf myenv
-# Create a new environment
+# Create a new virtual environment
 python -m venv myenv
-# Activate the environment again
-source myenv/bin/activate   # Linux/macOS
-# or
-.\myenv\Scripts\Activate     # Windows
-# Install the dependencies
-pip install -r requirements.txt
 
+# Activate the environment based on the OS
+if [ "$(uname)" == "Darwin" ]; then
+    # macOS
+    source myenv/bin/activate
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # Linux
+    source myenv/bin/activate
+elif [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
+    # Windows (using Git Bash)
+    source myenv/Scripts/activate
+fi
 
+# Install Python dependencies
 pip install -r requirements.txt
 
 # Go back to the root directory
