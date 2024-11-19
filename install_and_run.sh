@@ -3,11 +3,14 @@ npm install
 # Navigate to the recommendation_system directory
 cd recommendation_system
 
-# Install Python packages
+# Create and activate virtual environment
+python -m venv myenv
+source myenv/bin/activate  # Use 'source myenv/Scripts/Activate' for Windows
+
 pip install -r requirements.txt
 
 # Go back to the root directory
 cd ..
 
-# Run nodemon and uvicorn concurrently
+# Run both Node.js (app.js) and FastAPI (new:app) concurrently
 concurrently "nodemon app.js" "cd recommendation_system && uvicorn new:app --reload --port 4000"
