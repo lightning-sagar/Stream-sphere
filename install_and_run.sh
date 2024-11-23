@@ -33,4 +33,4 @@ pip install -r requirements.txt
 cd ..
 
 # Run both Node.js (app.js) and FastAPI (new:app) concurrently
-concurrently "nodemon app.js" "cd recommendation_system && uvicorn new:app --reload --port 4000"
+concurrently "nodemon app.js" "cd recommendation_system && uvicorn new:app --host "0.0.0.0" --port "8000" --reload"
