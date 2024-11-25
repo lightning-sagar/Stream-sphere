@@ -20,6 +20,7 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const User = require("./models/user.js");
 const Comment = require("./models/comment.js");
 const Subscription = require("./models/subscription.js");
+const WatchHistory = require("./models/watchHistory.js");
 
 const flash = require("connect-flash");
 const bodyParser = require("body-parser");
@@ -582,7 +583,6 @@ app.get("/videos/:id", ensureAuthenticated, async (req, res) => {
   res.redirect("/login");
 });
 //watch video
-const WatchHistory = require("./models/watchHistory.js");
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
   try {
     // Get the user's category
