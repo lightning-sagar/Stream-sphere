@@ -3,13 +3,12 @@
 <style>
     .con-sub {
       box-sizing: border-box;
-      margin-top: -70px;
-      width: 129%; /* Make it responsive */
+      margin-top: -30px;
       display: flex;
-      flex-direction: row;
       flex-wrap: wrap;
-      position: relative;
-      color: #333;
+      gap: 20px; /* Add spacing between cards */
+      justify-content: flex-start; /* Align cards to the left */
+      width: 120%;
     }
   
     .chat-sidebar {
@@ -70,19 +69,24 @@
       flex-direction: column;
       justify-content: space-between;
     }
-  
+    .card-img-top {
+    border-radius: calc(.25rem - 1px) !important;
+    object-fit: cover;
+    height: 200px;
+    width: 100%;
+}
     h5 {
       color: #ffffffef;
     }
   
     .card-wrapper {
-      flex: 1 1 calc(33.333% - 20px);
-      box-sizing: border-box;
+      flex: 1 1 calc(33.333% - 20px); /* Adjust width and spacing for cards */
       max-width: calc(33.333% - 20px);
+      box-sizing: border-box;
     }
   
     .channel-info.active .channel-avatar {
-      border: 3px solid #ef73ff; /* Active border for avatar */
+      border: 5px solid #ef73ff; /* Active border for avatar */
       border-radius: 50%; /* Ensure round shape */
     }
   
@@ -163,62 +167,65 @@
   
 <body>
 <div class="con-sub">
-    <div class="chat-sidebar">
-        <% if (subscribedChannels.length > 0) { %>
-            <% subscribedChannels.forEach(channel => { %>
-                <% if (typeof channelId !== 'undefined' && channel._id.toString() === channelId) { %>
-                <div class="channel">
-                    <div class="channel-info bg-sub">
-                        <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
-                    </div>
+  <div class="chat-sidebar">
+    <% if (subscribedChannels.length > 0) { %>
+        <% subscribedChannels.forEach(channel => { %>
+            <% if (typeof channelId !== 'undefined' && channel._id.toString() === channelId) { %>
+            <div class="channel">
+                <div class="channel-info bg-sub">
+                    <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
                 </div>
-                <% } else { %>
-                <div class="channel">
-                    <div class="channel-info">
-                        <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
-                    </div>
+            </div>
+            <% } else { %>
+            <div class="channel">
+                <div class="channel-info">
+                    <img class="channel-avatar rounded-circle" data-userid="<%= channel._id %>" src="<%= channel.avatar %>" width="52" height="52" alt="Avatar">
                 </div>
-                <% } %>
-            <% }) %>
-        <% } else { %>
-            <p>You have not subscribed to any channels yet.</p>
-        <% } %>
-    </div>
-    <div class="video-cont">
-        <div class="row">
-            <% if (allVideos.length == 0) { %>
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="text-center">No videos found.</p>
-                        </div>
-                    </div>
-                </div>
+            </div>
             <% } %>
-            <% allVideos.forEach(video => { %>
-                    <div class="card-wrapper"> 
-                        <a href="<%= currentUser ? `/user/${req.user._id}1/videos/${video._id}` : `/videos/${video._id}` %>" class="card">
-                            <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <p class="card-text">
-                                        <% if (video.owner.avatar) { %>
-                                            <img src="<%= video.owner.avatar %>" class="rounded-circle mright" width="30" height="30" alt="Avatar">
-                                        <% } else { %>
-                                            <span class="material-symbols-outlined profile-avatar center rounded-circle">
-                                                account_circle
-                                            </span>
-                                        <% } %>
-                                    </p>
-                                    <h5 class="card-title"><%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %></h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-            <% }); %>
-        </div>
-    </div>
+        <% }) %>
+    <% } else { %>
+        <p>You have not subscribed to any channels yet.</p>
+    <% } %>
 </div>
+<div class="video-cont">
+    <div class="row">
+        <% if (allVideos.length == 0) { %>
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-center">No videos found.</p>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+         
+
+  <% allVideos.forEach(video => { %>
+    <div class="card-wrapper">
+      <a href="<%= currentUser ? `/user/${req.user._id}1/videos/${video._id}` : `/videos/${video._id}` %>" class="card">
+        <img src="<%= video.thumbnail %>" class="card-img-top" alt="Thumbnail">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <p class="card-text">
+              <% if (video.owner.avatar) { %>
+                <img src="<%= video.owner.avatar %>" class="rounded-circle mright" width="30" height="30" alt="Avatar">
+              <% } else { %>
+                <span class="material-symbols-outlined profile-avatar center rounded-circle">
+                  account_circle
+                </span>
+              <% } %>
+            </p>
+            <h5 class="card-title">
+              <%= video.title && video.title.length > 28 ? video.title.slice(0, 28) + '...' : video.title %>
+            </h5>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% }); %>
+</div>
+
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
