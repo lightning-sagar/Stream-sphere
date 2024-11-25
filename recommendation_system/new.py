@@ -12,6 +12,9 @@ app.add_middleware(
     allow_headers=["*"],   
 )
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the recommendation system API. Use POST / to get recommendations."}
 
 @app.post("/")
 async def read_root(request: Request):
@@ -21,7 +24,7 @@ async def read_root(request: Request):
     print(title)   
     if not title:
         raise HTTPException(status_code=400, detail="Title is required in the request body")
-
+    print(title)
     recommended_ids = recommend(title)
     print(recommended_ids)  # Debugging: Print the recommended IDs
     

@@ -31,8 +31,11 @@
   @media (max-width: 768px) {
     .card-wrapper {
       flex: 1 1 calc(50% - 20px);
-      /* 2 columns on smaller screens */
       max-width: calc(50% - 20px);
+    }
+    .video-container{
+      margin-top: 50px;
+
     }
   }
 
@@ -41,6 +44,9 @@
       flex: 1 1 100%;
       /* Full width on mobile */
       max-width: 100%;
+    }
+    .recommended-videos{
+      margin-left: -19px;
     }
   }
 
@@ -556,9 +562,14 @@
   }
   @media (max-width: 768px) {
     .video-container {
+      margin-top: 40px;
       width: 100%;
       margin-left: 0;
       padding: 10px;
+    }
+    .recommended-videos {
+      width: 108%;
+      margin-left: -40px;
     }
   }
 

@@ -22,13 +22,23 @@ from sklearn.metrics.pairwise import cosine_similarity
 similarity = cosine_similarity(vector)
 similarity
 def recommend(title):
-    index = videos[videos['title'] == title].index[0]
-    
+    print("working")
+
+    # Normalize titles for case-insensitive comparison
+    videos['title_normalized'] = videos['title'].str.strip().str.lower()
+    title_normalized = title.strip().lower()
+
+    # Check for matching titles
+    matching_rows = videos[videos['title_normalized'] == title_normalized]
+    if matching_rows.empty:
+        print(f"Title '{title}' not found in the dataset.")
+        return []
+
+    index = matching_rows.index[0]
     distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
-    
+
     recommended_ids = []
     for i in distances[1:6]: 
         recommended_ids.append(videos.iloc[i[0]]['_id'])
-    
-    return recommended_ids
 
+    return recommended_ids

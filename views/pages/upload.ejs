@@ -4,23 +4,24 @@
     background-color: #0e0f0f!important; 
     color: #333;  
     font-family: "Playfair Display", serif !important;
-  font-optical-sizing: auto !important;
-  font-weight: 400;
-  font-style: normal !important;
+    font-optical-sizing: auto !important;
+    font-weight: 400;
+    font-style: normal !important;
   }
-
   .container{
-    margin-top: 40px;
-    position: fixed;
-    left: 208px
-  }
+    top: 80 !important; 
 
-  .max-width-800 {
-    max-width: 800px;
   }
-/* Step 2 container */
+  .container{
+    margin-top: 80px;
+    position: absolute;
+    left: 155px!important;
+  }
+  
+  .max-width-800 {
+    max-width: 500px;
+  }
 .step-two {
-  background-color: #1e2022;
   padding: 20px;
   border-radius: 10px;
   margin-top: 20px;
@@ -122,7 +123,8 @@ textarea.form-control {
     background-color: #4362ab; /* Darker blue on hover */
   }
 
-  .container{
+  .upload-container{
+    margin-left: 50px;
     background-color: #0e0f0f;
     padding-bottom: 150px;
   }
@@ -202,7 +204,7 @@ textarea.form-control {
       .video-container {
         flex-direction: column;
       }
-      .container {
+      .upload-container {
         /* flex-direction: column; */
         margin-left: 0;
         left: 0;
@@ -226,14 +228,14 @@ textarea.form-control {
     .sidebar .shortcut-links a .upload-icon {
      color: #ef73ff;
     }
-    .container{
+    .upload-container{
       top: 100px;
     }
  
 </style>
 
 
-<div class="container mRGIN-NEG">
+<div class="upload-container">
   <form enctype="multipart/form-data" id="uploadForm" class="max-width-900 mx-auto"  method="post">
     <!-- Step indicators -->
     <div class="step-container">

@@ -12,6 +12,11 @@
     --secondary-text-color: #bbbbbb; /* Light gray for secondary text */
     --btn-hover: rgba(255, 255, 255, 0.1);
   }
+  .container{
+    top: 80!important;
+    left: 65px!important;
+    position: absolute!important;
+  }
 
   /* Global Styling */
   body {
@@ -23,23 +28,29 @@
 
   /* Profile Section */
   .profile-section {
-    background-color: var(--profile-bg); /* Dark gray background */
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+    margin-left: 20px;
+    width: 104%;border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0px 0px 15px 2px rgba(128, 0, 128, 0.5);
     display: flex;
     align-items: center;
     margin-bottom: 30px;
-    color: var(--text-color); /* Ensure text is white */
+  }
+  .profile-actions {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    align-items: center; /* Align buttons vertically */
+    flex-wrap: wrap; /* Ensure buttons wrap to the next line on smaller screens */
+  }
+  .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-right: 20px;
+      border: 3px solid #ef73ff; /* Correct border syntax */
   }
 
-  .profile-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
-    border: 2px solid var(--primary-color); /* Primary color for avatar border */
-  }
 
   .profile-info {
     flex-grow: 1;
@@ -65,7 +76,6 @@
 
   /* Action Buttons */
   .btn {
-    background-color: var(--primary-color);
     color: #fff;
     padding: 0.5rem 1rem;
     border: none;
@@ -76,8 +86,8 @@
   }
 
   .btn:hover {
-    background-color: var(--secondary-color);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    color:white;
+    box-shadow: 0 2px 4px #ef73ff;
   }
 
   /* Overlay for Modals */
@@ -102,59 +112,67 @@
 
   /* Video Section */
   .video-section {
-    background-color: #1f1f1f;
+    width: 108%;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .video-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
   }
 
   .video-card {
-    flex: 1 1 calc(33.333% - 20px);
-    background-color: #151414;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s;
-    text-decoration: none;
-    color: var(--text-color);
-  }
+  padding: 5px;
+  flex: 1 1 calc(33.333% - 20px);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s;
+  text-decoration: none;
+  color: var(--text-color);
+  display: flex;
+  box-shadow: 0 2px 4px #ef73ff;
 
-  .video-card:hover {
-    transform: translateY(-5px);
-  }
+  flex-direction: column; /* Ensure consistent layout for thumbnail and text */
+}
 
-  .video-card img.video-thumbnail {
-    width: 100%;
-    border-radius: 10px 10px 0 0;
-  }
+.video-card:hover {
+  transform: translateY(-5px);
+}
 
-  .video-card img.avatar {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-  }
+.video-card img.video-thumbnail {
+  width: 100%;
+  height: 180px; /* Fixed height for the thumbnail */
+  object-fit: cover; /* Ensures thumbnail image fits nicely without distortion */
+  border-radius: 6px;
+}
 
-  .card-body {
-    padding: 15px;
-  }
+.card-body {
+  height: 100px;
+  padding: 15px;
+  display: flex; /* Use flexbox for horizontal alignment */
+  align-items: center; /* Vertically align items */
+  gap: 10px; /* Add space between avatar and title */
+}
 
-  .video-title {
-    margin: 10px 0 5px;
-    font-size: 1.1rem;
-    text-decoration: none;
+.video-title {
+  margin: 10px 0 5px;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
 
-  }
+.video-views {
+  color: var(--secondary-text-color);
+  margin-bottom: 10px;
+}
 
-  .video-views {
-    color: var(--secondary-text-color);
-    margin-bottom: 10px;
-  }
+.video-card img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
 
   /* Close Button */
   .close-btn {
@@ -177,7 +195,8 @@
     background-color: var(--light-bg);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #ef73ff;
+
     z-index: 9999;
   }
 
@@ -209,9 +228,13 @@
           <button class="btn editbtn">Edit Profile</button>
         <% } else { %>
           <% if (currentuser.sendreq.some(waitingUser => waitingUser._id.equals(profile._id))) { %>
-            <button class="btn" disabled><i class="fa-solid fa-check"></i>&nbsp;Sent</button>
+            <button class="btn" disabled>
+              <i class="fa-solid fa-check"></i>&nbsp;Sent
+            </button>
           <% } else if (currentuser.friends.some(friend => friend._id.equals(profile._id))) { %>
-            <button class="btn" onclick="window.location.href='/<%= req.user._id %>/chat/<%= profile._id %>'">Chat</button>
+            <button class="btn" onclick="window.location.href='/<%= req.user._id %>/chat/'">
+              Chat
+            </button>
           <% } else { %>
             <form action="/user/<%= req.user._id %>/<%= profile.username %>?_method=PUT" method="POST">
               <button type="submit" class="btn addfriend">Add Friend</button>
@@ -238,9 +261,9 @@
           <a href="/user/<%= req.user._id %>/videos/<%= video._id %>" class="video-card">
             <img src="<%= video.thumbnail %>" alt="Thumbnail" class="video-thumbnail">
             <div class="card-body">
-              <h5 class="video-title"><%= video.title %></h5>
-              <p class="video-views"><%= video.owner.categories %></p>
               <img src="<%= video.owner.avatar %>" class="avatar" alt="Avatar">
+
+              <h5 class="video-title"><%= video.title %></h5>
             </div>
           </a>
         <% }); %>

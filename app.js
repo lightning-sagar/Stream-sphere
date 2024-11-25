@@ -219,7 +219,6 @@ app.put("/user/:id/submit", ensureAuthenticated, async (req, res) => {
       categories: categories,
     });
 
-    // console.log("User updated:", newUser);
     res.redirect(`/user/${userId}`);
   } catch (error) {
     console.error("Error updating user:", error);
@@ -228,24 +227,30 @@ app.put("/user/:id/submit", ensureAuthenticated, async (req, res) => {
 });
 
 const getrecommendations = async (videoData) => {
-  try {
-    const response = await fetch("https://stream-sphere.onrender.com/", {
+  try {//https://stream-sphere-ml.onrender.com
+    console.log(videoData)
+    const response = await fetch("https://stream-sphere-ml.onrender.com/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(videoData),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error from API:', errorText); // Log the actual response for debugging
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    }
     const data = await response.json();
     if (data.message === "Recommendations fetched successfully") {
       return data.recommended_ids;
     } else {
       console.log("Error fetching recommendations:", data);
-      return []; // Return an empty array if no recommendations are fetched
+      return [];  
     }
   } catch (error) {
     console.error("ML model is not running:", error);
-    return []; // Return an empty array in case of errors
+    return [];  
   }
 };
 
@@ -268,36 +273,30 @@ app.get("/user/:id", ensureAuthenticated, async (req, res) => {
 
     let recommendedVideos = [];
     if (user.watchHistory.length > 0) {
-      let lastWatchHistoryEntry =
+      const lastWatchHistoryEntry =
         user.watchHistory[user.watchHistory.length - 1];
-      let watchHistory = await WatchHistory.findById(
-        lastWatchHistoryEntry
-      ).populate("video"); // Fetch the WatchHistory object with the video populated
-      let lastWatchedVideo = watchHistory.video;
-
-      let recommendationIds = await getrecommendations({
+      const watchHistory = await WatchHistory.findById(lastWatchHistoryEntry).populate("video");
+    
+      const lastWatchedVideo = watchHistory.video;
+    
+      const recommendationIds = await getrecommendations({
         title: lastWatchedVideo.title,
       });
-
-      // Fetching recommended videos based on IDs
-      recommendedVideos = await Video.find({
-        _id: { $in: recommendationIds },
-      }).populate("owner");
-
-      while (recommendedVideos.length < 6) {
-        let additionalIds = await getrecommendations({
-          title: recommendedVideos[recommendedVideos.length - 1].title,
-        });
-        let additionalVideos = await Video.find({
-          _id: { $in: additionalIds },
-        }).populate("owner");
-        recommendedVideos.push(...additionalVideos);
-        recommendedVideos = [
-          ...new Set(recommendedVideos.map((v) => v._id.toString())),
-        ].map((id) => recommendedVideos.find((v) => v._id.toString() === id));
+    
+      recommendedVideos = await Video.find({ _id: { $in: recommendationIds } }).populate("owner");
+    
+      if (recommendedVideos.length < 6) {
+        const additionalVideos = await Video.find({
+          categories: { $in: userCategories },
+          _id: { $nin: recommendedVideos.map((v) => v._id) },
+        }).populate("owner").limit(6 - recommendedVideos.length);
+    
+        recommendedVideos = [...recommendedVideos, ...additionalVideos];
       }
+    } else {
+      recommendedVideos = await Video.find({ categories: { $in: userCategories } }).populate("owner").limit(10);
     }
-
+    
     res.render("pages/index.ejs", {
       user,
       currentUser: req.user,
@@ -389,13 +388,32 @@ app.post("/user/:id/upload", ensureAuthenticated, async (req, res) => {
       );
       const fileExists = fs.existsSync(csvFilePath);
 
+      // Convert the data array to a string with proper line breaks
       const csvDataString = csvDataArray.map((row) => row.join(",")).join("\n");
 
       if (!fileExists) {
-        // Write new CSV without headers
-        fs.writeFileSync(csvFilePath, csvDataString, { flag: "w" });
+        // Add headers if the file does not exist
+        const headers = [
+          "ID",
+          "Video URL",
+          "Thumbnail URL",
+          "Title",
+          "Description",
+          "Views",
+          "Is Published",
+          "Categories",
+          "Owner ID",
+          "Created At",
+          "Updated At",
+        ];
+        // Write headers and data to the file
+        fs.writeFileSync(
+          csvFilePath,
+          headers.join(",") + "\n" + csvDataString + "\n",
+          { flag: "w" }
+        );
       } else {
-        // Append raw CSV data without headers
+        // Append data to the file (ensure each row starts on a new line)
         fs.appendFileSync(csvFilePath, csvDataString + "\n", { flag: "a" });
       }
 
@@ -513,7 +531,7 @@ app.post("/delete-files", ensureAuthenticated, async (req, res) => {
     res.status(500).json({ success: false, message: "Error deleting files." });
   }
 });
-
+const marked = require("marked");
 app.post("/generate-description", ensureAuthenticated, async (req, res) => {
   try {
     console.log("Generating description...", req.body);
@@ -536,9 +554,13 @@ app.post("/generate-description", ensureAuthenticated, async (req, res) => {
     console.log("Description generated:", description);
 
     if (description) {
+      // Convert the description to HTML using marked
+      const descriptionHTML = marked.parse(description.text);
+      console.log("Generated HTML:", descriptionHTML);
+
       res.status(200).json({
         success: true,
-        description: description.text,
+        description: descriptionHTML, // Send the HTML instead of plain text
       });
     } else {
       console.log("Failed to generate description:", result);
@@ -623,10 +645,12 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     const get_videos = await Video.find({ _id: { $in: get_ids } }).populate(
       "owner"
     );
-    const allVideos = get_videos.filter(
+    let allVideos = get_videos.filter(
       (v) => v._id.toString() !== req.params.video
     );
-
+    if(allVideos.length>0){
+      allVideos = await Video.find({ categories:userCategory  })
+    }
     // Render the watch page
     res.render("pages/watch.ejs", {
       req,
@@ -935,22 +959,14 @@ app.post("/s/:channelId", ensureAuthenticated, async (req, res) => {
     if (existingSubscription) {
       await Subscription.findByIdAndDelete(existingSubscription._id);
       console.log("Unsubscribed successfully");
-      return res.json({
-        success: true,
-        subscribed: false,
-        likesCount: await getSubscriberCount(channelId),
-      });
+      return res.redirect(`/user/${userId}/dashboard/${channel.username}`)
     } else {
       await Subscription.create({
         subscriber: userId,
         channel: channelId,
       });
       console.log("Subscribed successfully");
-      return res.json({
-        success: true,
-        subscribed: true,
-        likesCount: await getSubscriberCount(channelId),
-      });
+      return res.redirect(`/user/${userId}/dashboard/${channel.username}`)
     }
   } catch (error) {
     console.error(error);
@@ -1132,16 +1148,7 @@ app.put("/user/:id/:friend", ensureAuthenticated, async (req, res) => {
 app.get("/search/:title", ensureAuthenticated, async (req, res) => {
   try {
     const { title } = req.query;
-    const videos = await Video.find({
-      title: { $regex: title, $options: "i" },
-    }).populate("owner");
-    const user = await User.find({
-      username: { $regex: title, $options: "i" },
-    });
-    // const Tweets = await Tweet.find({
-    //   content: { $regex: title, $options: "i" },
-    // });
-    res.render("pages/search.ejs", { req, videos, user });
+    res.redirect(`/user/${req.user._id}/dashboard/${title}`);
   } catch (err) {
     console.log(err);
   }
