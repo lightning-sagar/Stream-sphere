@@ -1,10 +1,10 @@
+# TechSphere
 
-# Stream-Sphere
 ![image](https://github.com/user-attachments/assets/a539818f-717c-4f27-8145-63fff7475389)
 
 ![image](https://github.com/user-attachments/assets/57c8b763-3ca7-4fc1-a35c-569feaeaccfb)
 
-**Stream-Sphere** is a cutting-edge tech community platform, designed as a social media platform specifically for tech enthusiasts. It was developed during the **RideHack Hackathon (JIIT Noida)** and successfully made it to the final round!
+**TechSphere** is a cutting-edge tech community platform, designed as a social media platform specifically for tech enthusiasts. It was developed during the **RideHack Hackathon (JIIT Noida)** and successfully made it to the final round!
 
 This platform enables users to:
 - Upload and share tech-related videos.
@@ -27,7 +27,7 @@ It leverages modern web technologies to deliver a seamless experience and integr
 
 4. **AI-Based Recommendations**:
    - Integrated a Machine Learning model for personalized recommendations.
-   - Recommendation model hosted on GitHub: [Stream-sphere-ML](https://github.com/lightning-sagar/Stream-sphere-ML).
+   - Recommendation model hosted on GitHub: [TechSphere-ML](https://github.com/lightning-sagar/Stream-sphere-ML).
    - Integrated the ML model using **FastAPI**, exposing endpoints for seamless functionality.
 
 ## Tech Stack
@@ -43,11 +43,11 @@ It leverages modern web technologies to deliver a seamless experience and integr
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/Stream-Sphere.git
+   git clone https://github.com/your-repo/TechSphere.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd Stream-Sphere
+   cd TechSphere
    ```
 3. Install dependencies:
    ```bash
@@ -60,12 +60,12 @@ It leverages modern web technologies to deliver a seamless experience and integr
 
 ## Usage
 
-- Access the platform at `http://localhost:3000` depend on your PORT.
+- Access the platform at `http://localhost:3000` (depending on your PORT).
 - Register as a user to upload videos, post tweets, and chat with others.
 
 ## Contribution
 
-We welcome contributions! Feel free to fork this repository, make changes, and submit a pull request. 
+We welcome contributions! Feel free to fork this repository, make changes, and submit a pull request.
 
 ---
 
@@ -75,5 +75,3 @@ We welcome contributions! Feel free to fork this repository, make changes, and s
 - Special thanks to the mentors and organizers for their guidance.
 
 **Happy Coding!**
-
- 
