@@ -582,7 +582,7 @@ app.get("/videos/:id", ensureAuthenticated, async (req, res) => {
   res.redirect("/login");
 });
 //watch video
-const WatchHistory = require("./models/watchHistory");
+const WatchHistory = require("./models/watchHistory.js");
 app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
   try {
     // Get the user's category
