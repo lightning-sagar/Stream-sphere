@@ -1664,7 +1664,7 @@ app.post(
   }
 );
 
-const Like = require("./models/Like");
+const Like = require("./models/like.js");
 const comment = require("./models/comment.js");
 //like video
 app.post("/toggle/v/:videoId", ensureAuthenticated, async (req, res) => {
