@@ -20,7 +20,7 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const User = require("./models/user.js");
 const Comment = require("./models/comment.js");
 const Subscription = require("./models/subscription.js");
-const WatchHistory = require("./models/watchHistory.js");
+const WatchHistory = require("./models/watchhistory.js");
 
 const flash = require("connect-flash");
 const bodyParser = require("body-parser");
