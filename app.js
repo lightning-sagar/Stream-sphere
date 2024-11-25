@@ -21,6 +21,7 @@ const User = require("./models/user.js");
 const Comment = require("./models/comment.js");
 const Subscription = require("./models/subscription.js");
 const WatchHistory = require("./models/watchhistory.js");
+const Post = require("./models/Post.js");
 
 const flash = require("connect-flash");
 const bodyParser = require("body-parser");
@@ -734,7 +735,6 @@ function organizeComments(comments) {
   });
   return threadedComments;
 }
-const Post = require("./models/post");
 //tweet
 app.get("/t/:id", async (req, res) => {
   try{
