@@ -244,6 +244,7 @@ const getrecommendations = async (videoData) => {
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
+    console.log(data);
     if (data.message === "Recommendations fetched successfully") {
       return data.recommended_ids;
     } else {
@@ -643,16 +644,15 @@ app.get("/user/:id/videos/:video", ensureAuthenticated, async (req, res) => {
     };
 
     const get_ids = await getrecommendations(videoData);
-    const get_videos = await Video.find({ _id: { $in: get_ids } }).populate(
-      "owner"
-    );
+    const get_videos = await Video.find({ _id: { $in: get_ids } }).populate("owner");
     let allVideos = get_videos.filter(
       (v) => v._id.toString() !== req.params.video
     );
-    if(allVideos.length>0){
-      allVideos = await Video.find({ categories:userCategory  })
+    if (allVideos.length === 0) { 
+      allVideos = await Video.find({ categories: userCategory }).populate("owner");
     }
-    // Render the watch page
+    console.log(allVideos,"648")
+
     res.render("pages/watch.ejs", {
       req,
       currentUser: req.user,
@@ -741,7 +741,7 @@ app.get("/t/:id", async (req, res) => {
     const currentuser = await User.findById(req.user._id);
     const getTweet = await Post.find().populate("posted_by");
     console.log(getTweet);
-    res.render("pages/tweet.ejs",{req,currentuser,getTweet});
+    res.render("pages/Tweet.ejs",{req,currentuser,getTweet});
   }
   catch(error){
     console.log(error,"error");
